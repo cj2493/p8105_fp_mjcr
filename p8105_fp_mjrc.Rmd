@@ -1,0 +1,27 @@
+---
+title: "p8105_fp_mjcr"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(httr)
+```
+
+download data
+```{r cache = TRUE}
+cdc_df = GET("https://chronicdata.cdc.gov/resource/ta23-kdpu.csv") %>%
+  content("parsed") 
+  
+
+```
+
+Clean data
+```{r}
+cdc_df 
+```
+
+
+
