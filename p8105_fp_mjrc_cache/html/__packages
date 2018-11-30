@@ -1,10 +1,4 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 httr
 tidyverse
 ggplot2
@@ -18,3 +12,4 @@ forcats
 xml2
 rvest
 bindrcpp
+openintro
