@@ -1,0 +1,13 @@
+name: "Yay internet!"
+output_dir: "."
+navbar:
+  title: "Home"
+  right:
+    - text: "About"
+      href: about.html
+    - text: "Flex Dashboard"
+      href: flex_dashboard.html
+    - icon: fa-github fa-lg
+      href: http://github.com/cj2493/p8105_fp_mjcr/
+output:
+  html_document
