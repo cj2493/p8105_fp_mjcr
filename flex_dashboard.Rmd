@@ -50,7 +50,8 @@ cdc_df %>%
 
 ```{r}
 cdc_df %>%
-  mutate(text_label = str_c("Health Expenditures per Capita: ", health_exp, '\nCity: ', PlaceName, '\nState: ', StateAbbr)) %>%
+  distinct(state, .keep_all = TRUE) %>%
+  mutate(text_label = str_c("Health Expenditures per Capita: ", health_exp, '\nState: ', StateAbbr)) %>%
   mutate(region = fct_reorder(region, health_exp)) %>%
   plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label)
 ```
