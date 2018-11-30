@@ -10,7 +10,6 @@ library(httr)
 library(rvest)
 library(openintro)
 
-
 ```
 
 Download data:
@@ -23,11 +22,6 @@ cdc_df = read_csv("./data/500_Cities__City-level_Data__GIS_Friendly_Format___201
 
 ```
 
-<<<<<<< HEAD
-clean data
-```{r}
-cdc_df
-=======
 
 Select variables we may be interested in:
 
@@ -38,7 +32,6 @@ cdc_df = cdc_df %>%
   mutate(state = abbr2state(StateAbbr)) %>%
   select(state, everything())
 
->>>>>>> d960a2476f0443c5fe092559bf92af251cfa3b5e
 ```
 
 Merge data on state expenditure on healthcare:
