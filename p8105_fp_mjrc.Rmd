@@ -23,7 +23,6 @@ cdc_df = read_csv("./data/500_Cities__City-level_Data__GIS_Friendly_Format___201
 
 ```
 
-
 Select variables we may be interested in:
 
 ```{r}
