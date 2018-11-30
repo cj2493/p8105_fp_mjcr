@@ -69,22 +69,15 @@ Data set for shiny insurance vs disease prevalence plot
 
 ``` r
 cdc_df %>% 
-  gather(key = outcome, value = prevalence, BPHIGH_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, COPD_AdjPrev, DIABETES_AdjPrev, HIGHCHOL_AdjPrev, OBESITY_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev) %>% 
-  select(StateAbbr, PlaceName, ACCESS2_AdjPrev, Population2010, Geolocation, health_exp, region, division, outcome, prevalence)
+  gather(key = outcome, value = prevalence, BPHIGH_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, COPD_AdjPrev,    DIABETES_AdjPrev, HIGHCHOL_AdjPrev, OBESITY_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev) %>% 
+  select(StateAbbr, PlaceName, ACCESS2_AdjPrev, Population2010, Geolocation, health_exp, region, division, outcome, prevalence) %>% View
+#  recode(outcome, "BPHIGH_AdjPrev" = "High Blood Pressure",
+#                  "Cancer_AdjPrev" = "Cancer",
+#                  "CHD_AdjPrev" = "Coronary Heart Disease",
+#                 "COPD_AdhPrev" = "Chronic Obstructive Pulmonary Disease",
+#                  "DIABETES_AdhPrev" = "Diabetes",
+#                  "HIGHCHOL_AdjPrev" = "High Cholesterol",
+#                  "OBESITY_AdjPrev" = "Obesity",
+#                  "PHLTH_AdjPrev" = "Poor Physical Health",
+#                  "STROKE_AdjPrev" = "Stroke") %>% View
 ```
-
-    ## # A tibble: 4,500 x 10
-    ##    StateAbbr PlaceName ACCESS2_AdjPrev Population2010 Geolocation
-    ##    <chr>     <chr>               <dbl>          <int> <chr>      
-    ##  1 AL        Birmingh~            21.4         212237 (33.527566~
-    ##  2 AL        Hoover               10.2          81619 (33.376760~
-    ##  3 AL        Huntsvil~            16.3         180105 (34.698969~
-    ##  4 AL        Mobile               19.1         195111 (30.677624~
-    ##  5 AL        Montgome~            18.5         205764 (32.347264~
-    ##  6 AL        Tuscaloo~            18.5          90468 (33.233608~
-    ##  7 AK        Anchorage            14.5         291826 (61.149868~
-    ##  8 AZ        Avondale             21.4          76238 (33.385836~
-    ##  9 AZ        Chandler             12.3         236123 (33.283189~
-    ## 10 AZ        Gilbert               9.7         208453 (33.310149~
-    ## # ... with 4,490 more rows, and 5 more variables: health_exp <dbl>,
-    ## #   region <chr>, division <chr>, outcome <chr>, prevalence <dbl>

@@ -67,7 +67,11 @@ cdc_df %>%
           alpha = 0.5,
           color = ~region,
           text = ~text_label
-          )
+          ) %>%
+  layout(
+    xaxis = list(title = "Lack of Insurance in City"),
+    yaxis = list(title = "Prevalence of Cancer")
+  )
 ```
 
 ### Chart C
@@ -77,5 +81,9 @@ cdc_df %>%
   distinct(state, .keep_all = TRUE) %>%
   mutate(text_label = str_c("Health Expenditures per Capita: ", health_exp, '\nState: ', StateAbbr)) %>%
   mutate(region = fct_reorder(region, health_exp)) %>%
-  plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label)
+  plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
+  layout(
+    xaxis = list(title = "Region"),
+    yaxis = list(title = "Health Expenditures per Capita per State")
+  )
 ```
