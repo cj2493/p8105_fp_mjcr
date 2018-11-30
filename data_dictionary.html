@@ -253,6 +253,14 @@ health_exp_dictionary = tibble(column_name = c(&quot;state&quot;, &quot;health_e
 
 data_dictionary = full_join(data_dictionary, health_exp_dictionary)</code></pre>
 <pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
+<pre class="r"><code>region_dict = tibble(column_name = c(&quot;region&quot;, &quot;division&quot;),
+                     description = c(&quot;geographical region of the state&quot;, &quot;more specific division within the region&quot;),
+                     type = c(&quot;Plain Text&quot;, &quot;Plain Text&quot;)
+  
+)
+
+data_dictionary = full_join(data_dictionary, region_dict)</code></pre>
+<pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
 
 
 
