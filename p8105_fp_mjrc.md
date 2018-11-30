@@ -50,6 +50,8 @@ cdc_df = cdc_df %>%
 Merge data on state expenditure on healthcare:
 
 ``` r
+#link: https://www.kff.org/other/state-indicator/health-spending-per-capita/?currentTimeframe=0&sortModel=%7B%22colId%22:%22Location%22,%22sort%22:%22asc%22%7D
+
 #Importing the raw expenditure data set and cleaning
 healthcare_exp_df = read_csv("./data/health_care_expenditure.csv", 
                              skip = 4, n_max = 50, col_names = F) %>%
@@ -69,4 +71,24 @@ healthcare_exp_df = read_csv("./data/health_care_expenditure.csv",
 cdc_df = left_join(cdc_df, healthcare_exp_df, by = "state")
 
 cdc_df = cdc_df %>% mutate(state = abbr2state(StateAbbr))
+```
+
+Merge data regions per state:
+
+``` r
+regions_df = read_csv("https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv") %>%
+  janitor::clean_names() %>%
+  select(-state_code)
+```
+
+    ## Parsed with column specification:
+    ## cols(
+    ##   State = col_character(),
+    ##   `State Code` = col_character(),
+    ##   Region = col_character(),
+    ##   Division = col_character()
+    ## )
+
+``` r
+cdc_df = left_join(cdc_df, regions_df, by = "state")
 ```

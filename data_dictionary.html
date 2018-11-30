@@ -25,11 +25,164 @@ body {
 
 <body>
 
+<<<<<<< HEAD
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="flex_dashboard.html">Flex Dashboard</a>
+</li>
+<li>
+  <a href="http://github.com/cj2493/p8105_fp_mjcr/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+<<<<<<< HEAD
+=======
 <h1 id="data_dictionary">data_dictionary</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">url =<span class="st"> &quot;https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny&quot;</span>
+>>>>>>> 0394cb324e97b6f452e1ed76a9c9bb24ce2844d3
 
 
+<<<<<<< HEAD
+
+
+<h1 class="title toc-ignore">data_dictionary</h1>
+
+=======
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">data_dictionary</h1>
+
+>>>>>>> 1b934b5607fd764639a29ff07fa42a55d1f8915e
+</div>
+
+
+<pre class="r"><code>url = &quot;https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny&quot;
+
+
+read_dict = function(url) {
+=======
 read_dict =<span class="st"> </span><span class="cf">function</span>(url) {
+>>>>>>> 0394cb324e97b6f452e1ed76a9c9bb24ce2844d3
   
   h =<span class="st"> </span><span class="kw">read_html</span>(url)
   
@@ -54,12 +207,40 @@ read_dict =<span class="st"> </span><span class="cf">function</span>(url) {
 
 
 
+<<<<<<< HEAD
+data_dictionary = read_dict(&quot;https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny&quot;)</code></pre>
+<p>This doesn’t read in anything? So for now I copied from the webpage into an excel file (will try to figure this out to get the selector gadget to work before submission)</p>
+<pre class="r"><code>data_dictionary = readxl::read_xlsx(&quot;./data/data_dictionary.xlsx&quot;) 
+data_dictionary = data_dictionary %&gt;%
+  janitor::clean_names() %&gt;%
+<<<<<<< HEAD
+  filter(column_name %in% c(&quot;StateAbbr&quot;, &quot;PlaceName&quot;, &quot;Population2010&quot;, &quot;ACCESS2_CrudePrev&quot;, &quot;ACCESS2_AdjPrev&quot;, &quot;BPHIGH_CrudePrev&quot;, &quot;BPHIGH_AdjPrev&quot;, &quot;BPMED_CrudePrev&quot;, &quot;BPMED_AdjPrev&quot;, &quot;CANCER_CrudePrev&quot;, &quot;CANCER_AdjPrev&quot;, &quot;CHD_CrudePrev&quot;, &quot;CHD_AdjPrev&quot;, &quot;CHECKUP_CrudePrev&quot;, &quot;CHECKUP_AdjPrev&quot;, &quot;CHOLSCREEN_CrudePrev&quot;, &quot;CHOLSCREEN_AdjPrev&quot;, &quot;COLON_SCREEN_CrudePrev&quot;, &quot;COLON_SCREEN_AdjPrev&quot;, &quot;COPD_CrudePrev&quot;, &quot;COPD_AdjPrev&quot;, &quot;COREM_CrudePrev&quot;, &quot;COREM_AdjPrev&quot;, &quot;COREW_CrudePrev&quot;, &quot;COREW_AdjPrev&quot;, &quot;DENTAL_CrudePrev&quot;, &quot;DENTAL_AdjPrev&quot;, &quot;DIABETES_CrudePrev&quot;, &quot;DIABETES_AdjPrev&quot;, &quot;HIGHCHOL_CrudePrev&quot;, &quot;HIGHCHOL_AdjPrev&quot;, &quot;LPA_CrudePrev&quot;, &quot;LPA_AdjPrev&quot;, &quot;MAMMOUSE_CrudePrev&quot;, &quot;MAMMOUSE_AdjPrev&quot;, &quot;OBESITY_CrudePrev&quot;, &quot;OBESITY_AdjPrev&quot;, &quot;PAPTEST_CrudePrev&quot;, &quot;PAPTEST_AdjPrev&quot;, &quot;PHLTH_CrudePrev&quot;, &quot;PHLTH_AdjPrev&quot;, &quot;STROKE_CrudePrev&quot;, &quot;STROKE_AdjPrev&quot;, &quot;Geolocation&quot;))</code></pre>
+=======
+  filter(column_name %in% c(&quot;StateAbbr&quot;, &quot;PlaceName&quot;, &quot;Population2010&quot;, &quot;ACCESS2_CrudePrev&quot;, &quot;ACCESS2_AdjPrev&quot;, &quot;BPHIGH_CrudePrev&quot;, &quot;BPHIGH_AdjPrev&quot;, &quot;BPMED_CrudePrev&quot;, &quot;BPMED_AdjPrev&quot;, &quot;CANCER_CrudePrev&quot;, &quot;CANCER_AdjPrev&quot;, &quot;CHD_CrudePrev&quot;, &quot;CHD_AdjPrev&quot;, &quot;CHECKUP_CrudePrev&quot;, &quot;CHECKUP_AdjPrev&quot;, &quot;CHOLSCREEN_CrudePrev&quot;, &quot;CHOLSCREEN_AdjPrev&quot;, &quot;COLON_SCREEN_CrudePrev&quot;, &quot;COLON_SCREEN_AdjPrev&quot;, &quot;COPD_CrudePrev&quot;, &quot;COPD_AdjPrev&quot;, &quot;COREM_CrudePrev&quot;, &quot;COREM_AdjPrev&quot;, &quot;COREW_CrudePrev&quot;, &quot;COREW_AdjPrev&quot;, &quot;DENTAL_CrudePrev&quot;, &quot;DENTAL_AdjPrev&quot;, &quot;DIABETES_CrudePrev&quot;, &quot;DIABETES_AdjPrev&quot;, &quot;HIGHCHOL_CrudePrev&quot;, &quot;HIGHCHOL_AdjPrev&quot;, &quot;LPA_CrudePrev&quot;, &quot;LPA_AdjPrev&quot;, &quot;MAMMOUSE_CrudePrev&quot;, &quot;MAMMOUSE_AdjPrev&quot;, &quot;OBESITY_CrudePrev&quot;, &quot;OBESITY_AdjPrev&quot;, &quot;PAPTEST_CrudePrev&quot;, &quot;PAPTEST_AdjPrev&quot;, &quot;PHLTH_CrudePrev&quot;, &quot;PHLTH_AdjPrev&quot;, &quot;STROKE_CrudePrev&quot;, &quot;STROKE_AdjPrev&quot;, &quot;Geolocation&quot;))
+=======
 data_dictionary =<span class="st"> </span><span class="kw">read_dict</span>(<span class="st">&quot;https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny&quot;</span>)</code></pre></div>
 <p>This doesn't read in anything? So for now I copied from the webpage into an excel file (will try to figure this out to get the selector gadget to work before submission)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_dictionary =<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_xlsx</span>(<span class="st">&quot;./data/data_dictionary.xlsx&quot;</span>) 
 data_dictionary =<span class="st"> </span>data_dictionary <span class="op">%&gt;%</span>
 <span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(column_name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;StateAbbr&quot;</span>, <span class="st">&quot;PlaceName&quot;</span>, <span class="st">&quot;Population2010&quot;</span>, <span class="st">&quot;ACCESS2_CrudePrev&quot;</span>, <span class="st">&quot;ACCESS2_AdjPrev&quot;</span>, <span class="st">&quot;BPHIGH_CrudePrev&quot;</span>, <span class="st">&quot;BPHIGH_AdjPrev&quot;</span>, <span class="st">&quot;BPMED_CrudePrev&quot;</span>, <span class="st">&quot;BPMED_AdjPrev&quot;</span>, <span class="st">&quot;CANCER_CrudePrev&quot;</span>, <span class="st">&quot;CANCER_AdjPrev&quot;</span>, <span class="st">&quot;CHD_CrudePrev&quot;</span>, <span class="st">&quot;CHD_AdjPrev&quot;</span>, <span class="st">&quot;CHECKUP_CrudePrev&quot;</span>, <span class="st">&quot;CHECKUP_AdjPrev&quot;</span>, <span class="st">&quot;CHOLSCREEN_CrudePrev&quot;</span>, <span class="st">&quot;CHOLSCREEN_AdjPrev&quot;</span>, <span class="st">&quot;COLON_SCREEN_CrudePrev&quot;</span>, <span class="st">&quot;COLON_SCREEN_AdjPrev&quot;</span>, <span class="st">&quot;COPD_CrudePrev&quot;</span>, <span class="st">&quot;COPD_AdjPrev&quot;</span>, <span class="st">&quot;COREM_CrudePrev&quot;</span>, <span class="st">&quot;COREM_AdjPrev&quot;</span>, <span class="st">&quot;COREW_CrudePrev&quot;</span>, <span class="st">&quot;COREW_AdjPrev&quot;</span>, <span class="st">&quot;DENTAL_CrudePrev&quot;</span>, <span class="st">&quot;DENTAL_AdjPrev&quot;</span>, <span class="st">&quot;DIABETES_CrudePrev&quot;</span>, <span class="st">&quot;DIABETES_AdjPrev&quot;</span>, <span class="st">&quot;HIGHCHOL_CrudePrev&quot;</span>, <span class="st">&quot;HIGHCHOL_AdjPrev&quot;</span>, <span class="st">&quot;LPA_CrudePrev&quot;</span>, <span class="st">&quot;LPA_AdjPrev&quot;</span>, <span class="st">&quot;MAMMOUSE_CrudePrev&quot;</span>, <span class="st">&quot;MAMMOUSE_AdjPrev&quot;</span>, <span class="st">&quot;OBESITY_CrudePrev&quot;</span>, <span class="st">&quot;OBESITY_AdjPrev&quot;</span>, <span class="st">&quot;PAPTEST_CrudePrev&quot;</span>, <span class="st">&quot;PAPTEST_AdjPrev&quot;</span>, <span class="st">&quot;PHLTH_CrudePrev&quot;</span>, <span class="st">&quot;PHLTH_AdjPrev&quot;</span>, <span class="st">&quot;STROKE_CrudePrev&quot;</span>, <span class="st">&quot;STROKE_AdjPrev&quot;</span>, <span class="st">&quot;Geolocation&quot;</span>))</code></pre></div>
+<span class="st">  </span><span class="kw">filter</span>(column_name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;StateAbbr&quot;</span>, <span class="st">&quot;PlaceName&quot;</span>, <span class="st">&quot;Population2010&quot;</span>, <span class="st">&quot;ACCESS2_CrudePrev&quot;</span>, <span class="st">&quot;ACCESS2_AdjPrev&quot;</span>, <span class="st">&quot;BPHIGH_CrudePrev&quot;</span>, <span class="st">&quot;BPHIGH_AdjPrev&quot;</span>, <span class="st">&quot;BPMED_CrudePrev&quot;</span>, <span class="st">&quot;BPMED_AdjPrev&quot;</span>, <span class="st">&quot;CANCER_CrudePrev&quot;</span>, <span class="st">&quot;CANCER_AdjPrev&quot;</span>, <span class="st">&quot;CHD_CrudePrev&quot;</span>, <span class="st">&quot;CHD_AdjPrev&quot;</span>, <span class="st">&quot;CHECKUP_CrudePrev&quot;</span>, <span class="st">&quot;CHECKUP_AdjPrev&quot;</span>, <span class="st">&quot;CHOLSCREEN_CrudePrev&quot;</span>, <span class="st">&quot;CHOLSCREEN_AdjPrev&quot;</span>, <span class="st">&quot;COLON_SCREEN_CrudePrev&quot;</span>, <span class="st">&quot;COLON_SCREEN_AdjPrev&quot;</span>, <span class="st">&quot;COPD_CrudePrev&quot;</span>, <span class="st">&quot;COPD_AdjPrev&quot;</span>, <span class="st">&quot;COREM_CrudePrev&quot;</span>, <span class="st">&quot;COREM_AdjPrev&quot;</span>, <span class="st">&quot;COREW_CrudePrev&quot;</span>, <span class="st">&quot;COREW_AdjPrev&quot;</span>, <span class="st">&quot;DENTAL_CrudePrev&quot;</span>, <span class="st">&quot;DENTAL_AdjPrev&quot;</span>, <span class="st">&quot;DIABETES_CrudePrev&quot;</span>, <span class="st">&quot;DIABETES_AdjPrev&quot;</span>, <span class="st">&quot;HIGHCHOL_CrudePrev&quot;</span>, <span class="st">&quot;HIGHCHOL_AdjPrev&quot;</span>, <span class="st">&quot;LPA_CrudePrev&quot;</span>, <span class="st">&quot;LPA_AdjPrev&quot;</span>, <span class="st">&quot;MAMMOUSE_CrudePrev&quot;</span>, <span class="st">&quot;MAMMOUSE_AdjPrev&quot;</span>, <span class="st">&quot;OBESITY_CrudePrev&quot;</span>, <span class="st">&quot;OBESITY_AdjPrev&quot;</span>, <span class="st">&quot;PAPTEST_CrudePrev&quot;</span>, <span class="st">&quot;PAPTEST_AdjPrev&quot;</span>, <span class="st">&quot;PHLTH_CrudePrev&quot;</span>, <span class="st">&quot;PHLTH_AdjPrev&quot;</span>, <span class="st">&quot;STROKE_CrudePrev&quot;</span>, <span class="st">&quot;STROKE_AdjPrev&quot;</span>, <span class="st">&quot;Geolocation&quot;</span>))
+>>>>>>> 0394cb324e97b6f452e1ed76a9c9bb24ce2844d3
+
+health_exp_dictionary =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">column_name =</span> <span class="kw">c</span>(<span class="st">&quot;state&quot;</span>, <span class="st">&quot;health_exp&quot;</span>),
+                               <span class="dt">description =</span> <span class="kw">c</span>(<span class="st">&quot;full name of the state&quot;</span>, <span class="st">&quot;total healthcare expenditures per capita by state in 2014&quot;</span>),
+                               <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&quot;Plain Text&quot;</span>, <span class="st">&quot;Number&quot;</span>))
+
+data_dictionary =<span class="st"> </span><span class="kw">full_join</span>(data_dictionary, health_exp_dictionary)</code></pre></div>
+<pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">region_dict =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">column_name =</span> <span class="kw">c</span>(<span class="st">&quot;region&quot;</span>, <span class="st">&quot;division&quot;</span>),
+                     <span class="dt">description =</span> <span class="kw">c</span>(<span class="st">&quot;geographical region of the state&quot;</span>, <span class="st">&quot;more specific division within the region&quot;</span>),
+                     <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&quot;Plain Text&quot;</span>, <span class="st">&quot;Plain Text&quot;</span>)
+  
+)
+
+data_dictionary =<span class="st"> </span><span class="kw">full_join</span>(data_dictionary, region_dict)</code></pre></div>
+<pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
+>>>>>>> 1b934b5607fd764639a29ff07fa42a55d1f8915e
 
 </body>
 </html>
