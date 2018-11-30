@@ -26,7 +26,7 @@ body {
 <body>
 
 <h1 id="p8105_fp_mjcr">p8105_fp_mjcr</h1>
-<p>download data</p>
+<p>Download data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#cdc_df = GET(&quot;https://chronicdata.cdc.gov/resource/ta23-kdpu.csv&quot;) %&gt;%</span>
 <span class="co">#  content(&quot;parsed&quot;) </span>
 
@@ -58,9 +58,27 @@ cdc_df =<span class="st"> </span><span class="kw">read_csv</span>(<span class="s
 ## )
 
 ## See spec(...) for full column specifications.</code></pre>
-<p>Clean data</p>
+<p>Select variables we may be interested in:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df =<span class="st"> </span>cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(StateAbbr, PlaceName, Population2010, ACCESS2_CrudePrev, ACCESS2_AdjPrev, BPHIGH_CrudePrev, BPHIGH_AdjPrev, BPMED_CrudePrev, BPMED_AdjPrev, CANCER_CrudePrev, CANCER_AdjPrev, CHD_CrudePrev, CHD_AdjPrev, CHECKUP_CrudePrev, CHECKUP_AdjPrev, CHOLSCREEN_CrudePrev, CHOLSCREEN_AdjPrev, COLON_SCREEN_CrudePrev, COLON_SCREEN_AdjPrev, COPD_CrudePrev, COPD_AdjPrev, COREM_CrudePrev, COREM_AdjPrev, COREW_CrudePrev, COREW_AdjPrev, DENTAL_CrudePrev, DENTAL_AdjPrev, DIABETES_CrudePrev, DIABETES_AdjPrev, HIGHCHOL_CrudePrev, HIGHCHOL_AdjPrev, LPA_CrudePrev, LPA_AdjPrev, MAMMOUSE_CrudePrev, MAMMOUSE_AdjPrev, OBESITY_CrudePrev, OBESITY_AdjPrev, PAPTEST_CrudePrev, PAPTEST_AdjPrev, PHLTH_CrudePrev, PHLTH_AdjPrev, STROKE_CrudePrev, STROKE_AdjPrev, Geolocation))</code></pre></div>
+<span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(StateAbbr, PlaceName, Population2010, ACCESS2_CrudePrev, ACCESS2_AdjPrev, BPHIGH_CrudePrev, BPHIGH_AdjPrev, BPMED_CrudePrev, BPMED_AdjPrev, CANCER_CrudePrev, CANCER_AdjPrev, CHD_CrudePrev, CHD_AdjPrev, CHECKUP_CrudePrev, CHECKUP_AdjPrev, CHOLSCREEN_CrudePrev, CHOLSCREEN_AdjPrev, COLON_SCREEN_CrudePrev, COLON_SCREEN_AdjPrev, COPD_CrudePrev, COPD_AdjPrev, COREM_CrudePrev, COREM_AdjPrev, COREW_CrudePrev, COREW_AdjPrev, DENTAL_CrudePrev, DENTAL_AdjPrev, DIABETES_CrudePrev, DIABETES_AdjPrev, HIGHCHOL_CrudePrev, HIGHCHOL_AdjPrev, LPA_CrudePrev, LPA_AdjPrev, MAMMOUSE_CrudePrev, MAMMOUSE_AdjPrev, OBESITY_CrudePrev, OBESITY_AdjPrev, PAPTEST_CrudePrev, PAPTEST_AdjPrev, PHLTH_CrudePrev, PHLTH_AdjPrev, STROKE_CrudePrev, STROKE_AdjPrev, Geolocation)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">state =</span> <span class="kw">abbr2state</span>(StateAbbr)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(state, <span class="kw">everything</span>())</code></pre></div>
+<p>Merge data on state expenditure on healthcare:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Importing the raw expenditure data set and cleaning</span>
+healthcare_exp_df =<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;./data/health_care_expenditure.csv&quot;</span>, 
+                             <span class="dt">skip =</span> <span class="dv">4</span>, <span class="dt">n_max =</span> <span class="dv">50</span>, <span class="dt">col_names =</span> F) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">state =</span> <span class="st">&quot;X1&quot;</span>, <span class="dt">health_exp =</span> <span class="st">&quot;X2&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">health_exp =</span> <span class="kw">str_replace</span>(health_exp, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">$&quot;</span>, <span class="st">&quot;&quot;</span>),
+         <span class="dt">health_exp  =</span> <span class="kw">as.numeric</span>(health_exp))</code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   X1 = col_character(),
+##   X2 = col_character()
+## )</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Add state healthcare expenditure data to CDC data</span>
+cdc_df =<span class="st"> </span><span class="kw">left_join</span>(cdc_df, healthcare_exp_df, <span class="dt">by =</span> <span class="st">&quot;state&quot;</span>)
+
+cdc_df =<span class="st"> </span>cdc_df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">state =</span> <span class="kw">abbr2state</span>(StateAbbr))</code></pre></div>
 
 </body>
 </html>
