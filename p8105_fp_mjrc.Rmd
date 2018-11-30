@@ -38,6 +38,7 @@ cdc_df = cdc_df %>%
 Merge data on state expenditure on healthcare:
 
 ```{r}
+#link: https://www.kff.org/other/state-indicator/health-spending-per-capita/?currentTimeframe=0&sortModel=%7B%22colId%22:%22Location%22,%22sort%22:%22asc%22%7D
 
 #Importing the raw expenditure data set and cleaning
 healthcare_exp_df = read_csv("./data/health_care_expenditure.csv", 

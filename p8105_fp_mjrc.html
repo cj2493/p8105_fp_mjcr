@@ -190,13 +190,10 @@ $(document).ready(function () {
   <a href="about.html">About</a>
 </li>
 <li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
-    <span class="fa fa-envelope fa-lg"></span>
-     
-  </a>
+  <a href="flex_dashboard.html">Flex Dashboard</a>
 </li>
 <li>
-  <a href="http://github.com/&lt;YOUR_GH_NAME&gt;/">
+  <a href="http://github.com/cj2493/p8105_fp_mjcr/">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -252,7 +249,9 @@ cdc_df = read_csv(&quot;./data/500_Cities__City-level_Data__GIS_Friendly_Format_
   mutate(state = abbr2state(StateAbbr)) %&gt;%
   select(state, everything())</code></pre>
 <p>Merge data on state expenditure on healthcare:</p>
-<pre class="r"><code>#Importing the raw expenditure data set and cleaning
+<pre class="r"><code>#link: https://www.kff.org/other/state-indicator/health-spending-per-capita/?currentTimeframe=0&amp;sortModel=%7B%22colId%22:%22Location%22,%22sort%22:%22asc%22%7D
+
+#Importing the raw expenditure data set and cleaning
 healthcare_exp_df = read_csv(&quot;./data/health_care_expenditure.csv&quot;, 
                              skip = 4, n_max = 50, col_names = F) %&gt;%
   rename(state = &quot;X1&quot;, health_exp = &quot;X2&quot;) %&gt;%
