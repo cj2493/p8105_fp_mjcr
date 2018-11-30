@@ -202,6 +202,7 @@ $(document).ready(function () {
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+<<<<<<< HEAD
 
 <div class="fluid-row" id="header">
 
@@ -209,6 +210,15 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">data_dictionary</h1>
 
+=======
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">data_dictionary</h1>
+
+>>>>>>> 1b934b5607fd764639a29ff07fa42a55d1f8915e
 </div>
 
 
@@ -245,7 +255,26 @@ data_dictionary = read_dict(&quot;https://chronicdata.cdc.gov/500-Cities/500-Cit
 <pre class="r"><code>data_dictionary = readxl::read_xlsx(&quot;./data/data_dictionary.xlsx&quot;) 
 data_dictionary = data_dictionary %&gt;%
   janitor::clean_names() %&gt;%
+<<<<<<< HEAD
   filter(column_name %in% c(&quot;StateAbbr&quot;, &quot;PlaceName&quot;, &quot;Population2010&quot;, &quot;ACCESS2_CrudePrev&quot;, &quot;ACCESS2_AdjPrev&quot;, &quot;BPHIGH_CrudePrev&quot;, &quot;BPHIGH_AdjPrev&quot;, &quot;BPMED_CrudePrev&quot;, &quot;BPMED_AdjPrev&quot;, &quot;CANCER_CrudePrev&quot;, &quot;CANCER_AdjPrev&quot;, &quot;CHD_CrudePrev&quot;, &quot;CHD_AdjPrev&quot;, &quot;CHECKUP_CrudePrev&quot;, &quot;CHECKUP_AdjPrev&quot;, &quot;CHOLSCREEN_CrudePrev&quot;, &quot;CHOLSCREEN_AdjPrev&quot;, &quot;COLON_SCREEN_CrudePrev&quot;, &quot;COLON_SCREEN_AdjPrev&quot;, &quot;COPD_CrudePrev&quot;, &quot;COPD_AdjPrev&quot;, &quot;COREM_CrudePrev&quot;, &quot;COREM_AdjPrev&quot;, &quot;COREW_CrudePrev&quot;, &quot;COREW_AdjPrev&quot;, &quot;DENTAL_CrudePrev&quot;, &quot;DENTAL_AdjPrev&quot;, &quot;DIABETES_CrudePrev&quot;, &quot;DIABETES_AdjPrev&quot;, &quot;HIGHCHOL_CrudePrev&quot;, &quot;HIGHCHOL_AdjPrev&quot;, &quot;LPA_CrudePrev&quot;, &quot;LPA_AdjPrev&quot;, &quot;MAMMOUSE_CrudePrev&quot;, &quot;MAMMOUSE_AdjPrev&quot;, &quot;OBESITY_CrudePrev&quot;, &quot;OBESITY_AdjPrev&quot;, &quot;PAPTEST_CrudePrev&quot;, &quot;PAPTEST_AdjPrev&quot;, &quot;PHLTH_CrudePrev&quot;, &quot;PHLTH_AdjPrev&quot;, &quot;STROKE_CrudePrev&quot;, &quot;STROKE_AdjPrev&quot;, &quot;Geolocation&quot;))</code></pre>
+=======
+  filter(column_name %in% c(&quot;StateAbbr&quot;, &quot;PlaceName&quot;, &quot;Population2010&quot;, &quot;ACCESS2_CrudePrev&quot;, &quot;ACCESS2_AdjPrev&quot;, &quot;BPHIGH_CrudePrev&quot;, &quot;BPHIGH_AdjPrev&quot;, &quot;BPMED_CrudePrev&quot;, &quot;BPMED_AdjPrev&quot;, &quot;CANCER_CrudePrev&quot;, &quot;CANCER_AdjPrev&quot;, &quot;CHD_CrudePrev&quot;, &quot;CHD_AdjPrev&quot;, &quot;CHECKUP_CrudePrev&quot;, &quot;CHECKUP_AdjPrev&quot;, &quot;CHOLSCREEN_CrudePrev&quot;, &quot;CHOLSCREEN_AdjPrev&quot;, &quot;COLON_SCREEN_CrudePrev&quot;, &quot;COLON_SCREEN_AdjPrev&quot;, &quot;COPD_CrudePrev&quot;, &quot;COPD_AdjPrev&quot;, &quot;COREM_CrudePrev&quot;, &quot;COREM_AdjPrev&quot;, &quot;COREW_CrudePrev&quot;, &quot;COREW_AdjPrev&quot;, &quot;DENTAL_CrudePrev&quot;, &quot;DENTAL_AdjPrev&quot;, &quot;DIABETES_CrudePrev&quot;, &quot;DIABETES_AdjPrev&quot;, &quot;HIGHCHOL_CrudePrev&quot;, &quot;HIGHCHOL_AdjPrev&quot;, &quot;LPA_CrudePrev&quot;, &quot;LPA_AdjPrev&quot;, &quot;MAMMOUSE_CrudePrev&quot;, &quot;MAMMOUSE_AdjPrev&quot;, &quot;OBESITY_CrudePrev&quot;, &quot;OBESITY_AdjPrev&quot;, &quot;PAPTEST_CrudePrev&quot;, &quot;PAPTEST_AdjPrev&quot;, &quot;PHLTH_CrudePrev&quot;, &quot;PHLTH_AdjPrev&quot;, &quot;STROKE_CrudePrev&quot;, &quot;STROKE_AdjPrev&quot;, &quot;Geolocation&quot;))
+
+health_exp_dictionary = tibble(column_name = c(&quot;state&quot;, &quot;health_exp&quot;),
+                               description = c(&quot;full name of the state&quot;, &quot;total healthcare expenditures per capita by state in 2014&quot;),
+                               type = c(&quot;Plain Text&quot;, &quot;Number&quot;))
+
+data_dictionary = full_join(data_dictionary, health_exp_dictionary)</code></pre>
+<pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
+<pre class="r"><code>region_dict = tibble(column_name = c(&quot;region&quot;, &quot;division&quot;),
+                     description = c(&quot;geographical region of the state&quot;, &quot;more specific division within the region&quot;),
+                     type = c(&quot;Plain Text&quot;, &quot;Plain Text&quot;)
+  
+)
+
+data_dictionary = full_join(data_dictionary, region_dict)</code></pre>
+<pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
+>>>>>>> 1b934b5607fd764639a29ff07fa42a55d1f8915e
 
 
 

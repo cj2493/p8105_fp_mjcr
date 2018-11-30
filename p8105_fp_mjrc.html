@@ -278,6 +278,12 @@ cdc_df = cdc_df %&gt;% mutate(state = abbr2state(StateAbbr))</code></pre>
 ##   Division = col_character()
 ## )</code></pre>
 <pre class="r"><code>cdc_df = left_join(cdc_df, regions_df, by = &quot;state&quot;)</code></pre>
+<p>List of health practice variables and health outcome variables:</p>
+<pre class="r"><code>#health_practices = BPMED_AdjPrev, CHECKUP_AdjPrev, CHOLSCREEN_AdjPrev, COLON_SCREEN_AdjPrev, COREM_AdjPrev, COREW_AdjPrev, DENTAL_AdjPrev, LPA_AdjPrev, MAMMOUSE_AdjPrev, PAPTEST_AdjPrev
+
+#health_outcomes = BPHIGH_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, COPD_AdjPrev, DIABETES_AdjPrev, HIGHCHOL_AdjPrev, OBESITY_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev
+
+#miscellaneous = StateAbbr, PlaceName, Population2010, ACCESS2_AdjPrev, Geolocation, state, health_exp, region, division</code></pre>
 
 
 
