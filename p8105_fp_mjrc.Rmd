@@ -55,6 +55,16 @@ cdc_df = cdc_df %>% mutate(state = abbr2state(StateAbbr))
 ```
 
 
+Merge data regions per state:
+
+```{r}
+regions_df = read_csv("https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv") %>%
+  janitor::clean_names() %>%
+  select(-state_code)
+  
+
+cdc_df = left_join(cdc_df, regions_df, by = "state")
+```
 
 
 
