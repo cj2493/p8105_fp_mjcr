@@ -89,8 +89,11 @@ h6 {
 <body>
 
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
 <h1 id="p8105_fp_mjcr">p8105_fp_mjcr</h1>
 =======
+>>>>>>> 0394cb324e97b6f452e1ed76a9c9bb24ce2844d3
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -294,7 +297,45 @@ cdc_df =<span class="st"> </span>cdc_df <span class="op">%&gt;%</span><span clas
 ##   Region = col_character(),
 ##   Division = col_character()
 ## )</code></pre>
+<<<<<<< HEAD
+<pre class="r"><code>cdc_df = left_join(cdc_df, regions_df, by = &quot;state&quot;)</code></pre>
+<p>List of health practice variables and health outcome variables:</p>
+<pre class="r"><code>#health_practices = BPMED_AdjPrev, CHECKUP_AdjPrev, CHOLSCREEN_AdjPrev, COLON_SCREEN_AdjPrev, COREM_AdjPrev, COREW_AdjPrev, DENTAL_AdjPrev, LPA_AdjPrev, MAMMOUSE_AdjPrev, PAPTEST_AdjPrev
+
+#health_outcomes = BPHIGH_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, COPD_AdjPrev, DIABETES_AdjPrev, HIGHCHOL_AdjPrev, OBESITY_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev
+
+#miscellaneous = StateAbbr, PlaceName, Population2010, ACCESS2_AdjPrev, Geolocation, state, health_exp, region, division</code></pre>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+=======
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df =<span class="st"> </span><span class="kw">left_join</span>(cdc_df, regions_df, <span class="dt">by =</span> <span class="st">&quot;state&quot;</span>)</code></pre></div>
+>>>>>>> 0394cb324e97b6f452e1ed76a9c9bb24ce2844d3
 
 </body>
 </html>

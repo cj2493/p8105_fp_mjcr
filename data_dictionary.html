@@ -76,6 +76,10 @@ h6 {
 
 <body>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 60e25bf0430314e9c2d72e4d3da5fac1dfac6488
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -202,9 +206,38 @@ $(document).ready(function () {
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<h1 id="data_dictionary">data_dictionary</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">url =<span class="st"> &quot;https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny&quot;</span>
+>>>>>>> 0394cb324e97b6f452e1ed76a9c9bb24ce2844d3
+
+
+<<<<<<< HEAD
+
+
+<h1 class="title toc-ignore">data_dictionary</h1>
+
+=======
 
 <div class="fluid-row" id="header">
 
+
+
+<h1 class="title toc-ignore">data_dictionary</h1>
+
+>>>>>>> 1b934b5607fd764639a29ff07fa42a55d1f8915e
+</div>
+
+
+<pre class="r"><code>url = &quot;https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny&quot;
+>>>>>>> 60e25bf0430314e9c2d72e4d3da5fac1dfac6488
+
+<div class="fluid-row" id="header">
+
+<<<<<<< HEAD
 
 
 <h1 class="title toc-ignore">data_dictionary</h1>
@@ -216,6 +249,12 @@ $(document).ready(function () {
 
 
 read_dict = function(url) {
+=======
+read_dict = function(url) {
+=======
+read_dict =<span class="st"> </span><span class="cf">function</span>(url) {
+>>>>>>> 0394cb324e97b6f452e1ed76a9c9bb24ce2844d3
+>>>>>>> 60e25bf0430314e9c2d72e4d3da5fac1dfac6488
   
   h = read_html(url)
   
@@ -240,12 +279,31 @@ read_dict = function(url) {
 
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 60e25bf0430314e9c2d72e4d3da5fac1dfac6488
 data_dictionary = read_dict(&quot;https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny&quot;)</code></pre>
 <p>This doesn’t read in anything? So for now I copied from the webpage into an excel file (will try to figure this out to get the selector gadget to work before submission)</p>
 <pre class="r"><code>data_dictionary = readxl::read_xlsx(&quot;./data/data_dictionary.xlsx&quot;) 
 data_dictionary = data_dictionary %&gt;%
   janitor::clean_names() %&gt;%
+<<<<<<< HEAD
   filter(column_name %in% c(&quot;StateAbbr&quot;, &quot;PlaceName&quot;, &quot;Population2010&quot;, &quot;ACCESS2_CrudePrev&quot;, &quot;ACCESS2_AdjPrev&quot;, &quot;BPHIGH_CrudePrev&quot;, &quot;BPHIGH_AdjPrev&quot;, &quot;BPMED_CrudePrev&quot;, &quot;BPMED_AdjPrev&quot;, &quot;CANCER_CrudePrev&quot;, &quot;CANCER_AdjPrev&quot;, &quot;CHD_CrudePrev&quot;, &quot;CHD_AdjPrev&quot;, &quot;CHECKUP_CrudePrev&quot;, &quot;CHECKUP_AdjPrev&quot;, &quot;CHOLSCREEN_CrudePrev&quot;, &quot;CHOLSCREEN_AdjPrev&quot;, &quot;COLON_SCREEN_CrudePrev&quot;, &quot;COLON_SCREEN_AdjPrev&quot;, &quot;COPD_CrudePrev&quot;, &quot;COPD_AdjPrev&quot;, &quot;COREM_CrudePrev&quot;, &quot;COREM_AdjPrev&quot;, &quot;COREW_CrudePrev&quot;, &quot;COREW_AdjPrev&quot;, &quot;DENTAL_CrudePrev&quot;, &quot;DENTAL_AdjPrev&quot;, &quot;DIABETES_CrudePrev&quot;, &quot;DIABETES_AdjPrev&quot;, &quot;HIGHCHOL_CrudePrev&quot;, &quot;HIGHCHOL_AdjPrev&quot;, &quot;LPA_CrudePrev&quot;, &quot;LPA_AdjPrev&quot;, &quot;MAMMOUSE_CrudePrev&quot;, &quot;MAMMOUSE_AdjPrev&quot;, &quot;OBESITY_CrudePrev&quot;, &quot;OBESITY_AdjPrev&quot;, &quot;PAPTEST_CrudePrev&quot;, &quot;PAPTEST_AdjPrev&quot;, &quot;PHLTH_CrudePrev&quot;, &quot;PHLTH_AdjPrev&quot;, &quot;STROKE_CrudePrev&quot;, &quot;STROKE_AdjPrev&quot;, &quot;Geolocation&quot;))
+=======
+<<<<<<< HEAD
+  filter(column_name %in% c(&quot;StateAbbr&quot;, &quot;PlaceName&quot;, &quot;Population2010&quot;, &quot;ACCESS2_CrudePrev&quot;, &quot;ACCESS2_AdjPrev&quot;, &quot;BPHIGH_CrudePrev&quot;, &quot;BPHIGH_AdjPrev&quot;, &quot;BPMED_CrudePrev&quot;, &quot;BPMED_AdjPrev&quot;, &quot;CANCER_CrudePrev&quot;, &quot;CANCER_AdjPrev&quot;, &quot;CHD_CrudePrev&quot;, &quot;CHD_AdjPrev&quot;, &quot;CHECKUP_CrudePrev&quot;, &quot;CHECKUP_AdjPrev&quot;, &quot;CHOLSCREEN_CrudePrev&quot;, &quot;CHOLSCREEN_AdjPrev&quot;, &quot;COLON_SCREEN_CrudePrev&quot;, &quot;COLON_SCREEN_AdjPrev&quot;, &quot;COPD_CrudePrev&quot;, &quot;COPD_AdjPrev&quot;, &quot;COREM_CrudePrev&quot;, &quot;COREM_AdjPrev&quot;, &quot;COREW_CrudePrev&quot;, &quot;COREW_AdjPrev&quot;, &quot;DENTAL_CrudePrev&quot;, &quot;DENTAL_AdjPrev&quot;, &quot;DIABETES_CrudePrev&quot;, &quot;DIABETES_AdjPrev&quot;, &quot;HIGHCHOL_CrudePrev&quot;, &quot;HIGHCHOL_AdjPrev&quot;, &quot;LPA_CrudePrev&quot;, &quot;LPA_AdjPrev&quot;, &quot;MAMMOUSE_CrudePrev&quot;, &quot;MAMMOUSE_AdjPrev&quot;, &quot;OBESITY_CrudePrev&quot;, &quot;OBESITY_AdjPrev&quot;, &quot;PAPTEST_CrudePrev&quot;, &quot;PAPTEST_AdjPrev&quot;, &quot;PHLTH_CrudePrev&quot;, &quot;PHLTH_AdjPrev&quot;, &quot;STROKE_CrudePrev&quot;, &quot;STROKE_AdjPrev&quot;, &quot;Geolocation&quot;))</code></pre>
+=======
+  filter(column_name %in% c(&quot;StateAbbr&quot;, &quot;PlaceName&quot;, &quot;Population2010&quot;, &quot;ACCESS2_CrudePrev&quot;, &quot;ACCESS2_AdjPrev&quot;, &quot;BPHIGH_CrudePrev&quot;, &quot;BPHIGH_AdjPrev&quot;, &quot;BPMED_CrudePrev&quot;, &quot;BPMED_AdjPrev&quot;, &quot;CANCER_CrudePrev&quot;, &quot;CANCER_AdjPrev&quot;, &quot;CHD_CrudePrev&quot;, &quot;CHD_AdjPrev&quot;, &quot;CHECKUP_CrudePrev&quot;, &quot;CHECKUP_AdjPrev&quot;, &quot;CHOLSCREEN_CrudePrev&quot;, &quot;CHOLSCREEN_AdjPrev&quot;, &quot;COLON_SCREEN_CrudePrev&quot;, &quot;COLON_SCREEN_AdjPrev&quot;, &quot;COPD_CrudePrev&quot;, &quot;COPD_AdjPrev&quot;, &quot;COREM_CrudePrev&quot;, &quot;COREM_AdjPrev&quot;, &quot;COREW_CrudePrev&quot;, &quot;COREW_AdjPrev&quot;, &quot;DENTAL_CrudePrev&quot;, &quot;DENTAL_AdjPrev&quot;, &quot;DIABETES_CrudePrev&quot;, &quot;DIABETES_AdjPrev&quot;, &quot;HIGHCHOL_CrudePrev&quot;, &quot;HIGHCHOL_AdjPrev&quot;, &quot;LPA_CrudePrev&quot;, &quot;LPA_AdjPrev&quot;, &quot;MAMMOUSE_CrudePrev&quot;, &quot;MAMMOUSE_AdjPrev&quot;, &quot;OBESITY_CrudePrev&quot;, &quot;OBESITY_AdjPrev&quot;, &quot;PAPTEST_CrudePrev&quot;, &quot;PAPTEST_AdjPrev&quot;, &quot;PHLTH_CrudePrev&quot;, &quot;PHLTH_AdjPrev&quot;, &quot;STROKE_CrudePrev&quot;, &quot;STROKE_AdjPrev&quot;, &quot;Geolocation&quot;))
+=======
+data_dictionary =<span class="st"> </span><span class="kw">read_dict</span>(<span class="st">&quot;https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny&quot;</span>)</code></pre></div>
+<p>This doesn't read in anything? So for now I copied from the webpage into an excel file (will try to figure this out to get the selector gadget to work before submission)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_dictionary =<span class="st"> </span>readxl<span class="op">::</span><span class="kw">read_xlsx</span>(<span class="st">&quot;./data/data_dictionary.xlsx&quot;</span>) 
+data_dictionary =<span class="st"> </span>data_dictionary <span class="op">%&gt;%</span>
+<span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(column_name <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;StateAbbr&quot;</span>, <span class="st">&quot;PlaceName&quot;</span>, <span class="st">&quot;Population2010&quot;</span>, <span class="st">&quot;ACCESS2_CrudePrev&quot;</span>, <span class="st">&quot;ACCESS2_AdjPrev&quot;</span>, <span class="st">&quot;BPHIGH_CrudePrev&quot;</span>, <span class="st">&quot;BPHIGH_AdjPrev&quot;</span>, <span class="st">&quot;BPMED_CrudePrev&quot;</span>, <span class="st">&quot;BPMED_AdjPrev&quot;</span>, <span class="st">&quot;CANCER_CrudePrev&quot;</span>, <span class="st">&quot;CANCER_AdjPrev&quot;</span>, <span class="st">&quot;CHD_CrudePrev&quot;</span>, <span class="st">&quot;CHD_AdjPrev&quot;</span>, <span class="st">&quot;CHECKUP_CrudePrev&quot;</span>, <span class="st">&quot;CHECKUP_AdjPrev&quot;</span>, <span class="st">&quot;CHOLSCREEN_CrudePrev&quot;</span>, <span class="st">&quot;CHOLSCREEN_AdjPrev&quot;</span>, <span class="st">&quot;COLON_SCREEN_CrudePrev&quot;</span>, <span class="st">&quot;COLON_SCREEN_AdjPrev&quot;</span>, <span class="st">&quot;COPD_CrudePrev&quot;</span>, <span class="st">&quot;COPD_AdjPrev&quot;</span>, <span class="st">&quot;COREM_CrudePrev&quot;</span>, <span class="st">&quot;COREM_AdjPrev&quot;</span>, <span class="st">&quot;COREW_CrudePrev&quot;</span>, <span class="st">&quot;COREW_AdjPrev&quot;</span>, <span class="st">&quot;DENTAL_CrudePrev&quot;</span>, <span class="st">&quot;DENTAL_AdjPrev&quot;</span>, <span class="st">&quot;DIABETES_CrudePrev&quot;</span>, <span class="st">&quot;DIABETES_AdjPrev&quot;</span>, <span class="st">&quot;HIGHCHOL_CrudePrev&quot;</span>, <span class="st">&quot;HIGHCHOL_AdjPrev&quot;</span>, <span class="st">&quot;LPA_CrudePrev&quot;</span>, <span class="st">&quot;LPA_AdjPrev&quot;</span>, <span class="st">&quot;MAMMOUSE_CrudePrev&quot;</span>, <span class="st">&quot;MAMMOUSE_AdjPrev&quot;</span>, <span class="st">&quot;OBESITY_CrudePrev&quot;</span>, <span class="st">&quot;OBESITY_AdjPrev&quot;</span>, <span class="st">&quot;PAPTEST_CrudePrev&quot;</span>, <span class="st">&quot;PAPTEST_AdjPrev&quot;</span>, <span class="st">&quot;PHLTH_CrudePrev&quot;</span>, <span class="st">&quot;PHLTH_AdjPrev&quot;</span>, <span class="st">&quot;STROKE_CrudePrev&quot;</span>, <span class="st">&quot;STROKE_AdjPrev&quot;</span>, <span class="st">&quot;Geolocation&quot;</span>))
+>>>>>>> 0394cb324e97b6f452e1ed76a9c9bb24ce2844d3
+>>>>>>> 60e25bf0430314e9c2d72e4d3da5fac1dfac6488
 
 health_exp_dictionary = tibble(column_name = c(&quot;state&quot;, &quot;health_exp&quot;),
                                description = c(&quot;full name of the state&quot;, &quot;total healthcare expenditures per capita by state in 2014&quot;),
@@ -261,6 +319,7 @@ data_dictionary = full_join(data_dictionary, health_exp_dictionary)</code></pre>
 
 data_dictionary = full_join(data_dictionary, region_dict)</code></pre>
 <pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
+>>>>>>> 1b934b5607fd764639a29ff07fa42a55d1f8915e
 
 
 
