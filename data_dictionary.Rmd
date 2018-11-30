@@ -60,6 +60,14 @@ health_exp_dictionary = tibble(column_name = c("state", "health_exp"),
                                type = c("Plain Text", "Number"))
 
 data_dictionary = full_join(data_dictionary, health_exp_dictionary)
+
+region_dict = tibble(column_name = c("region", "division"),
+                     description = c("geographical region of the state", "more specific division within the region"),
+                     type = c("Plain Text", "Plain Text")
+  
+)
+
+data_dictionary = full_join(data_dictionary, region_dict)
 ```
 
 
