@@ -15,7 +15,7 @@ library(openintro)
 
 Download data:
 
-```{r cache = TRUE}
+```{r, cache = TRUE, message = FALSE}
 #cdc_df = GET("https://chronicdata.cdc.gov/resource/ta23-kdpu.csv") %>%
 #  content("parsed") 
 
@@ -36,7 +36,7 @@ cdc_df = cdc_df %>%
 
 Merge data on state expenditure on healthcare:
 
-```{r}
+```{r, message = FALSE}
 #link: https://www.kff.org/other/state-indicator/health-spending-per-capita/?currentTimeframe=0&sortModel=%7B%22colId%22:%22Location%22,%22sort%22:%22asc%22%7D
 
 #Importing the raw expenditure data set and cleaning
@@ -57,7 +57,7 @@ cdc_df = cdc_df %>% mutate(state = abbr2state(StateAbbr))
 
 Merge data regions per state:
 
-```{r}
+```{r, message = FAlSE}
 regions_df = read_csv("https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv") %>%
   janitor::clean_names() %>%
   select(-state_code)
