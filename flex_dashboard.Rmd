@@ -13,7 +13,14 @@ library(tidyverse)
 library(viridis)
 library(p8105.datasets)
 library(plotly)
+library(stringr)
 ```
+
+```{r, echo = FALSE}
+cdc_df = read_csv("./data/cdc_df.csv")
+```
+
+
 
 Column {data-width=650}
 -----------------------------------------------------------------------
@@ -30,11 +37,20 @@ Column {data-width=350}
 ### Chart B
 
 ```{r}
-
+cdc_df %>%
+  mutate(text_label = str_c("Percent without Insurance: ", ACCESS2_AdjPrev, '\nPrevalence of Cancer: ', CANCER_AdjPrev)) %>%
+  plot_ly(x = ~ACCESS2_AdjPrev, y = ~CANCER_AdjPrev, type = "scatter", mode = "markers",
+          alpha = 0.5,
+          color = ~region,
+          text = ~text_label
+          )
 ```
 
 ### Chart C
 
 ```{r}
-
+cdc_df %>%
+  mutate(text_label = str_c("Health Expenditures per Capita: ", health_exp, '\nCity: ', PlaceName, '\nState: ', StateAbbr)) %>%
+  mutate(region = fct_reorder(region, health_exp)) %>%
+  plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label)
 ```
