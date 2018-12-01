@@ -1,8 +1,8 @@
 ---
 title: "500 Cities Project"
 ---
- 
-<img src="images/Healthcare.jpg" style="width:100%">
+
+<img src = "images/Healthcare.jpg" style="width:100%">
 
 ### Exploring the Patterns of Adherence to Known Public Health Guidelines Across the United States and their Consequences
 
