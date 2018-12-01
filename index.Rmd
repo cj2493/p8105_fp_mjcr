@@ -2,13 +2,11 @@
 title: "500 Cities Project"
 ---
 
-<img src="images/Healthcare.jpg" style="width:100%">
+<img src = "images/Healthcare.jpg" style="width:100%">
 
 ### Exploring the Patterns of Adherence to Known Public Health Guidelines Across the United States and their Consequences
 
-Here we explore regional differences in health outcomes across the United States.
-
-We analyze the associations between:
+Here we explore regional differences in health outcomes across the United States by analyzing the associations between:
 
 * Prevalence of lack of health insurance with 
     * Regular health practices

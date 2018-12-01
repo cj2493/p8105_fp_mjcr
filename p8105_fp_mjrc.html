@@ -256,6 +256,7 @@ health_outcomes = cdc_df %&gt;%
 miscellaneous = cdc_df %&gt;%
   select(StateAbbr, PlaceName, Population2010, ACCESS2_AdjPrev, Geolocation, state, health_exp, region, division)</code></pre>
 <p>Data set for shiny insurance vs disease prevalence plot</p>
+<<<<<<< HEAD
 <pre class="r"><code>cdc_df %&gt;% 
   gather(key = outcome, value = prevalence, BPHIGH_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, COPD_AdjPrev, DIABETES_AdjPrev, HIGHCHOL_AdjPrev, OBESITY_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev) %&gt;% 
   select(StateAbbr, PlaceName, ACCESS2_AdjPrev, Population2010, Geolocation, health_exp, region, division, outcome, prevalence)</code></pre>
@@ -379,6 +380,20 @@ $(document).ready(function () {
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
+=======
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> outcome, <span class="dt">value =</span> prevalence, BPHIGH_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, COPD_AdjPrev,    DIABETES_AdjPrev, HIGHCHOL_AdjPrev, OBESITY_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(StateAbbr, PlaceName, ACCESS2_AdjPrev, Population2010, Geolocation, health_exp, region, division, outcome, prevalence) <span class="op">%&gt;%</span><span class="st"> </span>View
+<span class="co">#  recode(outcome, &quot;BPHIGH_AdjPrev&quot; = &quot;High Blood Pressure&quot;,</span>
+<span class="co">#                  &quot;Cancer_AdjPrev&quot; = &quot;Cancer&quot;,</span>
+<span class="co">#                  &quot;CHD_AdjPrev&quot; = &quot;Coronary Heart Disease&quot;,</span>
+<span class="co">#                 &quot;COPD_AdhPrev&quot; = &quot;Chronic Obstructive Pulmonary Disease&quot;,</span>
+<span class="co">#                  &quot;DIABETES_AdhPrev&quot; = &quot;Diabetes&quot;,</span>
+<span class="co">#                  &quot;HIGHCHOL_AdjPrev&quot; = &quot;High Cholesterol&quot;,</span>
+<span class="co">#                  &quot;OBESITY_AdjPrev&quot; = &quot;Obesity&quot;,</span>
+<span class="co">#                  &quot;PHLTH_AdjPrev&quot; = &quot;Poor Physical Health&quot;,</span>
+<span class="co">#                  &quot;STROKE_AdjPrev&quot; = &quot;Stroke&quot;) %&gt;% View</span></code></pre></div>
+>>>>>>> fbba1af9c8adf38dcaf1af45308119f4ea373885
 
 </body>
 </html>

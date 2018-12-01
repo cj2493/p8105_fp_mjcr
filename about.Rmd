@@ -6,5 +6,11 @@ title: "About"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+### Dataset
+
+[<img src = "images/500-cities-logo.png" style="width:50%">](https://www.cdc.gov/500cities/about.htm)
+
+This data is taken from the 500 Cities Project, which analyzes data from the Centers for Disease Control and Prevention (CDC) in order to provide estimates for chronic disease risk factors, health outcomes, and clinical preventive service use. Data is provided for the 500 largest cities in the US.
+
 
 

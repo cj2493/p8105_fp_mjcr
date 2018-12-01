@@ -20,6 +20,22 @@ library(stringr)
 cdc_df = read_csv("./data/cdc_df.csv")
 ```
 
+```{r}
+outcome_transform = cdc_df %>% 
+  gather(key = outcome, value = prevalence, BPHIGH_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, COPD_AdjPrev,    DIABETES_AdjPrev, HIGHCHOL_AdjPrev, OBESITY_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev) %>% 
+  select(StateAbbr, PlaceName, ACCESS2_AdjPrev, Population2010, Geolocation, health_exp, region, division, outcome, prevalence) 
+```
+
+Column {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+outcomes = outcome_transform %>% distinct(outcome) %>% pull()
+
+selectInput("outcome_choice", label = h3("Select health outcome"),
+    choices = outcomes, 
+    selected = "CANCER_AdjPrev")
+```
 
 
 Column {data-width=650}
@@ -28,7 +44,15 @@ Column {data-width=650}
 ### Chart A
 
 ```{r}
-
+renderPlotly({outcome_transform %>%
+  mutate(text_label = str_c("Percent without Insurance: ", ACCESS2_AdjPrev)) %>%
+  filter(outcome == input$outcome_choice) %>%
+  plot_ly(x = ~ACCESS2_AdjPrev, y = ~prevalence, type = "scatter", mode = "markers",
+          alpha = 0.5,
+          color = ~region,
+          text = ~text_label
+          )
+})
 ```
 
 Column {data-width=350}
@@ -43,7 +67,11 @@ cdc_df %>%
           alpha = 0.5,
           color = ~region,
           text = ~text_label
-          )
+          ) %>%
+  layout(
+    xaxis = list(title = "Lack of Insurance in City"),
+    yaxis = list(title = "Prevalence of Cancer")
+  )
 ```
 
 ### Chart C
@@ -53,5 +81,9 @@ cdc_df %>%
   distinct(state, .keep_all = TRUE) %>%
   mutate(text_label = str_c("Health Expenditures per Capita: ", health_exp, '\nState: ', StateAbbr)) %>%
   mutate(region = fct_reorder(region, health_exp)) %>%
-  plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label)
+  plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
+  layout(
+    xaxis = list(title = "Region"),
+    yaxis = list(title = "Health Expenditures per Capita per State")
+  )
 ```
