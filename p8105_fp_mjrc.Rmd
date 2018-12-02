@@ -90,7 +90,7 @@ miscellaneous = cdc_df %>%
 
 
 
-Analyze some variables
+Analyze some variables: region
 
 ```{r}
 
@@ -141,6 +141,35 @@ ggplot() +
 
 
 ```
+
+
+Analyze some variables: expenditure
+
+```{r}
+cdc_df %>%
+  lm(DIABETES_AdjPrev ~ CHECKUP_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(OBESITY_AdjPrev ~ health_exp + CHECKUP_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(BPHIGH_AdjPrev ~ health_exp + CHECKUP_AdjPrev, data = .) %>%
+  summary
+
+library(betareg)
+
+cdc_df %>%
+  mutate(DIABETES_AdjPrev = DIABETES_AdjPrev/100,
+         CHECKUP_AdjPrev = CHECKUP_AdjPrev/100) %>%
+  betareg(DIABETES_AdjPrev ~ CHECKUP_AdjPrev + health_exp, data = .) %>%
+  summary
+
+
+```
+
+
 
 
 
