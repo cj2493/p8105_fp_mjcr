@@ -11,4 +11,4 @@ navbar:
       href: http://github.com/cj2493/p8105_fp_mjcr/
 output:
   html_document:
-    theme: journal
+    theme: cerulean

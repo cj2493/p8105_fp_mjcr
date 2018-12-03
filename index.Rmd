@@ -1,22 +1,21 @@
 ---
-title: "500 Cities Project"
+title: "Exploring the Relationship between Health and Healthcare in America"
 ---
 
 <img src = "images/Healthcare.jpg" style="width:100%">
 
-### Exploring the Patterns of Adherence to Known Public Health Guidelines Across the United States and their Consequences
 
-Here we explore regional differences in health outcomes across the United States by analyzing the associations between:
+The United States continues to spend more on healthcare than any other nation. As a result, the cost of many health practices that public health officials advocate for often becomes prohibitive for a large population. As students of public health, we wanted to explore differences in health practices and outcomes. We did this by analyzing the following associations:
 
-* Prevalence of lack of health insurance with 
+* Lack of health insurance with:
     * Regular health practices
     * Health outcomes
 
-* Healthcare expenditure per capita per state with
+* Healthcare expenditure per state with:
     * Regular health practices
     * Health outcomes
 
 
-
+Exploring the Patterns of Adherence to Known Public Health Guidelines Across the United States and their Consequences
 
 
