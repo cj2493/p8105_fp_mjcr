@@ -11,11 +11,9 @@ library(modelr)
 library(purrr)
 ```
 
-### Multiple Linear Regression  
-
 In this section, we will explore some linear models predicting health outcomes from commonly used health practices.
 
-```{r, load_data, message = FALSE}
+```{r, load_data, include = FALSE}
 cdc_df = read_csv("./data/cdc_df.csv")
 ```
 
