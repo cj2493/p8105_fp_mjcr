@@ -7,5 +7,104 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(modelr)
+library(purrr)
+```
+
+In this section, we will explore some linear models predicting health outcomes from commonly used health practices.
+
+```{r, load_data, message = FALSE}
+cdc_df = read_csv("./data/cdc_df.csv")
+```
+
+In this dataset, the variables related to commonly used health practices are:  
+  
+COREM_AdjPrev: the prevalence of men 65 years or older who are up to date on flu shots, PPV shots, and colorectal cancer screenings;  
+COREW_AdjPrev: the prevalence of women 65 years or older who are up to date on flu shots, PPV shots, colorectal cancer screenings, and mammograms;  
+DENTAL_AdjPrev: the prevalence of visits to dental clinics for adults 18 years and older;  
+LPA_AdjPrev: the prevalence of no leisure time physical activity for adults 18 years and older;  
+MAMMOUSE_AdjPrev: the prevalence of mammograph use for women aged 50-74;  
+PAPTEST_AdjPrev: the prevalence of pap smear use for women aged 21-65;  
+CHECKUP_AdjPrev: the prevalence of routine doctor visits in the past year for adults 18 and older;  
+CHOLSCREEN_AdjPrev: the prevalence of cholesterol screening for adults 18 and older;  
+COLON_SCREEN_AdjPrev: the prevalence of fecal occult blood test, sigmoidoscopy, or colonoscopy for adults 50-75.  
+  
+  
+For each of the models we will show, we first fit a model on disease prevalences with all of the aforementioned practices as predictors, and eliminated predictors until all were significant.  
+  
+For the prevalence of cancer (excluding skin cancer) for adults 18 and older, the following model was the result:  
+
+```{r, cancer_mod, include = FALSE}
+cancer_full_mod = lm(CANCER_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(cancer_full_mod)
+cancer_minus_1 = update(cancer_full_mod, . ~ . -COREW_AdjPrev)
+summary(cancer_minus_1)
+cancer_minus_2 = update(cancer_minus_1, . ~ . -LPA_AdjPrev)
+summary(cancer_minus_2)
+cancer_minus_3 = update(cancer_minus_2, . ~ . -CHOLSCREEN_AdjPrev)
+summary(cancer_minus_3)
+cancer_minus_4 = update(cancer_minus_3, . ~ . -PAPTEST_AdjPrev)
+```
+
+```{r, final_cancer}
+summary(cancer_minus_4)
+```
+
+
+```{r, chol_mod, include = FALSE}
+chol_full_mod = lm(HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(chol_full_mod)
+chol_minus_1 = update(chol_full_mod, . ~ . -CHOLSCREEN_AdjPrev) #the first thing I took out!
+summary(chol_minus_1)
+chol_minus_2 = update(chol_minus_1, . ~ . -COREW_AdjPrev)
+summary(chol_minus_2)
+chol_minus_3 = update(chol_minus_2, . ~ . -COREM_AdjPrev)
+summary(chol_minus_3)
+chol_minus_4 = update(chol_minus_3, . ~ . -MAMMOUSE_AdjPrev)
+summary(chol_minus_4)
+chol_minus_5 = update(chol_minus_4, . ~ . -PAPTEST_AdjPrev)
+```
+
+```{r, final_chol_mod}
+summary(chol_minus_5)
+```
+
+
+```{r, diabetes_mod, include = FALSE}
+diab_full_mod = lm(DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(diab_full_mod)
+diab_minus_1 = update(diab_full_mod, . ~ . -COLON_SCREEN_AdjPrev)
+summary(diab_minus_1)
+diab_minus_2 = update(diab_minus_1, . ~ . -PAPTEST_AdjPrev)
+summary(diab_minus_2)
+diab_minus_3 = update(diab_minus_2, . ~ . -COREM_AdjPrev)
+```
+
+```{r, final_diab_mod}
+summary(diab_minus_3)
+```
+
+
+```{r, cross_validation}
+cv_df =
+  crossv_mc(cdc_df, 500) %>% 
+  mutate(train = map(train, as_tibble),
+         test = map(test, as_tibble))
+
+cv_df = 
+  cv_df %>% 
+  mutate(cancer_minus_4 = map(train, ~lm(CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
+         chol_minus_5   = map(train, ~lm(HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
+         diab_minus_3   = map(train, ~lm(DIABETES_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev, data = .x))) %>% 
+  mutate(rmse_cancer    = map2_dbl(cancer_minus_4, test, ~rmse(model = .x, data = .y)),
+         rmse_chol      = map2_dbl(chol_minus_5, test, ~rmse(model = .x, data = .y)),
+         rmse_diabetes  = map2_dbl(diab_minus_3, test, ~rmse(model = .x, data = .y)))
+
+cv_df %>% 
+  select(starts_with("rmse")) %>% 
+  gather(key = model, value = rmse) %>% 
+  mutate(model = str_replace(model, "rmse_", ""), 
+         model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()
 ```
 
