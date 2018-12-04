@@ -3,29 +3,26 @@ title: "Healthcare Expenditure"
 output: html_document
 ---
 
-```{r setup, include=FALSE, message = F}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
-<<<<<<< HEAD
 library(ggmap)
-=======
 library(flexdashboard)
 library(viridis)
 library(p8105.datasets)
 library(plotly)
 library(stringr)
->>>>>>> a3e9492845fc508d049a1405c105cc4b0a753bb2
 ```
 
 ```{r, echo = FALSE, message = FALSE}
 cdc_df = read_csv("./data/cdc_df.csv")
 ```
 
+In the US, state governments have a great deal of control over public spending on healthcare, partly through programs like Medicare and Medicaid. As a result, healthcare spending is not uniform across the country. These differences are illustrated in the map below where healthcare expenditure by state is presented in millions of dollars and black dots represent the 500 cities used in our analysis.
 
 
-
-```{r, echo = F}
+```{r, echo = FALSE, message = FALSE, cache = TRUE}
 
 usa = map_data("state") %>%
   rename(state = "region")
@@ -57,14 +54,15 @@ ggplot() +
         axis.title.y = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
-        legend.title = element_text(size = 10)) +
+        legend.title = element_text(size = 10),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank()) +
   labs(title = "Healthcare Expenditure per Capita")
-
-
 
 ```
 
-
+This map suggests that there very well may be regional differences in healthcare spending. Exploring this question shows clear graphical differences in regional spending:
 
 ```{r, echo = FALSE}
 cdc_df %>%
@@ -74,10 +72,32 @@ cdc_df %>%
   plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
   layout(
     xaxis = list(title = "Region"),
-    yaxis = list(title = "Health Expenditures per Capita per State")
+    yaxis = list(title = "Health Expenditures per Capita per State"),
+    title = "Comparing Healthcare Expenditure Across Regions"
   )
+```
+
+Further analysis shows that there is a statistically significant difference between regions:
+
+```{r, echo = FALSE}
+cdc_df %>%
+  distinct(state, .keep_all = TRUE) %>%
+  mutate(region = fct_reorder(region, health_exp)) %>%
+  lm(health_exp ~ region, data = .) %>%
+  broom::tidy() %>% 
+  knitr::kable()
 ```
 
 
 
+```{r, echo = FALSE}
+reg = cdc_df %>%
+  distinct(state, .keep_all = TRUE) %>%
+  mutate(region = fct_reorder(region, health_exp)) %>%
+  lm(health_exp ~ region, data = .)
+
+anova(reg) %>% 
+  broom::tidy() %>% 
+  knitr::kable()
+```
 
