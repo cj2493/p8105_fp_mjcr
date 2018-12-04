@@ -11,7 +11,7 @@
 
 
 
-<title>Health Outcome</title>
+<title>Modeling Health Outcomes</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -187,9 +187,6 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="about.html">About</a>
-</li>
-<li>
   <a href="health_outcome.html">Health Outcome</a>
 </li>
 <li>
@@ -216,13 +213,18 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Health Outcome</h1>
+<h1 class="title toc-ignore">Modeling Health Outcomes</h1>
 
 </div>
 
 
+<div id="multiple-linear-regression" class="section level3">
+<h3>Multiple Linear Regression</h3>
 <p>In this section, we will explore some linear models predicting health outcomes from commonly used health practices.</p>
 <pre class="r"><code>cdc_df = read_csv(&quot;./data/cdc_df.csv&quot;)</code></pre>
+</div>
+<div id="predictor-variables" class="section level3">
+<h3>Predictor Variables</h3>
 <p>In this dataset, the variables related to commonly used health practices are:</p>
 <p>COREM_AdjPrev: the prevalence of men 65 years or older who are up to date on flu shots, PPV shots, and colorectal cancer screenings;<br />
 COREW_AdjPrev: the prevalence of women 65 years or older who are up to date on flu shots, PPV shots, colorectal cancer screenings, and mammograms;<br />
@@ -234,81 +236,183 @@ CHECKUP_AdjPrev: the prevalence of routine doctor visits in the past year for ad
 CHOLSCREEN_AdjPrev: the prevalence of cholesterol screening for adults 18 and older;<br />
 COLON_SCREEN_AdjPrev: the prevalence of fecal occult blood test, sigmoidoscopy, or colonoscopy for adults 50-75.</p>
 <p>For each of the models we will show, we first fit a model on disease prevalences with all of the aforementioned practices as predictors, and eliminated predictors until all were significant.</p>
+</div>
+<div id="cancer" class="section level3">
+<h3>Cancer</h3>
 <p>For the prevalence of cancer (excluding skin cancer) for adults 18 and older, the following model was the result:</p>
-<pre class="r"><code>summary(cancer_minus_4)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
-##     MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
-##     data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.03868 -0.20284  0.01556  0.22721  0.86591 
-## 
-## Coefficients:
-##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           4.327473   0.322006  13.439  &lt; 2e-16 ***
-## COREM_AdjPrev         0.011737   0.004670   2.513   0.0123 *  
-## DENTAL_AdjPrev       -0.033185   0.004160  -7.976 1.06e-14 ***
-## MAMMOUSE_AdjPrev     -0.036228   0.007579  -4.780 2.31e-06 ***
-## CHECKUP_AdjPrev      -0.009509   0.004357  -2.183   0.0295 *  
-## COLON_SCREEN_AdjPrev  0.106566   0.007070  15.074  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.3259 on 494 degrees of freedom
-## Multiple R-squared:  0.5701, Adjusted R-squared:  0.5657 
-## F-statistic:   131 on 5 and 494 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>summary(chol_minus_5)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + 
-##     CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.1079 -1.0528 -0.1173  1.0362  4.1262 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)          26.37818    1.94070  13.592  &lt; 2e-16 ***
-## DENTAL_AdjPrev       -0.06397    0.02217  -2.885  0.00409 ** 
-## LPA_AdjPrev           0.17050    0.03430   4.971 9.18e-07 ***
-## CHECKUP_AdjPrev       0.04013    0.02034   1.973  0.04901 *  
-## COLON_SCREEN_AdjPrev  0.06145    0.02931   2.097  0.03650 *  
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 1.493 on 495 degrees of freedom
-## Multiple R-squared:  0.3968, Adjusted R-squared:  0.3919 
-## F-statistic: 81.41 on 4 and 495 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>summary(diab_minus_3)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = DIABETES_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + 
-##     LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev, 
-##     data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.94594 -0.48832 -0.03568  0.38740  2.84917 
-## 
-## Coefficients:
-##                     Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)         9.669195   1.228864   7.868 2.29e-14 ***
-## COREW_AdjPrev      -0.062549   0.009354  -6.687 6.19e-11 ***
-## DENTAL_AdjPrev     -0.134701   0.011605 -11.607  &lt; 2e-16 ***
-## LPA_AdjPrev         0.193171   0.016159  11.954  &lt; 2e-16 ***
-## MAMMOUSE_AdjPrev    0.084542   0.014663   5.766 1.44e-08 ***
-## CHECKUP_AdjPrev     0.076247   0.013194   5.779 1.33e-08 ***
-## CHOLSCREEN_AdjPrev -0.074111   0.020892  -3.547 0.000426 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.7672 on 493 degrees of freedom
-## Multiple R-squared:  0.9009, Adjusted R-squared:  0.8997 
-## F-statistic: 747.2 on 6 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">4.3274730</td>
+<td align="right">0.3220057</td>
+<td align="right">13.439121</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">COREM_AdjPrev</td>
+<td align="right">0.0117368</td>
+<td align="right">0.0046700</td>
+<td align="right">2.513224</td>
+<td align="right">0.0122805</td>
+</tr>
+<tr class="odd">
+<td align="left">DENTAL_AdjPrev</td>
+<td align="right">-0.0331847</td>
+<td align="right">0.0041605</td>
+<td align="right">-7.976154</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">MAMMOUSE_AdjPrev</td>
+<td align="right">-0.0362284</td>
+<td align="right">0.0075788</td>
+<td align="right">-4.780251</td>
+<td align="right">0.0000023</td>
+</tr>
+<tr class="odd">
+<td align="left">CHECKUP_AdjPrev</td>
+<td align="right">-0.0095094</td>
+<td align="right">0.0043568</td>
+<td align="right">-2.182645</td>
+<td align="right">0.0295321</td>
+</tr>
+<tr class="even">
+<td align="left">COLON_SCREEN_AdjPrev</td>
+<td align="right">0.1065664</td>
+<td align="right">0.0070695</td>
+<td align="right">15.074078</td>
+<td align="right">0.0000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="high-cholesterol" class="section level3">
+<h3>High Cholesterol</h3>
+<p>For the prevalence of high cholesterol in adults over 18 who have been screened in the last 5 years, we follow the same backwards selection process and obtain the following model:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">26.3781801</td>
+<td align="right">1.9407040</td>
+<td align="right">13.592068</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">DENTAL_AdjPrev</td>
+<td align="right">-0.0639716</td>
+<td align="right">0.0221747</td>
+<td align="right">-2.884889</td>
+<td align="right">0.0040863</td>
+</tr>
+<tr class="odd">
+<td align="left">LPA_AdjPrev</td>
+<td align="right">0.1704976</td>
+<td align="right">0.0342955</td>
+<td align="right">4.971427</td>
+<td align="right">0.0000009</td>
+</tr>
+<tr class="even">
+<td align="left">CHECKUP_AdjPrev</td>
+<td align="right">0.0401349</td>
+<td align="right">0.0203387</td>
+<td align="right">1.973329</td>
+<td align="right">0.0490139</td>
+</tr>
+<tr class="odd">
+<td align="left">COLON_SCREEN_AdjPrev</td>
+<td align="right">0.0614541</td>
+<td align="right">0.0293053</td>
+<td align="right">2.097027</td>
+<td align="right">0.0364980</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="diabetes" class="section level3">
+<h3>Diabetes</h3>
+<p>For the prevalence of diabetes in adults 18 and older, we follow the same backwards selection process and obtain the following model:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">9.6691947</td>
+<td align="right">1.2288642</td>
+<td align="right">7.868400</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">COREW_AdjPrev</td>
+<td align="right">-0.0625489</td>
+<td align="right">0.0093539</td>
+<td align="right">-6.686919</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">DENTAL_AdjPrev</td>
+<td align="right">-0.1347005</td>
+<td align="right">0.0116050</td>
+<td align="right">-11.607073</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">LPA_AdjPrev</td>
+<td align="right">0.1931711</td>
+<td align="right">0.0161591</td>
+<td align="right">11.954320</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">MAMMOUSE_AdjPrev</td>
+<td align="right">0.0845418</td>
+<td align="right">0.0146633</td>
+<td align="right">5.765553</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">CHECKUP_AdjPrev</td>
+<td align="right">0.0762472</td>
+<td align="right">0.0131940</td>
+<td align="right">5.778932</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">CHOLSCREEN_AdjPrev</td>
+<td align="right">-0.0741112</td>
+<td align="right">0.0208915</td>
+<td align="right">-3.547429</td>
+<td align="right">0.0004262</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>cv_df =
   crossv_mc(cdc_df, 500) %&gt;% 
   mutate(train = map(train, as_tibble),
@@ -330,6 +434,7 @@ cv_df %&gt;%
          model = fct_inorder(model)) %&gt;% 
   ggplot(aes(x = model, y = rmse)) + geom_violin()</code></pre>
 <p><img src="health_outcome_files/figure-html/cross_validation-1.png" width="672" /></p>
+</div>
 
 
 

@@ -1,5 +1,5 @@
 ---
-title: "Health Outcome"
+title: "Modeling Health Outcomes"
 output: html_document
 ---
 
@@ -11,11 +11,15 @@ library(modelr)
 library(purrr)
 ```
 
+### Multiple Linear Regression  
+
 In this section, we will explore some linear models predicting health outcomes from commonly used health practices.
 
 ```{r, load_data, message = FALSE}
 cdc_df = read_csv("./data/cdc_df.csv")
 ```
+
+### Predictor Variables  
 
 In this dataset, the variables related to commonly used health practices are:  
   
@@ -31,6 +35,8 @@ COLON_SCREEN_AdjPrev: the prevalence of fecal occult blood test, sigmoidoscopy, 
   
   
 For each of the models we will show, we first fit a model on disease prevalences with all of the aforementioned practices as predictors, and eliminated predictors until all were significant.  
+
+### Cancer   
   
 For the prevalence of cancer (excluding skin cancer) for adults 18 and older, the following model was the result:  
 
@@ -46,10 +52,13 @@ summary(cancer_minus_3)
 cancer_minus_4 = update(cancer_minus_3, . ~ . -PAPTEST_AdjPrev)
 ```
 
-```{r, final_cancer}
-summary(cancer_minus_4)
+```{r, final_cancer, echo = FALSE}
+summary(cancer_minus_4) %>% broom::tidy() %>% knitr::kable()
 ```
 
+### High Cholesterol   
+
+For the prevalence of high cholesterol in adults over 18 who have been screened in the last 5 years, we follow the same backwards selection process and obtain the following model:  
 
 ```{r, chol_mod, include = FALSE}
 chol_full_mod = lm(HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
@@ -65,10 +74,14 @@ summary(chol_minus_4)
 chol_minus_5 = update(chol_minus_4, . ~ . -PAPTEST_AdjPrev)
 ```
 
-```{r, final_chol_mod}
-summary(chol_minus_5)
+```{r, final_chol_mod, echo = FALSE}
+summary(chol_minus_5) %>% broom::tidy() %>% knitr::kable()
 ```
 
+
+### Diabetes    
+
+For the prevalence of diabetes in adults 18 and older, we follow the same backwards selection process and obtain the following model:  
 
 ```{r, diabetes_mod, include = FALSE}
 diab_full_mod = lm(DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
@@ -80,8 +93,8 @@ summary(diab_minus_2)
 diab_minus_3 = update(diab_minus_2, . ~ . -COREM_AdjPrev)
 ```
 
-```{r, final_diab_mod}
-summary(diab_minus_3)
+```{r, final_diab_mod, echo = FALSE}
+summary(diab_minus_3) %>% broom::tidy() %>% knitr::kable()
 ```
 
 
