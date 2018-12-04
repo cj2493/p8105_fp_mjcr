@@ -5,8 +5,8 @@ navbar:
   right:
     - text: "About"
       href: about.html
-    - text: "Regional"
-      href: regional_analysis.html
+    - text: "Health Outcome"
+      href: health_outcome.html
     - text: "Health Insurance"
       href: health_insurance.html
     - text: "Healthcare Expenditure"
