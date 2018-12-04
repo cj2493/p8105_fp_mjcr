@@ -115,46 +115,6 @@ cdc_df %>%
 ```
 
 
-Map by expenditure:
-
-```{r}
-
-usa = map_data("state") %>%
-  rename(state = "region")
-
-cdc_df_map = cdc_df %>%
-  separate(Geolocation, into = c("long", "lat"), sep = ",") %>%
-  mutate(long = str_replace(long, "\\(", ""),
-         lat = str_replace(lat, "\\)", ""),
-         long = as.numeric(long),
-         lat = as.numeric(lat),
-         state = factor(state),
-         state = tolower(state)) %>%
-  filter(!state %in% c("alaska", "hawaii")) %>%
-  left_join(., usa, by = "state")
-
-ggplot() + 
-  geom_polygon(data = cdc_df_map, aes(x = long.y, y = lat.y, 
-                                      group = state, fill = health_exp), color = "white") +
-  scale_fill_gradient2(low = "red", mid = "white", high = "blue", space = "Lab",
-                       midpoint = mean(cdc_df_map$health_exp),
-                       name = "US Dollars") +
-  coord_fixed(1) +
-  geom_point(data = cdc_df_map, aes(x = lat.x, y = long.x), 
-             color = "grey13", size = 0.5, alpha = 0.3) +
-  theme_bw() +
-  theme(axis.title.x = element_blank(),
-        axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
-        axis.title.y = element_blank(),
-        axis.text.y = element_blank(),
-        axis.ticks.y = element_blank(),
-        legend.title = element_text(size = 10)) +
-  labs(title = "Healthcare Expenditure per Capita")
-
-```
-
-
 Analyze some variables: expenditure
 
 ```{r}
