@@ -1307,7 +1307,7 @@ summary(chol_minus_5)</code></pre>
 ## - COLON_SCREEN_AdjPrev  1     9.806 1113.7 408.40
 ## - DENTAL_AdjPrev        1    18.559 1122.4 412.31
 ## - LPA_AdjPrev           1    55.115 1159.0 428.34</code></pre>
-<pre class="r"><code>summary(chol_step) # I think the only one with the same model for both</code></pre>
+<pre class="r"><code>summary(chol_step) # same model for both</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + 
@@ -1700,15 +1700,17 @@ summary(stroke_minus_1)</code></pre>
 
 cv_df = 
   cv_df %&gt;% 
-  mutate(bp_minus_2 = map(train, ~lm(BPHIGH_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
-         bp_stepwise = map(train, ~lm(BPHIGH_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = .x))) %&gt;% 
-  mutate(rmse_min_2    = map2_dbl(bp_minus_2, test, ~rmse(model = .x, data = .y)),
-         rmse_step = map2_dbl(bp_stepwise, test, ~rmse(model = .x, data = .y)))
+  mutate(cancer_minus_4 = map(train, ~lm(CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
+         chol_minus_5   = map(train, ~lm(HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
+         diab_minus_3   = map(train, ~lm(DIABETES_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev, data = .x))) %&gt;% 
+  mutate(rmse_cancer    = map2_dbl(cancer_minus_4, test, ~rmse(model = .x, data = .y)),
+         rmse_chol      = map2_dbl(chol_minus_5, test, ~rmse(model = .x, data = .y)),
+         rmse_diabetes  = map2_dbl(diab_minus_3, test, ~rmse(model = .x, data = .y)))
 
 cv_df %&gt;% 
   select(starts_with(&quot;rmse&quot;)) %&gt;% 
   gather(key = model, value = rmse) %&gt;% 
-  mutate(model = str_replace(model, &quot;rmse_&quot;, &quot;&quot;),
+  mutate(model = str_replace(model, &quot;rmse_&quot;, &quot;&quot;), 
          model = fct_inorder(model)) %&gt;% 
   ggplot(aes(x = model, y = rmse)) + geom_violin()</code></pre>
 <p><img src="outcome_practice_reg_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
