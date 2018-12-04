@@ -3,8 +3,12 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "About"
-      href: about.html
+    - text: "Health Outcome"
+      href: health_outcome.html
+    - text: "Health Insurance"
+      href: health_insurance.html
+    - text: "Healthcare Expenditure"
+      href: healthcare_expenditure.html
     - text: "Flex Dashboard"
       href: flex_dashboard.html
     - icon: fa-github fa-lg

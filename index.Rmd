@@ -5,6 +5,8 @@ title: "Exploring the Relationship between Health and Healthcare in America"
 <img src = "images/Healthcare.jpg" style="width:100%">
 
 
+### Objectives
+
 The United States continues to spend more on healthcare than any other nation. As a result, the cost of many health practices that public health officials advocate for often becomes prohibitive for a large population. As students of public health, we wanted to explore differences in health practices and outcomes. We did this by analyzing the following associations:
 
 * Lack of health insurance with:
@@ -16,6 +18,15 @@ The United States continues to spend more on healthcare than any other nation. A
     * Health outcomes
 
 
-Exploring the Patterns of Adherence to Known Public Health Guidelines Across the United States and their Consequences
+### Dataset
+
+[<img src = "images/500-cities-logo.png" style="width:50%">](https://www.cdc.gov/500cities/about.htm)
+
+This data is taken from the 500 Cities Project, which analyzes data from the Centers for Disease Control and Prevention (CDC) in order to provide estimates for chronic disease risk factors, health outcomes, and clinical preventive service use. Data is provided for the 500 largest cities in the US. From the original dataset, we narrowed down the variable to include 9 health outcomes and 10 health practices (take a look at our [data dictionary](data_dictionary.html) for variable descriptions).
+
+
+
+### Conclusions
+
 
 
