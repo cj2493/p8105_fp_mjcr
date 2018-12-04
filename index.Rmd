@@ -22,7 +22,7 @@ The United States continues to spend more on healthcare than any other nation. A
 
 [<img src = "images/500-cities-logo.png" style="width:50%">](https://www.cdc.gov/500cities/about.htm)
 
-This data is taken from the 500 Cities Project, which analyzes data from the Centers for Disease Control and Prevention (CDC) in order to provide estimates for chronic disease risk factors, health outcomes, and clinical preventive service use. Data is provided for the 500 largest cities in the US. From the original dataset, we narrowed down the variable to include 9 health outcomes and 10 health practices (take a look at our [data dictionary](data_dictionary.html) for variable descriptions).
+This data is taken from the 500 Cities Project, which analyzes data from the Centers for Disease Control and Prevention (CDC) in order to provide estimates for chronic disease risk factors, health outcomes, and clinical preventive service use. Data is provided for the 500 largest cities in the US. From the original dataset, we narrowed down the variable to include 9 health outcomes and 10 health practices -- refer to our [data dictionary](data_dictionary.html) for variable descriptions. Data on state healthcare expenditure per capita was taken from the [Henry J. Kaiser Family Foundation](https://www.kff.org/other/state-indicator/health-spending-per-capita/?currentTimeframe=0) and merged with our existing data. 
 
 
 
