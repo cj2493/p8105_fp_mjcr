@@ -7,8 +7,22 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+<<<<<<< HEAD
 library(ggmap)
+=======
+library(flexdashboard)
+library(viridis)
+library(p8105.datasets)
+library(plotly)
+library(stringr)
+>>>>>>> a3e9492845fc508d049a1405c105cc4b0a753bb2
 ```
+
+```{r, echo = FALSE, message = FALSE}
+cdc_df = read_csv("./data/cdc_df.csv")
+```
+
+
 
 
 ```{r, echo = F}
@@ -48,6 +62,20 @@ ggplot() +
 
 
 
+```
+
+
+
+```{r, echo = FALSE}
+cdc_df %>%
+  distinct(state, .keep_all = TRUE) %>%
+  mutate(text_label = str_c("Health Expenditures per Capita: ", health_exp, '\nState: ', StateAbbr)) %>%
+  mutate(region = fct_reorder(region, health_exp)) %>%
+  plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
+  layout(
+    xaxis = list(title = "Region"),
+    yaxis = list(title = "Health Expenditures per Capita per State")
+  )
 ```
 
 
