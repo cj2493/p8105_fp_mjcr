@@ -1,0 +1,29 @@
+column_name,description,type
+StateAbbr,State abbreviation,Plain Text
+PlaceName,City name,Plain Text
+Population2010,Population Count 2010,Number
+ACCESS2_AdjPrev,"Age-adjusted prevalence estimate of current lack of health insurance among adults aged 18-64 years, 2014",Number
+BPHIGH_AdjPrev,"Model-based estimate for age-adjusted prevalence of high blood pressure among adults aged >=18 years, 2013",Number
+BPMED_AdjPrev,"Model-based estimate for age-adjusted prevalence of taking medicine for high blood pressure control among adults aged >=18 years with high blood pressure, 2013",Number
+CANCER_AdjPrev,"Model-based estimate for age-adjusted prevalence of cancer (excluding skin cancer) among adults aged >=18 years, 2014",Number
+CHD_AdjPrev,"Model-based estimate for age-adjusted prevalence of coronary heart disease among adults aged >=18 years, 2014",Number
+CHECKUP_AdjPrev,"Model-based estimate for age-adjusted prevalence of visits to doctor for routine checkup within the past year among adults aged >=18 years, 2014",Number
+CHOLSCREEN_AdjPrev,"Model-based estimate for age-adjusted prevalence of cholesterol screening among adults aged >=18 years, 2013",Number
+COLON_SCREEN_AdjPrev,"Model-based estimate for age-adjusted prevalence of fecal occult blood test, sigmoidoscopy, or colonoscopy among adults aged 50–75 years, 2014",Number
+COPD_AdjPrev,"Model-based estimate for age-adjusted prevalence of chronic obstructive pulmonary disease among adults aged >=18 years, 2014",Number
+COREM_AdjPrev,"Model-based estimate for age-adjusted prevalence of older adult men aged >=65 years who are up to date on a core set of clinical preventive services: Flu shot past year, PPV shot ever, Colorectal cancer screening, 2014",Number
+COREW_AdjPrev,"Model-based estimate for age-adjusted prevalence of older adult women aged >=65 years who are up to date on a core set of clinical preventive services: Flu shot past year, PPV shot ever, Colorectal cancer screening, and Mammogram past 2 years, 2014",Number
+DENTAL_AdjPrev,"Model-based estimate for age-adjusted prevalence of visits to dentist or dental clinic among adults aged >=18 years, 2014",Number
+DIABETES_AdjPrev,"Model-based estimate for age-adjusted prevalence of diagnosed diabetes among adults aged >=18 years, 2014",Number
+HIGHCHOL_AdjPrev,"Model-based estimate for age-adjusted prevalence of high cholesterol among adults aged >=18 years who have been screened in the past 5 years, 2013",Number
+LPA_AdjPrev,"Model-based estimate for age-adjusted prevalence of no leisure-time physical activity among adults aged >=18 years, 2014",Number
+MAMMOUSE_AdjPrev,"Model-based estimate for age-adjusted prevalence of mammography use among women aged 50–74 years, 2014",Number
+OBESITY_AdjPrev,"Model-based estimate for age-adjusted prevalence of obesity among adults aged >=18 years, 2014",Number
+PAPTEST_AdjPrev,"Model-based estimate for age-adjusted prevalence of papanicolaou smear use among adult women aged 21–65 years, 2014",Number
+PHLTH_AdjPrev,"Model-based estimate for age-adjusted prevalence of physical health not good for >=14 days among adults aged >=18 years, 2014",Number
+STROKE_AdjPrev,"Model-based estimate for age-adjusted prevalence of stroke among adults aged >=18 years, 2014",Number
+Geolocation,"Latitude, longitude of city centroid",Locatio
+state,full name of the state,Plain Text
+health_exp,total healthcare expenditures per capita by state in 2014,Number
+region,geographical region of the state,Plain Text
+division,more specific division within the region,Plain Text
