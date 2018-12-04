@@ -11,6 +11,8 @@ navbar:
       href: healthcare_expenditure.html
     - text: "Flex Dashboard"
       href: flex_dashboard.html
+    - text: "Data"
+      href: Data.html
     - icon: fa-github fa-lg
       href: http://github.com/cj2493/p8105_fp_mjcr/
 output:
