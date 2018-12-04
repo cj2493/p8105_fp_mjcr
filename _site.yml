@@ -3,8 +3,6 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "About"
-      href: about.html
     - text: "Health Outcome"
       href: health_outcome.html
     - text: "Health Insurance"
