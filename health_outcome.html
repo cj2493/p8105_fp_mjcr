@@ -413,27 +413,14 @@ COLON_SCREEN_AdjPrev: the prevalence of fecal occult blood test, sigmoidoscopy, 
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>cv_df =
-  crossv_mc(cdc_df, 500) %&gt;% 
-  mutate(train = map(train, as_tibble),
-         test = map(test, as_tibble))
-
-cv_df = 
-  cv_df %&gt;% 
-  mutate(cancer_minus_4 = map(train, ~lm(CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
-         chol_minus_5   = map(train, ~lm(HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
-         diab_minus_3   = map(train, ~lm(DIABETES_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev, data = .x))) %&gt;% 
-  mutate(rmse_cancer    = map2_dbl(cancer_minus_4, test, ~rmse(model = .x, data = .y)),
-         rmse_chol      = map2_dbl(chol_minus_5, test, ~rmse(model = .x, data = .y)),
-         rmse_diabetes  = map2_dbl(diab_minus_3, test, ~rmse(model = .x, data = .y)))
-
-cv_df %&gt;% 
-  select(starts_with(&quot;rmse&quot;)) %&gt;% 
-  gather(key = model, value = rmse) %&gt;% 
-  mutate(model = str_replace(model, &quot;rmse_&quot;, &quot;&quot;), 
-         model = fct_inorder(model)) %&gt;% 
-  ggplot(aes(x = model, y = rmse)) + geom_violin()</code></pre>
+</div>
+<div id="cross-validation" class="section level3">
+<h3>Cross Validation</h3>
+<p>Now, we want to assess the predictive ability of these models to see if they are at all useful.<br />
+So, we use cross validation: we split the data into training and testing sets, run the models on the training sets and assess their accuracy on the testing sets.<br />
+Once we do this, we show the RMSE graphically.</p>
 <p><img src="health_outcome_files/figure-html/cross_validation-1.png" width="672" /></p>
+<p>From this, we can see that the health practice variables from the dataset have the most predictive power for prevalence of cancer, and the least for high cholesterol. Intuitively, this makes sense for a couple of reasons. First, cholesterol levels are highly related to genetics, and this dataset has no variables collected on genetics. Also, many of the practices measured by this dataset are cancer screening practices.</p>
 </div>
 
 

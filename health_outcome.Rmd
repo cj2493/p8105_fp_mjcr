@@ -97,8 +97,14 @@ diab_minus_3 = update(diab_minus_2, . ~ . -COREM_AdjPrev)
 summary(diab_minus_3) %>% broom::tidy() %>% knitr::kable()
 ```
 
+### Cross Validation  
+  
+Now, we want to assess the predictive ability of these models to see if they are at all useful.  
+So, we use cross validation: we split the data into training and testing sets, run the models on the training sets and assess their accuracy on the testing sets.  
+Once we do this, we show the RMSE graphically.  
 
-```{r, cross_validation}
+
+```{r, cross_validation, echo = FALSE}
 cv_df =
   crossv_mc(cdc_df, 500) %>% 
   mutate(train = map(train, as_tibble),
@@ -121,3 +127,4 @@ cv_df %>%
   ggplot(aes(x = model, y = rmse)) + geom_violin()
 ```
 
+From this, we can see that the health practice variables from the dataset have the most predictive power for prevalence of cancer, and the least for high cholesterol. Intuitively, this makes sense for a couple of reasons. First, cholesterol levels are highly related to genetics, and this dataset has no variables collected on genetics. Also, many of the practices measured by this dataset are cancer screening practices.  
