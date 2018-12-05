@@ -54,7 +54,6 @@ ggplot() +
         axis.title.y = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
-<<<<<<< HEAD
         legend.title = element_text(size = 8),
         plot.caption = element_text(size = 6),
         panel.grid.major = element_blank(), 
@@ -62,14 +61,8 @@ ggplot() +
         panel.border = element_blank()) +
   labs(title = "Healthcare Expenditure per Capita",
        caption = 
-         "Points represent 500 most populated cities in the US,\n excluding Hawaii and Alaska")
-=======
-        panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank()) +
-  ggtitle("Healthcare Expenditure per Capita") +
+         "Points represent 500 most populated cities in the US,\n excluding Hawaii and Alaska") + 
   theme(plot.title = element_text(hjust = 0.5))
->>>>>>> f3ddd066b15661467277dd4b5f3e2327893c125e
 
 ```
 
