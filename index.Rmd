@@ -30,7 +30,10 @@ We found that there is a negative correlation between lack of health insurance a
 Having established an association between insurance and preventative care, we found that the health practice variables from the dataset have the most predictive power for prevalence of cancer, and the least for high cholesterol. Intuitively, this makes sense for a couple of reasons. First, cholesterol levels are highly related to genetics, and this dataset has no variables collected on genetics. Also, many of the practices measured by this dataset are cancer screening practices. 
 Cancer screening and other proactive health practices that we have mentioned tend to be very expensive, particularly for the uninsured. Since we know cost is often prohibitive, we next wanted to see if healthcare expenditure is uniform across the United States. Regional health expenditure analysis showed that there is a significant difference in healthcare expenditure between regions. Of course the relationships between all of our variables is incredibly complex, however our analysis provides some interesting insights into a very complex subject.
 
+### Group Members
 
-
-
+* [Melanie Mayer](mm4963@cumc.columbia.edu)  
+* [Jaisal Amin](ja3314@cumc.columbia.edu)
+* [Courtney Johnson](cj2493@cumc.columbia.edu) 
+* [Dayoung Yu](dry2115@cumc.columbia.edu)
 
