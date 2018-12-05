@@ -22,7 +22,7 @@ cdc_df = read_csv("./data/cdc_df.csv")
 
 For each of the models we will show, we first fit a model on disease prevalences with common health practices as predictors, and eliminated predictors until all of the predictors in the model were significant.   
   
-For a detailed description of all of the health practice variables for which data was collected, see the data dictionary link on the home page.
+For a detailed description of all of the health practice variables for which data was collected, see the [data dictionary](data_dictionary.html).
 
 ### Cancer   
   
