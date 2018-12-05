@@ -39,37 +39,6 @@ Code for reading in, merging, and cleaning data:
 
 ``` r
 cdc_df = read_csv("./data/500_Cities__City-level_Data__GIS_Friendly_Format___2016_release.csv")
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_character(),
-    ##   Population2010 = col_integer(),
-    ##   ACCESS2_CrudePrev = col_double(),
-    ##   ACCESS2_AdjPrev = col_double(),
-    ##   ARTHRITIS_CrudePrev = col_double(),
-    ##   ARTHRITIS_AdjPrev = col_double(),
-    ##   BINGE_CrudePrev = col_double(),
-    ##   BINGE_AdjPrev = col_double(),
-    ##   BPHIGH_CrudePrev = col_double(),
-    ##   BPHIGH_AdjPrev = col_double(),
-    ##   BPMED_CrudePrev = col_double(),
-    ##   BPMED_AdjPrev = col_double(),
-    ##   CANCER_CrudePrev = col_double(),
-    ##   CANCER_AdjPrev = col_double(),
-    ##   CASTHMA_CrudePrev = col_double(),
-    ##   CASTHMA_AdjPrev = col_double(),
-    ##   CHD_CrudePrev = col_double(),
-    ##   CHD_AdjPrev = col_double(),
-    ##   CHECKUP_CrudePrev = col_double(),
-    ##   CHECKUP_AdjPrev = col_double(),
-    ##   CHOLSCREEN_CrudePrev = col_double()
-    ##   # ... with 37 more columns
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-``` r
 #Select variables of interest
 cdc_df = cdc_df %>%
   select(c(StateAbbr, PlaceName, Population2010, ACCESS2_AdjPrev, BPHIGH_AdjPrev, BPMED_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, CHECKUP_AdjPrev, CHOLSCREEN_AdjPrev, COLON_SCREEN_AdjPrev, COPD_AdjPrev,COREM_AdjPrev, COREW_AdjPrev, DENTAL_AdjPrev, DIABETES_AdjPrev, HIGHCHOL_AdjPrev, LPA_AdjPrev, MAMMOUSE_AdjPrev, OBESITY_AdjPrev, PAPTEST_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev, Geolocation)) %>% 
@@ -81,15 +50,6 @@ healthcare_exp_df = read_csv("./data/health_care_expenditure.csv",
   rename(state = "X1", health_exp = "X2") %>%
   mutate(health_exp = str_replace(health_exp, "\\$", ""),
          health_exp  = as.numeric(health_exp))
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   X1 = col_character(),
-    ##   X2 = col_character()
-    ## )
-
-``` r
 #Add state healthcare expenditure data to CDC data
 cdc_df = left_join(cdc_df, healthcare_exp_df, by = "state")
 cdc_df = cdc_df %>% mutate(state = abbr2state(StateAbbr))
@@ -97,17 +57,7 @@ cdc_df = cdc_df %>% mutate(state = abbr2state(StateAbbr))
 regions_df = read_csv("https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv") %>%
   janitor::clean_names() %>%
   select(-state_code)
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   State = col_character(),
-    ##   `State Code` = col_character(),
-    ##   Region = col_character(),
-    ##   Division = col_character()
-    ## )
-
-``` r
+  
 cdc_df = left_join(cdc_df, regions_df, by = "state")
 ```
 
@@ -126,19 +76,12 @@ health_exp_dictionary = tibble(column_name = c("state", "health_exp"),
                                description = c("full name of the state", "total healthcare expenditures per capita by state in 2014"),
                                type = c("Plain Text", "Number"))
 data_dictionary = full_join(data_dictionary, health_exp_dictionary)
-```
-
-    ## Joining, by = c("column_name", "description", "type")
-
-``` r
 region_dict = tibble(column_name = c("region", "division"),
                      description = c("geographical region of the state", "more specific division within the region"),
                      type = c("Plain Text", "Plain Text")
 )
 data_dictionary = full_join(data_dictionary, region_dict)
 ```
-
-    ## Joining, by = c("column_name", "description", "type")
 
 Exploratory Analysis:
 ---------------------
@@ -302,22 +245,7 @@ Positive
 </tr>
 </tbody>
 </table>
-``` r
-health_practice = c("Dental Visits", "Lack of Physical Activity",
-                    "Routine Checkups", "Colon Screening")
-effect = c("Negative", "Positive", "Positive", "Positive")
-estimate = c(-0.064, 0.171, 0.0401, 0.061)
-p_val = c(0.004, '9.18e-07', 0.049, 0.037)
-chol_tbl = tibble(
-  "Health Practice" = health_practice,
-  "Effect on High Cholesterol Prevalence" = effect,
-  "Coefficient Estimate" = estimate,
-  "P-Value" = p_val
-)
-chol_tbl %>%
-  knitr::kable() %>%
-  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
-```
+Once we obtained the other two models, we created similar tables in the same way:
 
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
@@ -395,22 +323,6 @@ Positive
 </tr>
 </tbody>
 </table>
-``` r
-health_practice = c("Core Practices for Women", "Dental Visits", "Lack of Physical Activity", "Mammogram Usage", "Routine Checkups", "Cholesterol Screening")
-effect = c("Negative", "Negative", "Positive", "Positive", "Positive", "Negative")
-estimate = c(-0.063, -0.135, 0.193, 0.085, 0.076, -0.074)
-p_val = c('6.19e-11', '< 2e-16', '< 2e-16', '1.44e-08', '1.33e-08', 0.0004)
-diab_tbl = tibble(
-  "Health Practice" = health_practice,
-  "Effect on Diabetes Prevalence" = effect,
-  "Coefficient Estimate" = estimate,
-  "P-Value" = p_val
-)
-diab_tbl %>%
-  knitr::kable() %>%
-  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
-```
-
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -516,256 +428,6 @@ Negative
 </tbody>
 </table>
 We ran simple linear regressions to determine if there was an association between the prevalence of lack of insurance and the prevalence of health outcomes -- colon/cancer/cholestrol screenings, mammograms, etc. The purpose here was not to build a predictive model, only to test association and therefore any statistics related to model reliability were disregarded.
-
-``` r
-cdc_df %>%
-  lm(ACCESS2_AdjPrev ~ CHECKUP_AdjPrev, data = .) %>%
-  summary
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = ACCESS2_AdjPrev ~ CHECKUP_AdjPrev, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -14.3033  -4.8734  -0.8666   3.9749  30.8858 
-    ## 
-    ## Coefficients:
-    ##                 Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)     16.67317    4.15554   4.012 6.94e-05 ***
-    ## CHECKUP_AdjPrev  0.02259    0.06097   0.370    0.711    
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 6.857 on 498 degrees of freedom
-    ## Multiple R-squared:  0.0002755,  Adjusted R-squared:  -0.001732 
-    ## F-statistic: 0.1372 on 1 and 498 DF,  p-value: 0.7112
-
-``` r
-cdc_df %>%
-  lm(ACCESS2_AdjPrev ~ DENTAL_AdjPrev, data = .) %>%
-  summary
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = ACCESS2_AdjPrev ~ DENTAL_AdjPrev, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -11.5583  -2.1019  -0.1286   1.7714  19.7386 
-    ## 
-    ## Coefficients:
-    ##                Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)    64.75462    1.44079   44.94   <2e-16 ***
-    ## DENTAL_AdjPrev -0.75038    0.02306  -32.54   <2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 3.879 on 498 degrees of freedom
-    ## Multiple R-squared:  0.6802, Adjusted R-squared:  0.6795 
-    ## F-statistic:  1059 on 1 and 498 DF,  p-value: < 2.2e-16
-
-``` r
-cdc_df %>%
-  lm(ACCESS2_AdjPrev ~ CHOLSCREEN_AdjPrev, data = .) %>%
-  summary
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = ACCESS2_AdjPrev ~ CHOLSCREEN_AdjPrev, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -11.4146  -4.7829  -0.7015   3.9088  20.8205 
-    ## 
-    ## Coefficients:
-    ##                    Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)        99.27618    6.38321   15.55   <2e-16 ***
-    ## CHOLSCREEN_AdjPrev -1.09796    0.08638  -12.71   <2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 5.959 on 498 degrees of freedom
-    ## Multiple R-squared:  0.245,  Adjusted R-squared:  0.2435 
-    ## F-statistic: 161.6 on 1 and 498 DF,  p-value: < 2.2e-16
-
-``` r
-cdc_df %>%
-  lm(ACCESS2_AdjPrev ~ COLON_SCREEN_AdjPrev, data = .) %>%
-  summary
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = ACCESS2_AdjPrev ~ COLON_SCREEN_AdjPrev, data = .)
-    ## 
-    ## Residuals:
-    ##    Min     1Q Median     3Q    Max 
-    ## -9.662 -2.687 -0.535  2.568 13.338 
-    ## 
-    ## Coefficients:
-    ##                      Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)          81.64527    2.00151   40.79   <2e-16 ***
-    ## COLON_SCREEN_AdjPrev -1.01284    0.03183  -31.82   <2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 3.938 on 498 degrees of freedom
-    ## Multiple R-squared:  0.6703, Adjusted R-squared:  0.6696 
-    ## F-statistic:  1012 on 1 and 498 DF,  p-value: < 2.2e-16
-
-``` r
-cdc_df %>%
-  lm(ACCESS2_AdjPrev ~ COREM_AdjPrev, data = .) %>%
-  summary
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = ACCESS2_AdjPrev ~ COREM_AdjPrev, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -12.0230  -4.1028  -0.1845   3.6097  28.4732 
-    ## 
-    ## Coefficients:
-    ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   39.03085    1.67760   23.27   <2e-16 ***
-    ## COREM_AdjPrev -0.65385    0.05201  -12.57   <2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 5.975 on 498 degrees of freedom
-    ## Multiple R-squared:  0.2409, Adjusted R-squared:  0.2394 
-    ## F-statistic: 158.1 on 1 and 498 DF,  p-value: < 2.2e-16
-
-``` r
-cdc_df %>%
-  lm(ACCESS2_AdjPrev ~ COREW_AdjPrev, data = .) %>%
-  summary
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = ACCESS2_AdjPrev ~ COREW_AdjPrev, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -12.8653  -3.7809  -0.4643   3.1987  26.5916 
-    ## 
-    ## Coefficients:
-    ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   42.61860    1.47487   28.90   <2e-16 ***
-    ## COREW_AdjPrev -0.79882    0.04759  -16.78   <2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 5.481 on 498 degrees of freedom
-    ## Multiple R-squared:  0.3613, Adjusted R-squared:   0.36 
-    ## F-statistic: 281.7 on 1 and 498 DF,  p-value: < 2.2e-16
-
-``` r
-cdc_df %>%
-  lm(ACCESS2_AdjPrev ~ LPA_AdjPrev, data = .) %>%
-  summary
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = ACCESS2_AdjPrev ~ LPA_AdjPrev, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -11.0931  -2.8884  -0.1922   2.8727  19.6451 
-    ## 
-    ## Coefficients:
-    ##             Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept) -4.99785    0.87664  -5.701 2.04e-08 ***
-    ## LPA_AdjPrev  0.96496    0.03554  27.150  < 2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 4.355 on 498 degrees of freedom
-    ## Multiple R-squared:  0.5968, Adjusted R-squared:  0.596 
-    ## F-statistic: 737.1 on 1 and 498 DF,  p-value: < 2.2e-16
-
-``` r
-cdc_df %>%
-  lm(ACCESS2_AdjPrev ~ MAMMOUSE_AdjPrev, data = .) %>%
-  summary
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = ACCESS2_AdjPrev ~ MAMMOUSE_AdjPrev, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -12.4533  -4.5578  -0.8023   3.7676  22.5717 
-    ## 
-    ## Coefficients:
-    ##                  Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)      80.29846    5.35431   15.00   <2e-16 ***
-    ## MAMMOUSE_AdjPrev -0.79808    0.06873  -11.61   <2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 6.084 on 498 degrees of freedom
-    ## Multiple R-squared:  0.213,  Adjusted R-squared:  0.2115 
-    ## F-statistic: 134.8 on 1 and 498 DF,  p-value: < 2.2e-16
-
-``` r
-cdc_df %>%
-  lm(ACCESS2_AdjPrev ~ PAPTEST_AdjPrev, data = .) %>%
-  summary
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = ACCESS2_AdjPrev ~ PAPTEST_AdjPrev, data = .)
-    ## 
-    ## Residuals:
-    ##      Min       1Q   Median       3Q      Max 
-    ## -13.9574  -3.6682  -0.2634   2.9858  18.5909 
-    ## 
-    ## Coefficients:
-    ##                  Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)     120.21507    5.41489   22.20   <2e-16 ***
-    ## PAPTEST_AdjPrev  -1.26490    0.06708  -18.86   <2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 5.238 on 498 degrees of freedom
-    ## Multiple R-squared:  0.4165, Adjusted R-squared:  0.4154 
-    ## F-statistic: 355.5 on 1 and 498 DF,  p-value: < 2.2e-16
-
-``` r
-cdc_df %>%
-  lm(ACCESS2_AdjPrev ~ PHLTH_AdjPrev, data = .) %>%
-  summary
-```
-
-    ## 
-    ## Call:
-    ## lm(formula = ACCESS2_AdjPrev ~ PHLTH_AdjPrev, data = .)
-    ## 
-    ## Residuals:
-    ##     Min      1Q  Median      3Q     Max 
-    ## -15.636  -2.915  -0.440   2.083  22.033 
-    ## 
-    ## Coefficients:
-    ##               Estimate Std. Error t value Pr(>|t|)    
-    ## (Intercept)   -4.90960    0.99643  -4.927 1.14e-06 ***
-    ## PHLTH_AdjPrev  1.84260    0.07763  23.734  < 2e-16 ***
-    ## ---
-    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-    ## 
-    ## Residual standard error: 4.698 on 498 degrees of freedom
-    ## Multiple R-squared:  0.5308, Adjusted R-squared:  0.5298 
-    ## F-statistic: 563.3 on 1 and 498 DF,  p-value: < 2.2e-16
 
 ``` r
 health_practice = c("Health Checkup", "Cholestrol Screening", "Colon Screening", "Dental", "COREM", "COREW", "LPA", "Mammogram", "Pap Test", "Poor Physical Health")
@@ -988,24 +650,6 @@ cdc_df_map = read_csv("./data/cdc_df.csv") %>%
          state = tolower(state)) %>%
   filter(!state %in% c("alaska", "hawaii")) %>%
   left_join(., usa, by = "state")
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_double(),
-    ##   state = col_character(),
-    ##   StateAbbr = col_character(),
-    ##   PlaceName = col_character(),
-    ##   Population2010 = col_integer(),
-    ##   Geolocation = col_character(),
-    ##   health_exp = col_integer(),
-    ##   region = col_character(),
-    ##   division = col_character()
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-``` r
 ggplot() + 
   geom_polygon(data = cdc_df_map, aes(x = long.y, y = lat.y, group = state, 
                                       fill = ACCESS2_AdjPrev), 
@@ -1049,24 +693,6 @@ cdc_df_map = read_csv("./data/cdc_df.csv") %>%
          state = tolower(state)) %>%
   filter(!state %in% c("alaska", "hawaii")) %>%
   left_join(., usa, by = "state")
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_double(),
-    ##   state = col_character(),
-    ##   StateAbbr = col_character(),
-    ##   PlaceName = col_character(),
-    ##   Population2010 = col_integer(),
-    ##   Geolocation = col_character(),
-    ##   health_exp = col_integer(),
-    ##   region = col_character(),
-    ##   division = col_character()
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-``` r
 ggplot() + 
   geom_polygon(data = cdc_df_map, aes(x = long.y, y = lat.y, 
                                       group = state, fill = health_exp), color = "white") +
@@ -1113,7 +739,7 @@ cdc_df %>%
 
 <!--html_preserve-->
 
-<script type="application/json" data-for="htmlwidget-743d394857afd566090b">{"x":{"visdat":{"4c5025e12b12":["function () ","plotlyVisDat"]},"cur_data":"4c5025e12b12","attrs":{"4c5025e12b12":{"y":{},"text":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Region"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Health Expenditures per Capita per State"},"title":"Comparing Healthcare Expenditure Across Regions","font":"Open Sans","titlefont":"Open Sans","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"data":[{"y":[11064,6452,7549,6804,7299,6927,8221,6714,7214,8044,5982,7913,8320],"text":["Health Expenditures per Capita: 11064<br />State: AK","Health Expenditures per Capita: 6452<br />State: AZ","Health Expenditures per Capita: 7549<br />State: CA","Health Expenditures per Capita: 6804<br />State: CO","Health Expenditures per Capita: 7299<br />State: HI","Health Expenditures per Capita: 6927<br />State: ID","Health Expenditures per Capita: 8221<br />State: MT","Health Expenditures per Capita: 6714<br />State: NV","Health Expenditures per Capita: 7214<br />State: NM","Health Expenditures per Capita: 8044<br />State: OR","Health Expenditures per Capita: 5982<br />State: UT","Health Expenditures per Capita: 7913<br />State: WA","Health Expenditures per Capita: 8320<br />State: WY"],"type":"box","name":"West","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[7281,7408,10254,11944,8076,6587,8004,7815,8602,7646,7264,7627,7311,7372,6998,7556,9462],"text":["Health Expenditures per Capita: 7281<br />State: AL","Health Expenditures per Capita: 7408<br />State: AR","Health Expenditures per Capita: 10254<br />State: DE","Health Expenditures per Capita: 11944<br />State: DC","Health Expenditures per Capita: 8076<br />State: FL","Health Expenditures per Capita: 6587<br />State: GA","Health Expenditures per Capita: 8004<br />State: KY","Health Expenditures per Capita: 7815<br />State: LA","Health Expenditures per Capita: 8602<br />State: MD","Health Expenditures per Capita: 7646<br />State: MS","Health Expenditures per Capita: 7264<br />State: NC","Health Expenditures per Capita: 7627<br />State: OK","Health Expenditures per Capita: 7311<br />State: SC","Health Expenditures per Capita: 7372<br />State: TN","Health Expenditures per Capita: 6998<br />State: TX","Health Expenditures per Capita: 7556<br />State: VA","Health Expenditures per Capita: 9462<br />State: WV"],"type":"box","name":"South","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[8262,8300,8200,7651,8055,8871,8107,8412,9851,8712,8933,8702],"text":["Health Expenditures per Capita: 8262<br />State: IL","Health Expenditures per Capita: 8300<br />State: IN","Health Expenditures per Capita: 8200<br />State: IA","Health Expenditures per Capita: 7651<br />State: KS","Health Expenditures per Capita: 8055<br />State: MI","Health Expenditures per Capita: 8871<br />State: MN","Health Expenditures per Capita: 8107<br />State: MO","Health Expenditures per Capita: 8412<br />State: NE","Health Expenditures per Capita: 9851<br />State: ND","Health Expenditures per Capita: 8712<br />State: OH","Health Expenditures per Capita: 8933<br />State: SD","Health Expenditures per Capita: 8702<br />State: WI"],"type":"box","name":"Midwest","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[9859,9531,10559,9589,8859,9778,9258,9551,10190],"text":["Health Expenditures per Capita: 9859<br />State: CT","Health Expenditures per Capita: 9531<br />State: ME","Health Expenditures per Capita: 10559<br />State: MA","Health Expenditures per Capita: 9589<br />State: NH","Health Expenditures per Capita: 8859<br />State: NJ","Health Expenditures per Capita: 9778<br />State: NY","Health Expenditures per Capita: 9258<br />State: PA","Health Expenditures per Capita: 9551<br />State: RI","Health Expenditures per Capita: 10190<br />State: VT"],"type":"box","name":"Northeast","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"line":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-5642a029d9d529739394">{"x":{"visdat":{"4c503ef6317b":["function () ","plotlyVisDat"]},"cur_data":"4c503ef6317b","attrs":{"4c503ef6317b":{"y":{},"text":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Region"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Health Expenditures per Capita per State"},"title":"Comparing Healthcare Expenditure Across Regions","font":"Open Sans","titlefont":"Open Sans","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"data":[{"y":[11064,6452,7549,6804,7299,6927,8221,6714,7214,8044,5982,7913,8320],"text":["Health Expenditures per Capita: 11064<br />State: AK","Health Expenditures per Capita: 6452<br />State: AZ","Health Expenditures per Capita: 7549<br />State: CA","Health Expenditures per Capita: 6804<br />State: CO","Health Expenditures per Capita: 7299<br />State: HI","Health Expenditures per Capita: 6927<br />State: ID","Health Expenditures per Capita: 8221<br />State: MT","Health Expenditures per Capita: 6714<br />State: NV","Health Expenditures per Capita: 7214<br />State: NM","Health Expenditures per Capita: 8044<br />State: OR","Health Expenditures per Capita: 5982<br />State: UT","Health Expenditures per Capita: 7913<br />State: WA","Health Expenditures per Capita: 8320<br />State: WY"],"type":"box","name":"West","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[7281,7408,10254,11944,8076,6587,8004,7815,8602,7646,7264,7627,7311,7372,6998,7556,9462],"text":["Health Expenditures per Capita: 7281<br />State: AL","Health Expenditures per Capita: 7408<br />State: AR","Health Expenditures per Capita: 10254<br />State: DE","Health Expenditures per Capita: 11944<br />State: DC","Health Expenditures per Capita: 8076<br />State: FL","Health Expenditures per Capita: 6587<br />State: GA","Health Expenditures per Capita: 8004<br />State: KY","Health Expenditures per Capita: 7815<br />State: LA","Health Expenditures per Capita: 8602<br />State: MD","Health Expenditures per Capita: 7646<br />State: MS","Health Expenditures per Capita: 7264<br />State: NC","Health Expenditures per Capita: 7627<br />State: OK","Health Expenditures per Capita: 7311<br />State: SC","Health Expenditures per Capita: 7372<br />State: TN","Health Expenditures per Capita: 6998<br />State: TX","Health Expenditures per Capita: 7556<br />State: VA","Health Expenditures per Capita: 9462<br />State: WV"],"type":"box","name":"South","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[8262,8300,8200,7651,8055,8871,8107,8412,9851,8712,8933,8702],"text":["Health Expenditures per Capita: 8262<br />State: IL","Health Expenditures per Capita: 8300<br />State: IN","Health Expenditures per Capita: 8200<br />State: IA","Health Expenditures per Capita: 7651<br />State: KS","Health Expenditures per Capita: 8055<br />State: MI","Health Expenditures per Capita: 8871<br />State: MN","Health Expenditures per Capita: 8107<br />State: MO","Health Expenditures per Capita: 8412<br />State: NE","Health Expenditures per Capita: 9851<br />State: ND","Health Expenditures per Capita: 8712<br />State: OH","Health Expenditures per Capita: 8933<br />State: SD","Health Expenditures per Capita: 8702<br />State: WI"],"type":"box","name":"Midwest","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[9859,9531,10559,9589,8859,9778,9258,9551,10190],"text":["Health Expenditures per Capita: 9859<br />State: CT","Health Expenditures per Capita: 9531<br />State: ME","Health Expenditures per Capita: 10559<br />State: MA","Health Expenditures per Capita: 9589<br />State: NH","Health Expenditures per Capita: 8859<br />State: NJ","Health Expenditures per Capita: 9778<br />State: NY","Health Expenditures per Capita: 9258<br />State: PA","Health Expenditures per Capita: 9551<br />State: RI","Health Expenditures per Capita: 10190<br />State: VT"],"type":"box","name":"Northeast","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"line":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
 <!--/html_preserve-->
 <table>
 <thead>

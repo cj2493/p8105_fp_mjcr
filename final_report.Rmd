@@ -64,7 +64,7 @@ https://drive.google.com/file/d/1jlps3e265Q9eZoBXcgKTu5YrKwOOHTFc/view?usp=shari
 Download the data sets from the google drive links given above. In the code below, replace the "read_csv" locations to the local locations where data is downloaded.
 
 Code for reading in, merging, and cleaning data:
-```{r}
+```{r, message = FALSE}
 cdc_df = read_csv("./data/500_Cities__City-level_Data__GIS_Friendly_Format___2016_release.csv")
 #Select variables of interest
 cdc_df = cdc_df %>%
@@ -95,7 +95,7 @@ https://drive.google.com/file/d/1Myn3kicEjmmeD2PGoOehSlA30UtFfaV9/view?usp=shari
 
   
 Code to create a data dictionary: 
-```{r, data_dictionary}
+```{r, data_dictionary, message = FALSE}
 data_dictionary = readxl::read_xlsx("./data/data_dictionary.xlsx") 
 data_dictionary = data_dictionary %>%
   janitor::clean_names() %>%
@@ -189,6 +189,8 @@ cancer_tbl %>%
   kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
 ```
 
+Once we obtained the other two models, we created similar tables in the same way:
+
 ```{r, chol_model, include = FALSE}
 chol_full_mod = lm(HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
 summary(chol_full_mod)
@@ -204,7 +206,7 @@ chol_minus_5 = update(chol_minus_4, . ~ . -PAPTEST_AdjPrev)
 summary(chol_minus_5)
 ```
 
-```{r, chol_tbl}
+```{r, chol_tbl, echo = FALSE}
 health_practice = c("Dental Visits", "Lack of Physical Activity",
                     "Routine Checkups", "Colon Screening")
 effect = c("Negative", "Positive", "Positive", "Positive")
@@ -232,7 +234,7 @@ diab_minus_3 = update(diab_minus_2, . ~ . -COREM_AdjPrev)
 summary(diab_minus_3)
 ```
 
-```{r, diab_tbl}
+```{r, diab_tbl, echo = FALSE}
 health_practice = c("Core Practices for Women", "Dental Visits", "Lack of Physical Activity", "Mammogram Usage", "Routine Checkups", "Cholesterol Screening")
 effect = c("Negative", "Negative", "Positive", "Positive", "Positive", "Negative")
 estimate = c(-0.063, -0.135, 0.193, 0.085, 0.076, -0.074)
@@ -250,7 +252,7 @@ diab_tbl %>%
 
 We ran simple linear regressions to determine if there was an association between the prevalence of lack of insurance and the prevalence of health outcomes -- colon/cancer/cholestrol screenings, mammograms, etc. The purpose here was not to build a predictive model, only to test association and therefore any statistics related to model reliability were disregarded.
 
-```{r, insurance_slrs}
+```{r, insurance_slrs, include = FALSE}
 cdc_df %>%
   lm(ACCESS2_AdjPrev ~ CHECKUP_AdjPrev, data = .) %>%
   summary
@@ -299,6 +301,10 @@ insurance_asso %>%
   kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
 ```
 
+
+   
+        
+           
 ```{r, insurance_plots}
 dental = cdc_df %>% 
   ggplot(aes(x = ACCESS2_AdjPrev, y = DENTAL_AdjPrev)) + 
@@ -329,7 +335,7 @@ phlth = cdc_df %>%
 
 We also wanted to look at lack of health insurance prevalence and health expenditure by state and compare across regions. We created graphs to display differences and ran an ANOVA to test significance.
 
-```{r, insurance_map, cache = TRUE}
+```{r, insurance_map, message = FALSE}
 usa = map_data("state") %>%
   rename(state = "region")
 cdc_df_map = read_csv("./data/cdc_df.csv") %>%
@@ -370,7 +376,7 @@ ggplot() +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r, expend_map}
+```{r, expend_map, message = FALSE}
 usa = map_data("state") %>%
   rename(state = "region")
 cdc_df_map = read_csv("./data/cdc_df.csv") %>%
