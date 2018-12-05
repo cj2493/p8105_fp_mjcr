@@ -120,14 +120,14 @@ effect = c("Negative", "Negative", "Positive", "Positive", "Positive", "Negative
 estimate = c(-0.063, -0.135, 0.193, 0.085, 0.076, -0.074)
 p_val = c('6.19e-11', '< 2e-16', '< 2e-16', '1.44e-08', '1.33e-08', 0.0004)
 
-chol_tbl = tibble(
+diab_tbl = tibble(
   "Health Practice" = health_practice,
   "Effect on Diabetes Prevalence" = effect,
   "Coefficient Estimate" = estimate,
   "P-Value" = p_val
 )
 
-chol_tbl %>%
+diab_tbl %>%
   knitr::kable() %>%
   kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
 ```
@@ -136,7 +136,7 @@ chol_tbl %>%
   
 Now, we want to assess the predictive ability of these models to see if they are at all useful.  
 So, we use cross validation: we split the data into training and testing sets, run the models on the training sets and assess their accuracy on the testing sets.  
-Once we do this, we show the RMSE graphically.  
+Once we do this, we show the RMSE graphically (lower RMSE - root mean squared - indicates a better predictive power).  
 
 
 ```{r, cross_validation, echo = FALSE}

@@ -3,10 +3,10 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "Health Outcome"
-      href: health_outcome.html
     - text: "Health Insurance"
       href: health_insurance.html
+    - text: "Health Outcome"
+      href: health_outcome.html
     - text: "Healthcare Expenditure"
       href: healthcare_expenditure.html
     - text: "Shiny Dashboard"

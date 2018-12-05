@@ -13,16 +13,17 @@ library(viridis)
 library(p8105.datasets)
 library(plotly)
 library(stringr)
+library(kableExtra)
 ```
 
 ```{r, echo = FALSE, message = FALSE}
 cdc_df = read_csv("./data/cdc_df.csv")
 ```
 
-In the US, state governments have a great deal of control over public spending on healthcare, partly through programs like Medicare and Medicaid. As a result, healthcare spending is not uniform across the country. These differences are illustrated in the map below where healthcare expenditure by state is presented in millions of dollars and black dots represent the 500 cities used in our analysis.
+In the US, state governments have a great deal of control over public spending on healthcare, partly through programs like Medicare and Medicaid. As a result, healthcare spending is not uniform across the country. These differences are illustrated in the map below where healthcare expenditure by state is presented in millions of dollars.
 
 
-```{r, echo = FALSE, message = FALSE, cache = TRUE}
+```{r, echo = FALSE, message = FALSE}
 
 usa = map_data("state") %>%
   rename(state = "region")
@@ -83,27 +84,23 @@ cdc_df %>%
   )
 ```
 
-Further analysis shows that there is a statistically significant difference between regions:
+Further analysis shows that there is a statistically significant difference between regions and confirms that healthcare expenditure is not uniform across the country:
 
 ```{r, echo = FALSE}
-cdc_df %>%
-  distinct(state, .keep_all = TRUE) %>%
-  mutate(region = fct_reorder(region, health_exp)) %>%
-  lm(health_exp ~ region, data = .) %>%
-  broom::tidy() %>% 
-  knitr::kable()
-```
+term = c("Region")
+test = c("ANOVA")
+test_stat = c(7.43803)
+p_value = c(0.0003559)
 
+regional_anova = tibble(
+  "Term" = term,
+  "Test" = test,
+  "Test Statistic" = test_stat,
+  "P-Value" = p_value
+)
 
-
-```{r, echo = FALSE}
-reg = cdc_df %>%
-  distinct(state, .keep_all = TRUE) %>%
-  mutate(region = fct_reorder(region, health_exp)) %>%
-  lm(health_exp ~ region, data = .)
-
-anova(reg) %>% 
-  broom::tidy() %>% 
-  knitr::kable()
+regional_anova %>% 
+  knitr::kable() %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
 ```
 

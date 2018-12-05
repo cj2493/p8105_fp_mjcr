@@ -188,16 +188,16 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="health_outcome.html">Health Outcome</a>
+  <a href="health_insurance.html">Health Insurance</a>
 </li>
 <li>
-  <a href="health_insurance.html">Health Insurance</a>
+  <a href="health_outcome.html">Health Outcome</a>
 </li>
 <li>
   <a href="healthcare_expenditure.html">Healthcare Expenditure</a>
 </li>
 <li>
-  <a href="flex_dashboard.html">Flex Dashboard</a>
+  <a href="https://dayoungyu.shinyapps.io/final_plots/">Shiny Dashboard</a>
 </li>
 <li>
   <a href="http://github.com/cj2493/p8105_fp_mjcr/">
@@ -511,7 +511,7 @@ Negative
 <h3>Cross Validation</h3>
 <p>Now, we want to assess the predictive ability of these models to see if they are at all useful.<br />
 So, we use cross validation: we split the data into training and testing sets, run the models on the training sets and assess their accuracy on the testing sets.<br />
-Once we do this, we show the RMSE graphically.</p>
+Once we do this, we show the RMSE graphically (lower RMSE - root mean squared - indicates a better predictive power).</p>
 <p><img src="health_outcome_files/figure-html/cross_validation-1.png" width="672" /></p>
 <p>From this, we can see that the health practice variables from the dataset have the most predictive power for prevalence of cancer, and the least for high cholesterol. Intuitively, this makes sense for a couple of reasons. First, cholesterol levels are highly related to genetics, and this dataset has no variables collected on genetics. Also, many of the practices measured by this dataset are cancer screening practices.</p>
 </div>
