@@ -9,6 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(modelr)
 library(purrr)
+library(kableExtra)
 ```
 
 In this section, we will explore some linear models predicting health outcomes from commonly used health practices.
@@ -19,24 +20,13 @@ cdc_df = read_csv("./data/cdc_df.csv")
 
 ### Predictor Variables  
 
-In this dataset, the variables related to commonly used health practices are:  
+For each of the models we will show, we first fit a model on disease prevalences with common health practices as predictors, and eliminated predictors until all of the predictors in the model were significant.   
   
-COREM_AdjPrev: the prevalence of men 65 years or older who are up to date on flu shots, PPV shots, and colorectal cancer screenings;  
-COREW_AdjPrev: the prevalence of women 65 years or older who are up to date on flu shots, PPV shots, colorectal cancer screenings, and mammograms;  
-DENTAL_AdjPrev: the prevalence of visits to dental clinics for adults 18 years and older;  
-LPA_AdjPrev: the prevalence of no leisure time physical activity for adults 18 years and older;  
-MAMMOUSE_AdjPrev: the prevalence of mammograph use for women aged 50-74;  
-PAPTEST_AdjPrev: the prevalence of pap smear use for women aged 21-65;  
-CHECKUP_AdjPrev: the prevalence of routine doctor visits in the past year for adults 18 and older;  
-CHOLSCREEN_AdjPrev: the prevalence of cholesterol screening for adults 18 and older;  
-COLON_SCREEN_AdjPrev: the prevalence of fecal occult blood test, sigmoidoscopy, or colonoscopy for adults 50-75.  
-  
-  
-For each of the models we will show, we first fit a model on disease prevalences with all of the aforementioned practices as predictors, and eliminated predictors until all were significant.  
+For a detailed description of all of the health practice variables for which data was collected, see the data dictionary link on the home page.
 
 ### Cancer   
   
-For the prevalence of cancer (excluding skin cancer) for adults 18 and older, the following model was the result:  
+For the prevalence of cancer (excluding skin cancer) for adults 18 and older, the following health practices were predictors in a multiple linear regression:  
 
 ```{r, cancer_mod, include = FALSE}
 cancer_full_mod = lm(CANCER_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
@@ -48,15 +38,31 @@ summary(cancer_minus_2)
 cancer_minus_3 = update(cancer_minus_2, . ~ . -CHOLSCREEN_AdjPrev)
 summary(cancer_minus_3)
 cancer_minus_4 = update(cancer_minus_3, . ~ . -PAPTEST_AdjPrev)
+summary(cancer_minus_4)
 ```
 
 ```{r, final_cancer, echo = FALSE}
-summary(cancer_minus_4) %>% broom::tidy() %>% knitr::kable()
+health_practice = c("Core Practices for Men", "Dental Visits", "Mammogram Usage",
+                    "Routine Checkups", "Colon Screening")
+effect = c("Positive", "Negative", "Negative", "Negative", "Positive")
+estimate = c(0.012, -0.033, -0.036, -0.0095, 0.107)
+p_val = c(0.012, '1.06e-14', '2.31e-06', 0.0295, '< 2e-16')
+
+cancer_tbl = tibble(
+  "Health Practice" = health_practice,
+  "Effect on Cancer Prevalence" = effect,
+  "Coefficient Estimate" = estimate,
+  "P-Value" = p_val
+)
+
+cancer_tbl %>%
+  knitr::kable() %>%
+  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
 ```
 
 ### High Cholesterol   
 
-For the prevalence of high cholesterol in adults over 18 who have been screened in the last 5 years, we follow the same backwards selection process and obtain the following model:  
+For the prevalence of high cholesterol in adults over 18 who have been screened in the last 5 years, the following health practices were predictors in a multiple linear regression:  
 
 ```{r, chol_mod, include = FALSE}
 chol_full_mod = lm(HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
@@ -70,16 +76,32 @@ summary(chol_minus_3)
 chol_minus_4 = update(chol_minus_3, . ~ . -MAMMOUSE_AdjPrev)
 summary(chol_minus_4)
 chol_minus_5 = update(chol_minus_4, . ~ . -PAPTEST_AdjPrev)
+summary(chol_minus_5)
 ```
 
 ```{r, final_chol_mod, echo = FALSE}
-summary(chol_minus_5) %>% broom::tidy() %>% knitr::kable()
+health_practice = c("Dental Visits", "Lack of Physical Activity",
+                    "Routine Checkups", "Colon Screening")
+effect = c("Negative", "Positive", "Positive", "Positive")
+estimate = c(-0.064, 0.171, 0.0401, 0.061)
+p_val = c(0.004, '9.18e-07', 0.049, 0.037)
+
+chol_tbl = tibble(
+  "Health Practice" = health_practice,
+  "Effect on High Cholesterol Prevalence" = effect,
+  "Coefficient Estimate" = estimate,
+  "P-Value" = p_val
+)
+
+chol_tbl %>%
+  knitr::kable() %>%
+  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
 ```
 
 
 ### Diabetes    
 
-For the prevalence of diabetes in adults 18 and older, we follow the same backwards selection process and obtain the following model:  
+For the prevalence of diabetes in adults 18 and older, the following health practices were predictors in a multiple linear regression:  
 
 ```{r, diabetes_mod, include = FALSE}
 diab_full_mod = lm(DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
@@ -89,10 +111,25 @@ summary(diab_minus_1)
 diab_minus_2 = update(diab_minus_1, . ~ . -PAPTEST_AdjPrev)
 summary(diab_minus_2)
 diab_minus_3 = update(diab_minus_2, . ~ . -COREM_AdjPrev)
+summary(diab_minus_3)
 ```
 
 ```{r, final_diab_mod, echo = FALSE}
-summary(diab_minus_3) %>% broom::tidy() %>% knitr::kable()
+health_practice = c("Core Practices for Women", "Dental Visits", "Lack of Physical Activity", "Mammogram Usage", "Routine Checkups", "Cholesterol Screening")
+effect = c("Negative", "Negative", "Positive", "Positive", "Positive", "Negative")
+estimate = c(-0.063, -0.135, 0.193, 0.085, 0.076, -0.074)
+p_val = c('6.19e-11', '< 2e-16', '< 2e-16', '1.44e-08', '1.33e-08', 0.0004)
+
+chol_tbl = tibble(
+  "Health Practice" = health_practice,
+  "Effect on Diabetes Prevalence" = effect,
+  "Coefficient Estimate" = estimate,
+  "P-Value" = p_val
+)
+
+chol_tbl %>%
+  knitr::kable() %>%
+  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
 ```
 
 ### Cross Validation  

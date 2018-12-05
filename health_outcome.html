@@ -22,6 +22,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
 <script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
 <script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
@@ -221,191 +222,287 @@ $(document).ready(function () {
 <p>In this section, we will explore some linear models predicting health outcomes from commonly used health practices.</p>
 <div id="predictor-variables" class="section level3">
 <h3>Predictor Variables</h3>
-<p>In this dataset, the variables related to commonly used health practices are:</p>
-<p>COREM_AdjPrev: the prevalence of men 65 years or older who are up to date on flu shots, PPV shots, and colorectal cancer screenings;<br />
-COREW_AdjPrev: the prevalence of women 65 years or older who are up to date on flu shots, PPV shots, colorectal cancer screenings, and mammograms;<br />
-DENTAL_AdjPrev: the prevalence of visits to dental clinics for adults 18 years and older;<br />
-LPA_AdjPrev: the prevalence of no leisure time physical activity for adults 18 years and older;<br />
-MAMMOUSE_AdjPrev: the prevalence of mammograph use for women aged 50-74;<br />
-PAPTEST_AdjPrev: the prevalence of pap smear use for women aged 21-65;<br />
-CHECKUP_AdjPrev: the prevalence of routine doctor visits in the past year for adults 18 and older;<br />
-CHOLSCREEN_AdjPrev: the prevalence of cholesterol screening for adults 18 and older;<br />
-COLON_SCREEN_AdjPrev: the prevalence of fecal occult blood test, sigmoidoscopy, or colonoscopy for adults 50-75.</p>
-<p>For each of the models we will show, we first fit a model on disease prevalences with all of the aforementioned practices as predictors, and eliminated predictors until all were significant.</p>
+<p>For each of the models we will show, we first fit a model on disease prevalences with common health practices as predictors, and eliminated predictors until all of the predictors in the model were significant.</p>
+<p>For a detailed description of all of the health practice variables for which data was collected, see the data dictionary link on the home page.</p>
 </div>
 <div id="cancer" class="section level3">
 <h3>Cancer</h3>
-<p>For the prevalence of cancer (excluding skin cancer) for adults 18 and older, the following model was the result:</p>
-<table>
+<p>For the prevalence of cancer (excluding skin cancer) for adults 18 and older, the following health practices were predictors in a multiple linear regression:</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
+<tr>
+<th style="text-align:left;">
+Health Practice
+</th>
+<th style="text-align:left;">
+Effect on Cancer Prevalence
+</th>
+<th style="text-align:right;">
+Coefficient Estimate
+</th>
+<th style="text-align:left;">
+P-Value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">4.3274730</td>
-<td align="right">0.3220057</td>
-<td align="right">13.439121</td>
-<td align="right">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+Core Practices for Men
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.0120
+</td>
+<td style="text-align:left;">
+0.012
+</td>
 </tr>
-<tr class="even">
-<td align="left">COREM_AdjPrev</td>
-<td align="right">0.0117368</td>
-<td align="right">0.0046700</td>
-<td align="right">2.513224</td>
-<td align="right">0.0122805</td>
+<tr>
+<td style="text-align:left;">
+Dental Visits
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.0330
+</td>
+<td style="text-align:left;">
+1.06e-14
+</td>
 </tr>
-<tr class="odd">
-<td align="left">DENTAL_AdjPrev</td>
-<td align="right">-0.0331847</td>
-<td align="right">0.0041605</td>
-<td align="right">-7.976154</td>
-<td align="right">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+Mammogram Usage
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.0360
+</td>
+<td style="text-align:left;">
+2.31e-06
+</td>
 </tr>
-<tr class="even">
-<td align="left">MAMMOUSE_AdjPrev</td>
-<td align="right">-0.0362284</td>
-<td align="right">0.0075788</td>
-<td align="right">-4.780251</td>
-<td align="right">0.0000023</td>
+<tr>
+<td style="text-align:left;">
+Routine Checkups
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.0095
+</td>
+<td style="text-align:left;">
+0.0295
+</td>
 </tr>
-<tr class="odd">
-<td align="left">CHECKUP_AdjPrev</td>
-<td align="right">-0.0095094</td>
-<td align="right">0.0043568</td>
-<td align="right">-2.182645</td>
-<td align="right">0.0295321</td>
-</tr>
-<tr class="even">
-<td align="left">COLON_SCREEN_AdjPrev</td>
-<td align="right">0.1065664</td>
-<td align="right">0.0070695</td>
-<td align="right">15.074078</td>
-<td align="right">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+Colon Screening
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.1070
+</td>
+<td style="text-align:left;">
+&lt; 2e-16
+</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="high-cholesterol" class="section level3">
 <h3>High Cholesterol</h3>
-<p>For the prevalence of high cholesterol in adults over 18 who have been screened in the last 5 years, we follow the same backwards selection process and obtain the following model:</p>
-<table>
+<p>For the prevalence of high cholesterol in adults over 18 who have been screened in the last 5 years, the following health practices were predictors in a multiple linear regression:</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
+<tr>
+<th style="text-align:left;">
+Health Practice
+</th>
+<th style="text-align:left;">
+Effect on High Cholesterol Prevalence
+</th>
+<th style="text-align:right;">
+Coefficient Estimate
+</th>
+<th style="text-align:left;">
+P-Value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">26.3781801</td>
-<td align="right">1.9407040</td>
-<td align="right">13.592068</td>
-<td align="right">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+Dental Visits
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.0640
+</td>
+<td style="text-align:left;">
+0.004
+</td>
 </tr>
-<tr class="even">
-<td align="left">DENTAL_AdjPrev</td>
-<td align="right">-0.0639716</td>
-<td align="right">0.0221747</td>
-<td align="right">-2.884889</td>
-<td align="right">0.0040863</td>
+<tr>
+<td style="text-align:left;">
+Lack of Physical Activity
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.1710
+</td>
+<td style="text-align:left;">
+9.18e-07
+</td>
 </tr>
-<tr class="odd">
-<td align="left">LPA_AdjPrev</td>
-<td align="right">0.1704976</td>
-<td align="right">0.0342955</td>
-<td align="right">4.971427</td>
-<td align="right">0.0000009</td>
+<tr>
+<td style="text-align:left;">
+Routine Checkups
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.0401
+</td>
+<td style="text-align:left;">
+0.049
+</td>
 </tr>
-<tr class="even">
-<td align="left">CHECKUP_AdjPrev</td>
-<td align="right">0.0401349</td>
-<td align="right">0.0203387</td>
-<td align="right">1.973329</td>
-<td align="right">0.0490139</td>
-</tr>
-<tr class="odd">
-<td align="left">COLON_SCREEN_AdjPrev</td>
-<td align="right">0.0614541</td>
-<td align="right">0.0293053</td>
-<td align="right">2.097027</td>
-<td align="right">0.0364980</td>
+<tr>
+<td style="text-align:left;">
+Colon Screening
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.0610
+</td>
+<td style="text-align:left;">
+0.037
+</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div id="diabetes" class="section level3">
 <h3>Diabetes</h3>
-<p>For the prevalence of diabetes in adults 18 and older, we follow the same backwards selection process and obtain the following model:</p>
-<table>
+<p>For the prevalence of diabetes in adults 18 and older, the following health practices were predictors in a multiple linear regression:</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
+<tr>
+<th style="text-align:left;">
+Health Practice
+</th>
+<th style="text-align:left;">
+Effect on Diabetes Prevalence
+</th>
+<th style="text-align:right;">
+Coefficient Estimate
+</th>
+<th style="text-align:left;">
+P-Value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">9.6691947</td>
-<td align="right">1.2288642</td>
-<td align="right">7.868400</td>
-<td align="right">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+Core Practices for Women
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.063
+</td>
+<td style="text-align:left;">
+6.19e-11
+</td>
 </tr>
-<tr class="even">
-<td align="left">COREW_AdjPrev</td>
-<td align="right">-0.0625489</td>
-<td align="right">0.0093539</td>
-<td align="right">-6.686919</td>
-<td align="right">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+Dental Visits
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.135
+</td>
+<td style="text-align:left;">
+&lt; 2e-16
+</td>
 </tr>
-<tr class="odd">
-<td align="left">DENTAL_AdjPrev</td>
-<td align="right">-0.1347005</td>
-<td align="right">0.0116050</td>
-<td align="right">-11.607073</td>
-<td align="right">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+Lack of Physical Activity
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.193
+</td>
+<td style="text-align:left;">
+&lt; 2e-16
+</td>
 </tr>
-<tr class="even">
-<td align="left">LPA_AdjPrev</td>
-<td align="right">0.1931711</td>
-<td align="right">0.0161591</td>
-<td align="right">11.954320</td>
-<td align="right">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+Mammogram Usage
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.085
+</td>
+<td style="text-align:left;">
+1.44e-08
+</td>
 </tr>
-<tr class="odd">
-<td align="left">MAMMOUSE_AdjPrev</td>
-<td align="right">0.0845418</td>
-<td align="right">0.0146633</td>
-<td align="right">5.765553</td>
-<td align="right">0.0000000</td>
+<tr>
+<td style="text-align:left;">
+Routine Checkups
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.076
+</td>
+<td style="text-align:left;">
+1.33e-08
+</td>
 </tr>
-<tr class="even">
-<td align="left">CHECKUP_AdjPrev</td>
-<td align="right">0.0762472</td>
-<td align="right">0.0131940</td>
-<td align="right">5.778932</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">CHOLSCREEN_AdjPrev</td>
-<td align="right">-0.0741112</td>
-<td align="right">0.0208915</td>
-<td align="right">-3.547429</td>
-<td align="right">0.0004262</td>
+<tr>
+<td style="text-align:left;">
+Cholesterol Screening
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.074
+</td>
+<td style="text-align:left;">
+4e-04
+</td>
 </tr>
 </tbody>
 </table>
