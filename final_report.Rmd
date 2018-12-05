@@ -370,7 +370,7 @@ ggplot() +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r, expend_map, cache = TRUE}
+```{r, expend_map}
 usa = map_data("state") %>%
   rename(state = "region")
 cdc_df_map = read_csv("./data/cdc_df.csv") %>%
