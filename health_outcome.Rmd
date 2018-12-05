@@ -136,7 +136,7 @@ diab_tbl %>%
   
 Now, we want to assess the predictive ability of these models to see if they are at all useful.  
 So, we use cross validation: we split the data into training and testing sets, run the models on the training sets and assess their accuracy on the testing sets.  
-Once we do this, we show the RMSE graphically.  
+Once we do this, we show the RMSE graphically (lower RMSE - root mean squared - indicates a better predictive power).  
 
 
 ```{r, cross_validation, echo = FALSE}

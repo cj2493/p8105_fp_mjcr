@@ -70,7 +70,7 @@ ggplot() +
 
 ```
 
-The prevalence of noninsured individuals is noteworthy for us because an analysis of correlations between the noninsured and health practices shows a significant linear relationship between all practices except for one. Proactive health practices -- such as screening tests -- showed a negative correlation with lack of insurance, meaning the higher the prevalence of uninsured, the lower the prevalence of these proactive practices.
+The prevalence of noninsured individuals is noteworthy for us because an analysis of correlations between the noninsured and health practices shows a significant linear relationship between all practices except for one. Proactive health practices -- such as screening tests -- showed a negative correlation with lack of insurance, meaning the higher the prevalence of uninsured, the lower the prevalence of these proactive practices. We also observed a positive correlation between prevalence of uninsured and poor physical health and lack of physical activity.
 
 ```{r, echo = FALSE}
 health_practice = c("Health Checkup", "Cholestrol Screening", "Colon Screening", "Dental", "COREM", "COREW", "LPA", "Mammogram", "Pap Test", "Poor Physical Health")
@@ -93,7 +93,7 @@ insurance_asso %>%
   kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
 ```
 
-This preliminary analysis shows that health insurance status could be used as a predictor of certain health practices. Any reliable statistical model would need to factor in multiple variables but here we can see some of the associations mentioned (note that all values presented are prevalences):
+This preliminary analysis shows that health insurance status could be used as a predictor of certain health practices. Any reliable statistical model would need to factor in multiple variables but here we can see some of the associations mentioned (note that all values presented below are prevalences):
 
 ```{r, echo = FALSE}
 dental = cdc_df %>% 
