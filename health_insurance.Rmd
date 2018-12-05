@@ -7,5 +7,81 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(ggmap)
+library(flexdashboard)
+library(viridis)
+library(p8105.datasets)
+library(plotly)
+library(stringr)
+
+```
+
+
+
+```{r, echo = FALSE, message = FALSE, cache = TRUE}
+
+usa = map_data("state") %>%
+  rename(state = "region")
+
+cdc_df_map = read_csv("./data/cdc_df.csv") %>%
+  separate(Geolocation, into = c("long", "lat"), sep = ",") %>%
+  mutate(long = str_replace(long, "\\(", ""),
+         lat = str_replace(lat, "\\)", ""),
+         long = as.numeric(long),
+         lat = as.numeric(lat),
+         state = factor(state),
+         state = tolower(state)) %>%
+  filter(!state %in% c("alaska", "hawaii")) %>%
+  left_join(., usa, by = "state")
+
+
+ggplot() + 
+  geom_polygon(data = cdc_df_map, aes(x = long.y, y = lat.y, group = state, 
+                                      fill = ACCESS2_AdjPrev), 
+               color = "white") +
+  scale_fill_gradient2(low = "dark blue", mid = "white", high = "red", space = "Lab",
+                       midpoint = mean(cdc_df_map$ACCESS2_AdjPrev),
+                       name = "% Lacking") +
+  coord_fixed(1) +
+  geom_point(data = cdc_df_map, aes(x = lat.x, y = long.x), 
+             color = "grey13", size = 0.5, alpha = 0.3) +
+  theme_bw() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.title = element_text(size = 10),
+        plot.caption = element_text(size = 10),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank()) +
+  labs(title = "Lack of Health Insurance",
+       caption = 
+         "Points represent 500 most populated cities in the US,\n excluding Hawaii and Alaska")
+
+```
+
+
+
+```{r, echo = FALSE, message = FALSE, cache = TRUE}
+read_csv("./data/cdc_df.csv") %>%
+  mutate(region = fct_reorder(region, ACCESS2_AdjPrev),
+         text_label = str_c("% Lack Health Insurance: ", 
+                            ACCESS2_AdjPrev, '\nCity: ', PlaceName)) %>%
+  plot_ly(y = ~ACCESS2_AdjPrev, color = ~region, type = "box", text = ~text_label) %>%
+  layout(yaxis = list(title = "Percent Lack Health Insurance"),
+    title = "Comparing Lack of Health Insurance Across Regions"
+  )
+```
+
+
+```{r, echo = FALSE, message = FALSE, cache = TRUE}
+HI_reg = read_csv("./data/cdc_df.csv") %>%
+  lm(ACCESS2_AdjPrev ~ region, data = .)
+
+anova(HI_reg) %>% 
+  knitr::kable(digits = 15)
 ```
 
