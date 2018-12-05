@@ -86,17 +86,6 @@ cdc_df %>%
 Further analysis shows that there is a statistically significant difference between regions:
 
 ```{r, echo = FALSE}
-cdc_df %>%
-  distinct(state, .keep_all = TRUE) %>%
-  mutate(region = fct_reorder(region, health_exp)) %>%
-  lm(health_exp ~ region, data = .) %>%
-  broom::tidy() %>% 
-  knitr::kable()
-```
-
-
-
-```{r, echo = FALSE}
 reg = cdc_df %>%
   distinct(state, .keep_all = TRUE) %>%
   mutate(region = fct_reorder(region, health_exp)) %>%

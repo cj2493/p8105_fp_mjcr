@@ -57,7 +57,6 @@ cdc_df = cdc_df %>% mutate(state = abbr2state(StateAbbr))
 
 ```
 
-
 Merge data regions per state:
 
 ```{r, message = FALSE}
@@ -274,7 +273,17 @@ phlth = cdc_df %>%
 (dental | colon | corew) / (obesity | lpa | phlth)
 ```
 
+Regional insurance boxplot
 
-
+```{r, echo = FALSE, message = FALSE, cache = TRUE}
+read_csv("./data/cdc_df.csv") %>%
+  mutate(region = fct_reorder(region, ACCESS2_AdjPrev),
+         text_label = str_c("% Lack Health Insurance: ", 
+                            ACCESS2_AdjPrev, '\nCity: ', PlaceName)) %>%
+  plot_ly(y = ~ACCESS2_AdjPrev, color = ~region, type = "box", text = ~text_label) %>%
+  layout(yaxis = list(title = "Percent Lack Health Insurance"),
+    title = "Comparing Lack of Health Insurance Across Regions"
+  )
+```
 
 

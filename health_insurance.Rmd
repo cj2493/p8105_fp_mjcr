@@ -93,48 +93,37 @@ insurance_asso %>%
   kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
 ```
 
-This preliminary analysis shows that health insurance status could be used as a predictor of certain health practices. Any reliable statistical model would need to factor in multiple variables but here we can see some of the associations mentioned:
+This preliminary analysis shows that health insurance status could be used as a predictor of certain health practices. Any reliable statistical model would need to factor in multiple variables but here we can see some of the associations mentioned (note that all values presented are prevalences):
 
 ```{r, echo = FALSE}
 dental = cdc_df %>% 
   ggplot(aes(x = ACCESS2_AdjPrev, y = DENTAL_AdjPrev)) + 
   geom_point(alpha = 0.5) + 
   theme_bw() +
-  xlab("% Without Insurance") +
+  xlab("% Uninsured") +
   ylab("Dental")
 
 colon = cdc_df %>% 
   ggplot(aes(x = ACCESS2_AdjPrev, y = COLON_SCREEN_AdjPrev)) + 
   geom_point(alpha = 0.5) + 
   theme_bw() +
-  xlab("% Without Insurance") +
+  xlab("% Uninsured") +
   ylab("Colon Screening")
 
 lpa = cdc_df %>% 
   ggplot(aes(x = ACCESS2_AdjPrev, y = LPA_AdjPrev)) + 
   geom_point(alpha = 0.5) + 
   theme_bw() +
-  xlab("% Without Insurance") +
+  xlab("% Uninsured") +
   ylab("No Physical Activity")
 
 phlth = cdc_df %>% 
   ggplot(aes(x = ACCESS2_AdjPrev, y = PHLTH_AdjPrev)) + 
   geom_point(alpha = 0.5) + 
   theme_bw() +
-  xlab("% Without Insurance") +
+  xlab("% Uninsured") +
   ylab("Poor Physical Health")
 
 (dental | colon) / (lpa | phlth)
-```
-
-
-
-```{r, echo = FALSE, message = FALSE, cache = TRUE}
-HI_reg = read_csv("./data/cdc_df.csv") %>%
-  lm(ACCESS2_AdjPrev ~ region, data = .)
-
-anova(HI_reg) %>% 
-  knitr::kable(digits = 15) %>% 
-  kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
 ```
 
