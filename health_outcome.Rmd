@@ -1,5 +1,5 @@
 ---
-title: "Health Outcome"
+title: "Modeling Health Outcomes"
 output: html_document
 ---
 
@@ -13,9 +13,11 @@ library(purrr)
 
 In this section, we will explore some linear models predicting health outcomes from commonly used health practices.
 
-```{r, load_data, message = FALSE}
+```{r, load_data, include = FALSE}
 cdc_df = read_csv("./data/cdc_df.csv")
 ```
+
+### Predictor Variables  
 
 In this dataset, the variables related to commonly used health practices are:  
   
@@ -31,6 +33,8 @@ COLON_SCREEN_AdjPrev: the prevalence of fecal occult blood test, sigmoidoscopy, 
   
   
 For each of the models we will show, we first fit a model on disease prevalences with all of the aforementioned practices as predictors, and eliminated predictors until all were significant.  
+
+### Cancer   
   
 For the prevalence of cancer (excluding skin cancer) for adults 18 and older, the following model was the result:  
 
@@ -46,10 +50,13 @@ summary(cancer_minus_3)
 cancer_minus_4 = update(cancer_minus_3, . ~ . -PAPTEST_AdjPrev)
 ```
 
-```{r, final_cancer}
-summary(cancer_minus_4)
+```{r, final_cancer, echo = FALSE}
+summary(cancer_minus_4) %>% broom::tidy() %>% knitr::kable()
 ```
 
+### High Cholesterol   
+
+For the prevalence of high cholesterol in adults over 18 who have been screened in the last 5 years, we follow the same backwards selection process and obtain the following model:  
 
 ```{r, chol_mod, include = FALSE}
 chol_full_mod = lm(HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
@@ -65,10 +72,14 @@ summary(chol_minus_4)
 chol_minus_5 = update(chol_minus_4, . ~ . -PAPTEST_AdjPrev)
 ```
 
-```{r, final_chol_mod}
-summary(chol_minus_5)
+```{r, final_chol_mod, echo = FALSE}
+summary(chol_minus_5) %>% broom::tidy() %>% knitr::kable()
 ```
 
+
+### Diabetes    
+
+For the prevalence of diabetes in adults 18 and older, we follow the same backwards selection process and obtain the following model:  
 
 ```{r, diabetes_mod, include = FALSE}
 diab_full_mod = lm(DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
@@ -80,12 +91,18 @@ summary(diab_minus_2)
 diab_minus_3 = update(diab_minus_2, . ~ . -COREM_AdjPrev)
 ```
 
-```{r, final_diab_mod}
-summary(diab_minus_3)
+```{r, final_diab_mod, echo = FALSE}
+summary(diab_minus_3) %>% broom::tidy() %>% knitr::kable()
 ```
 
+### Cross Validation  
+  
+Now, we want to assess the predictive ability of these models to see if they are at all useful.  
+So, we use cross validation: we split the data into training and testing sets, run the models on the training sets and assess their accuracy on the testing sets.  
+Once we do this, we show the RMSE graphically.  
 
-```{r, cross_validation}
+
+```{r, cross_validation, echo = FALSE}
 cv_df =
   crossv_mc(cdc_df, 500) %>% 
   mutate(train = map(train, as_tibble),
@@ -108,3 +125,4 @@ cv_df %>%
   ggplot(aes(x = model, y = rmse)) + geom_violin()
 ```
 
+From this, we can see that the health practice variables from the dataset have the most predictive power for prevalence of cancer, and the least for high cholesterol. Intuitively, this makes sense for a couple of reasons. First, cholesterol levels are highly related to genetics, and this dataset has no variables collected on genetics. Also, many of the practices measured by this dataset are cancer screening practices.  
