@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>Data Dictionary</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,6 +22,10 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -196,6 +200,9 @@ $(document).ready(function () {
   <a href="https://dayoungyu.shinyapps.io/final_plots/">Shiny Dashboard</a>
 </li>
 <li>
+  <a href="https://github.com/dayoungyu/final_plots">Shiny Repository</a>
+</li>
+<li>
   <a href="http://github.com/cj2493/p8105_fp_mjcr/">
     <span class="fa fa-github fa-lg"></span>
      
@@ -210,62 +217,336 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">Data Dictionary</h1>
 
 </div>
 
 
-<div id="data_dictionary" class="section level1">
-<h1>data_dictionary</h1>
-<pre class="r"><code>url = &quot;https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny&quot;
-
-
-read_dict = function(url) {
-  
-  h = read_html(url)
-  
-  var_name = h %&gt;%
-    html_nodes(&quot;.column-summary .column-name&quot;) %&gt;%
-    html_text()
-  
-  var_description = h %&gt;%
-    html_nodes(&quot;.Linkify&quot;) %&gt;%
-    html_text()
-  
-  var_type = h %&gt;%
-    html_nodes(&quot;.type-name&quot;) %&gt;%
-    html_text()
-  
-  tibble(
-    name = var_name,
-    description = var_description,
-    type = var_type
-  )
-}
-
-
-
-data_dictionary = read_dict(&quot;https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny&quot;)</code></pre>
-<p>This doesn’t read in anything? So for now I copied from the webpage into an excel file (will try to figure this out to get the selector gadget to work before submission)</p>
-<pre class="r"><code>data_dictionary = readxl::read_xlsx(&quot;./data/data_dictionary.xlsx&quot;) 
-data_dictionary = data_dictionary %&gt;%
-  janitor::clean_names() %&gt;%
-  filter(column_name %in% c(&quot;StateAbbr&quot;, &quot;PlaceName&quot;, &quot;Population2010&quot;, &quot;ACCESS2_AdjPrev&quot;, &quot;BPHIGH_AdjPrev&quot;, &quot;BPMED_AdjPrev&quot;, &quot;CANCER_AdjPrev&quot;, &quot;CHD_AdjPrev&quot;, &quot;CHECKUP_AdjPrev&quot;, &quot;CHOLSCREEN_AdjPrev&quot;, &quot;COLON_SCREEN_AdjPrev&quot;, &quot;COPD_AdjPrev&quot;, &quot;COREM_AdjPrev&quot;, &quot;COREW_AdjPrev&quot;, &quot;DENTAL_AdjPrev&quot;, &quot;DIABETES_AdjPrev&quot;, &quot;HIGHCHOL_AdjPrev&quot;, &quot;LPA_AdjPrev&quot;, &quot;MAMMOUSE_AdjPrev&quot;, &quot;OBESITY_AdjPrev&quot;, &quot;PAPTEST_AdjPrev&quot;, &quot;PHLTH_AdjPrev&quot;, &quot;STROKE_AdjPrev&quot;, &quot;Geolocation&quot;))
-
-health_exp_dictionary = tibble(column_name = c(&quot;state&quot;, &quot;health_exp&quot;),
-                               description = c(&quot;full name of the state&quot;, &quot;total healthcare expenditures per capita by state in 2014&quot;),
-                               type = c(&quot;Plain Text&quot;, &quot;Number&quot;))
-
-data_dictionary = full_join(data_dictionary, health_exp_dictionary)</code></pre>
-<pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
-<pre class="r"><code>region_dict = tibble(column_name = c(&quot;region&quot;, &quot;division&quot;),
-                     description = c(&quot;geographical region of the state&quot;, &quot;more specific division within the region&quot;),
-                     type = c(&quot;Plain Text&quot;, &quot;Plain Text&quot;)
-  
-)
-
-data_dictionary = full_join(data_dictionary, region_dict)</code></pre>
-<pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
-</div>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+column_name
+</th>
+<th style="text-align:left;">
+description
+</th>
+<th style="text-align:left;">
+type
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+StateAbbr
+</td>
+<td style="text-align:left;">
+State abbreviation
+</td>
+<td style="text-align:left;">
+Plain Text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PlaceName
+</td>
+<td style="text-align:left;">
+City name
+</td>
+<td style="text-align:left;">
+Plain Text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Population2010
+</td>
+<td style="text-align:left;">
+Population Count 2010
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ACCESS2_AdjPrev
+</td>
+<td style="text-align:left;">
+Age-adjusted prevalence estimate of current lack of health insurance among adults aged 18-64 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BPHIGH_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of high blood pressure among adults aged &gt;=18 years, 2013
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BPMED_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of taking medicine for high blood pressure control among adults aged &gt;=18 years with high blood pressure, 2013
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CANCER_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of cancer (excluding skin cancer) among adults aged &gt;=18 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CHD_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of coronary heart disease among adults aged &gt;=18 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CHECKUP_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of visits to doctor for routine checkup within the past year among adults aged &gt;=18 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+CHOLSCREEN_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of cholesterol screening among adults aged &gt;=18 years, 2013
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+COLON_SCREEN_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of fecal occult blood test, sigmoidoscopy, or colonoscopy among adults aged 50–75 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+COPD_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of chronic obstructive pulmonary disease among adults aged &gt;=18 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+COREM_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of older adult men aged &gt;=65 years who are up to date on a core set of clinical preventive services: Flu shot past year, PPV shot ever, Colorectal cancer screening, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+COREW_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of older adult women aged &gt;=65 years who are up to date on a core set of clinical preventive services: Flu shot past year, PPV shot ever, Colorectal cancer screening, and Mammogram past 2 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DENTAL_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of visits to dentist or dental clinic among adults aged &gt;=18 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DIABETES_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of diagnosed diabetes among adults aged &gt;=18 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HIGHCHOL_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of high cholesterol among adults aged &gt;=18 years who have been screened in the past 5 years, 2013
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+LPA_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of no leisure-time physical activity among adults aged &gt;=18 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+MAMMOUSE_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of mammography use among women aged 50–74 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OBESITY_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of obesity among adults aged &gt;=18 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PAPTEST_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of papanicolaou smear use among adult women aged 21–65 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PHLTH_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of physical health not good for &gt;=14 days among adults aged &gt;=18 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+STROKE_AdjPrev
+</td>
+<td style="text-align:left;">
+Model-based estimate for age-adjusted prevalence of stroke among adults aged &gt;=18 years, 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Geolocation
+</td>
+<td style="text-align:left;">
+Latitude, longitude of city centroid
+</td>
+<td style="text-align:left;">
+Locatio
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+state
+</td>
+<td style="text-align:left;">
+full name of the state
+</td>
+<td style="text-align:left;">
+Plain Text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+health_exp
+</td>
+<td style="text-align:left;">
+total healthcare expenditures per capita by state in 2014
+</td>
+<td style="text-align:left;">
+Number
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+region
+</td>
+<td style="text-align:left;">
+geographical region of the state
+</td>
+<td style="text-align:left;">
+Plain Text
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+division
+</td>
+<td style="text-align:left;">
+more specific division within the region
+</td>
+<td style="text-align:left;">
+Plain Text
+</td>
+</tr>
+</tbody>
+</table>
 
 
 
