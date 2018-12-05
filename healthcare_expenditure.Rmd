@@ -13,6 +13,7 @@ library(viridis)
 library(p8105.datasets)
 library(plotly)
 library(stringr)
+library(kableExtra)
 ```
 
 ```{r, echo = FALSE, message = FALSE}
@@ -83,7 +84,7 @@ cdc_df %>%
   )
 ```
 
-Further analysis shows that there is a statistically significant difference between regions:
+Further analysis shows that there is a statistically significant difference between regions and confirms that healthcare expenditure is not uniform across the country:
 
 ```{r, echo = FALSE}
 reg = cdc_df %>%
@@ -94,5 +95,21 @@ reg = cdc_df %>%
 anova(reg) %>% 
   broom::tidy() %>% 
   knitr::kable()
+
+term = c("Region")
+test = c("ANOVA - analysis of variance")
+test_stat = c(7.43803)
+p_value = c(0.0003559)
+
+regional_anova = tibble(
+  "Term" = term,
+  "Test" = test,
+  "Test Statistic" = test_stat,
+  "P-Value" = p_value
+)
+
+regional_anova %>% 
+  knitr::kable() %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
 ```
 
