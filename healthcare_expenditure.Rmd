@@ -54,8 +54,8 @@ ggplot() +
         axis.title.y = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
-        legend.title = element_text(size = 8),
-        plot.caption = element_text(size = 6),
+        legend.title = element_text(size = 10),
+        plot.caption = element_text(size = 8),
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         panel.border = element_blank()) +

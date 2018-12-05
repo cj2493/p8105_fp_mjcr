@@ -16,3 +16,5 @@ p8105.datasets
 plotly
 maps
 bindrcpp
+kableExtra
+patchwork

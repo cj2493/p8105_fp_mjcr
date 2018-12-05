@@ -13,10 +13,14 @@ library(viridis)
 library(p8105.datasets)
 library(plotly)
 library(stringr)
+library(kableExtra)
+library(patchwork)
 
 ```
 
-
+```{r, echo = FALSE, message = FALSE}
+cdc_df = read_csv("./data/cdc_df.csv")
+```
 
 ```{r, echo = FALSE, message = FALSE, cache = TRUE}
 
@@ -53,14 +57,72 @@ ggplot() +
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
         legend.title = element_text(size = 10),
-        plot.caption = element_text(size = 10),
+        plot.caption = element_text(size = 8),
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         panel.border = element_blank()) +
   labs(title = "Lack of Health Insurance",
        caption = 
-         "Points represent 500 most populated cities in the US,\n excluding Hawaii and Alaska")
+         "Points represent 500 most populated cities in the US,\n excluding Hawaii and Alaska") +
+  theme(plot.title = element_text(hjust = 0.5))
 
+```
+
+Analysis of correlations between the prevalence of lack of health insurance and health practices shows a significant linear relationship between all practices except for one. 
+
+```{r, echo = FALSE}
+health_practice = c("Health Checkup", "Cholestrol Screening", "Colon Screening", "Dental", "COREM", "COREW", "LPA", "Mammogram", "Pap Test", "Poor Physical Health")
+
+linear = c("No", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")
+
+direction = c("NA", "Negative", "Negative", "Negative", "Negative", "Negative", "Positive", "Negative", "Negative", "Positive")
+
+p_value = c(0.711, '<2e-16', '<2e-16', '<2e-16', '<2e-16', '<2e-16', '<2e-16', '<2e-16', '<2e-16', '<2e-16')
+
+insurance_asso = tibble(
+  "Health Practice" = health_practice,
+  "Linear Association?" = linear,
+  "Direction of Association" = direction,
+  "p-value" = p_value
+) 
+
+insurance_asso %>% 
+  knitr::kable() %>% 
+  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
+```
+
+This preliminary analysis shows that health insurance status could be used as a predictor of certain health practices. Any reliable statistical model would need to factor in multiple variables but here we can see some of the associations mentioned:
+
+```{r, echo = FALSE}
+dental = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = DENTAL_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Dental")
+
+colon = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = COLON_SCREEN_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Colon Screening")
+
+lpa = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = LPA_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("No Physical Activity")
+
+phlth = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = PHLTH_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Poor Physical Health")
+
+(dental | colon) / (lpa | phlth)
 ```
 
 
@@ -77,11 +139,14 @@ read_csv("./data/cdc_df.csv") %>%
 ```
 
 
+
+
 ```{r, echo = FALSE, message = FALSE, cache = TRUE}
 HI_reg = read_csv("./data/cdc_df.csv") %>%
   lm(ACCESS2_AdjPrev ~ region, data = .)
 
 anova(HI_reg) %>% 
-  knitr::kable(digits = 15)
+  knitr::kable(digits = 15) %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
 ```
 

@@ -11,6 +11,8 @@ library(rvest)
 library(openintro)
 library(ggmap)
 
+library(patchwork)
+
 
 ```
 
@@ -162,6 +164,114 @@ cdc_df %>%
   summary
 
 
+```
+
+
+Analyzing relationship b/w insurance and health practices:
+
+```{r}
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ CHECKUP_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ DENTAL_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ CHOLSCREEN_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ COLON_SCREEN_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ COREM_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ COREW_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ LPA_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ MAMMOUSE_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ PAPTEST_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ PHLTH_AdjPrev, data = .) %>%
+  summary
+```
+
+
+```{r}
+dental = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = DENTAL_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Dental")
+
+chol = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = CHOLSCREEN_AdjPrev, color = region)) + 
+  geom_point()
+
+colon = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = COLON_SCREEN_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Colon Screening")
+
+corem = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = COREM_AdjPrev, color = region)) + 
+  geom_point()
+
+corew = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = COREW_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Women w/ all Preventative Services")
+
+lpa = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = LPA_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("No Physical Activity")
+
+mammouse = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = MAMMOUSE_AdjPrev, color = region)) + 
+  geom_point()
+
+obesity = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = OBESITY_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Obesity")
+
+paptest = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = PAPTEST_AdjPrev, color = region)) + 
+  geom_point()
+
+phlth = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = PHLTH_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Poor Physical Health")
+
+(dental | colon | corew) / (obesity | lpa | phlth)
 ```
 
 
