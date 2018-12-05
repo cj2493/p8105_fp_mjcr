@@ -24,7 +24,7 @@ cdc_df = read_csv("./data/cdc_df.csv")
 
 Unlike many other developed nations, the US does not have a uniform health system or universal healthcare coverage, and prior to the passage of the Affordable Care Act in 2010, did not require individuals to have any sort of healthcare coverage. As a result, there are still a number of uninsured people in the US, as seen in the map below.
 
-```{r, echo = FALSE, message = FALSE, cache = TRUE}
+```{r, echo = FALSE, message = FALSE}
 
 usa = map_data("state") %>%
   rename(state = "region")
