@@ -7,15 +7,13 @@ title: "Exploring the Relationship between Health and Healthcare in America"
 
 ### Objectives
 
-The United States continues to spend more on healthcare than any other nation. As a result, the cost of many health practices that public health officials advocate for often becomes prohibitive for a large population. As students of public health, we wanted to explore differences in health practices and outcomes. We did this by analyzing the following associations:
+The United States continues to spend more on healthcare than any other nation. As a result, the cost of many health practices that public health officials advocate for often becomes prohibitive for a large population. Although the conversation pertaining to healthcare accessibility and affordability has become overtly political, it is important for us as public health students to be aware of the state of health and healthcare in this country, since it directly affects our field. As students of public health, we wanted to explore differences in health practices and outcomes. We did this by analyzing the following associations:  
 
-* Lack of health insurance with:
-    * Regular health practices
-    * Health outcomes
+* Lack of health insurance with health practices
 
-* Healthcare expenditure per state with:
-    * Regular health practices
-    * Health outcomes
+* Health practices with health outcome
+
+* Regional health expenditure
 
 
 ### Dataset
@@ -27,6 +25,12 @@ This data is taken from the 500 Cities Project, which analyzes data from the Cen
 
 
 ### Conclusions
+
+We found that there is a negative correlation between lack of health insurance and prevalence of proactive health practices, which include screening for diseases, and a positive correlation between variables pertaining to poor physical health. The notable exception was the routine checkups variable. There was no association between percent uninsured and the prevalence of routine checkups. This could indicate that there is a cost factor to these associations.
+Having established an association between insurance and preventative care, we found that the health practice variables from the dataset have the most predictive power for prevalence of cancer, and the least for high cholesterol. Intuitively, this makes sense for a couple of reasons. First, cholesterol levels are highly related to genetics, and this dataset has no variables collected on genetics. Also, many of the practices measured by this dataset are cancer screening practices. 
+Cancer screening and other proactive health practices that we have mentioned tend to be very expensive, particularly for the uninsured. Since we know cost is often prohibitive, we next wanted to see if healthcare expenditure is uniform across the United States. Regional health expenditure analysis showed that there is a significant difference in healthcare expenditure between regions. Of course the relationships between all of our variables is incredibly complex, however our analysis provides some interesting insights into a very complex subject.
+
+
 
 
 
