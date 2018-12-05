@@ -54,11 +54,11 @@ ggplot() +
         axis.title.y = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank(),
-        legend.title = element_text(size = 10),
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         panel.border = element_blank()) +
-  labs(title = "Healthcare Expenditure per Capita")
+  ggtitle("Healthcare Expenditure per Capita") +
+  theme(plot.title = element_text(hjust = 0.5))
 
 ```
 
@@ -73,7 +73,9 @@ cdc_df %>%
   layout(
     xaxis = list(title = "Region"),
     yaxis = list(title = "Health Expenditures per Capita per State"),
-    title = "Comparing Healthcare Expenditure Across Regions"
+    title = "Comparing Healthcare Expenditure Across Regions",
+    font = "Open Sans",
+    titlefont = "Open Sans"
   )
 ```
 
