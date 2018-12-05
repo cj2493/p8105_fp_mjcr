@@ -23,7 +23,7 @@ cdc_df = read_csv("./data/cdc_df.csv")
 In the US, state governments have a great deal of control over public spending on healthcare, partly through programs like Medicare and Medicaid. As a result, healthcare spending is not uniform across the country. These differences are illustrated in the map below where healthcare expenditure by state is presented in millions of dollars.
 
 
-```{r, echo = FALSE, message = FALSE, cache = TRUE}
+```{r, echo = FALSE, message = FALSE}
 
 usa = map_data("state") %>%
   rename(state = "region")

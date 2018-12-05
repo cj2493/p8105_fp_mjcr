@@ -1,0 +1,17 @@
+---
+title: "Screencast"
+output: html_document
+---
+
+```{r include = FALSE}
+# install package: devtools::install_github("ijlyttle/vembedr")
+
+library("htmltools")
+library("vembedr")
+
+```
+
+```{r echo = FALSE}
+embed_url("https://www.youtube.com/watch?v=uV4UpCq2azs")
+```
+
