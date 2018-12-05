@@ -22,6 +22,8 @@ library(patchwork)
 cdc_df = read_csv("./data/cdc_df.csv")
 ```
 
+Unlike many other developed nations, the US does not have a uniform health system or universal healthcare coverage, and prior to the passage of the Affordable Care Act in 2010, did not require individuals to have any sort of healthcare coverage. As a result, there are still a number of uninsured people in the US, as seen in the map below.
+
 ```{r, echo = FALSE, message = FALSE, cache = TRUE}
 
 usa = map_data("state") %>%
@@ -68,7 +70,7 @@ ggplot() +
 
 ```
 
-Analysis of correlations between the prevalence of lack of health insurance and health practices shows a significant linear relationship between all practices except for one. 
+The prevalence of noninsured individuals is noteworthy for us because an analysis of correlations between the noninsured and health practices shows a significant linear relationship between all practices except for one. Proactive health practices -- such as screening tests -- showed a negative correlation with lack of insurance, meaning the higher the prevalence of uninsured, the lower the prevalence of these proactive practices.
 
 ```{r, echo = FALSE}
 health_practice = c("Health Checkup", "Cholestrol Screening", "Colon Screening", "Dental", "COREM", "COREW", "LPA", "Mammogram", "Pap Test", "Poor Physical Health")
@@ -124,20 +126,6 @@ phlth = cdc_df %>%
 
 (dental | colon) / (lpa | phlth)
 ```
-
-
-
-```{r, echo = FALSE, message = FALSE, cache = TRUE}
-read_csv("./data/cdc_df.csv") %>%
-  mutate(region = fct_reorder(region, ACCESS2_AdjPrev),
-         text_label = str_c("% Lack Health Insurance: ", 
-                            ACCESS2_AdjPrev, '\nCity: ', PlaceName)) %>%
-  plot_ly(y = ~ACCESS2_AdjPrev, color = ~region, type = "box", text = ~text_label) %>%
-  layout(yaxis = list(title = "Percent Lack Health Insurance"),
-    title = "Comparing Lack of Health Insurance Across Regions"
-  )
-```
-
 
 
 
