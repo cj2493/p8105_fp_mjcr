@@ -130,7 +130,6 @@ cdc_df %>%
   lm(health_exp ~ division, data = .) %>%
   summary
 
-
 cdc_df %>%
   lm(health_exp ~ ACCESS2_AdjPrev, data = .) %>%
   summary
