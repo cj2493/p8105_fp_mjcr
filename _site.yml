@@ -11,6 +11,8 @@ navbar:
       href: healthcare_expenditure.html
     - text: "Shiny Dashboard"
       href: https://dayoungyu.shinyapps.io/final_plots/
+    - text: "Shiny Repository"
+      href: https://github.com/dayoungyu/final_plots
     - icon: fa-github fa-lg
       href: http://github.com/cj2493/p8105_fp_mjcr/
 output:
