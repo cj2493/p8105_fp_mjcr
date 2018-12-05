@@ -1,24 +1,32 @@
 ---
-title: "500 Cities Project"
+title: "Exploring the Relationship between Health and Healthcare in America"
 ---
 
-<img src="images/Healthcare.jpg" style="width:100%">
+<img src = "images/Healthcare.jpg" style="width:100%">
 
-### Exploring the Patterns of Adherence to Known Public Health Guidelines Across the United States and their Consequences
 
-Here we explore regional differences in health outcomes across the United States.
+### Objectives
 
-We analyze the associations between:
+The United States continues to spend more on healthcare than any other nation. As a result, the cost of many health practices that public health officials advocate for often becomes prohibitive for a large population. As students of public health, we wanted to explore differences in health practices and outcomes. We did this by analyzing the following associations:
 
-* Prevalence of lack of health insurance with 
+* Lack of health insurance with:
     * Regular health practices
     * Health outcomes
 
-* Healthcare expenditure per capita per state with
+* Healthcare expenditure per state with:
     * Regular health practices
     * Health outcomes
 
 
+### Dataset
+
+[<img src = "images/500-cities-logo.png" style="width:50%">](https://www.cdc.gov/500cities/about.htm)
+
+This data is taken from the 500 Cities Project, which analyzes data from the Centers for Disease Control and Prevention (CDC) in order to provide estimates for chronic disease risk factors, health outcomes, and clinical preventive service use. Data is provided for the 500 largest cities in the US. From the original dataset, we narrowed down the variable to include 9 health outcomes and 10 health practices -- refer to our [data dictionary](data_dictionary.html) for variable descriptions. Data on state healthcare expenditure per capita was taken from the [Henry J. Kaiser Family Foundation](https://www.kff.org/other/state-indicator/health-spending-per-capita/?currentTimeframe=0) and merged with our existing data. 
+
+
+
+### Conclusions
 
 
 

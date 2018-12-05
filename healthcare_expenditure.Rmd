@@ -1,0 +1,109 @@
+---
+title: "Healthcare Expenditure"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(ggmap)
+library(flexdashboard)
+library(viridis)
+library(p8105.datasets)
+library(plotly)
+library(stringr)
+```
+
+```{r, echo = FALSE, message = FALSE}
+cdc_df = read_csv("./data/cdc_df.csv")
+```
+
+In the US, state governments have a great deal of control over public spending on healthcare, partly through programs like Medicare and Medicaid. As a result, healthcare spending is not uniform across the country. These differences are illustrated in the map below where healthcare expenditure by state is presented in millions of dollars and black dots represent the 500 cities used in our analysis.
+
+
+```{r, echo = FALSE, message = FALSE, cache = TRUE}
+
+usa = map_data("state") %>%
+  rename(state = "region")
+
+cdc_df_map = read_csv("./data/cdc_df.csv") %>%
+  separate(Geolocation, into = c("long", "lat"), sep = ",") %>%
+  mutate(long = str_replace(long, "\\(", ""),
+         lat = str_replace(lat, "\\)", ""),
+         long = as.numeric(long),
+         lat = as.numeric(lat),
+         state = factor(state),
+         state = tolower(state)) %>%
+  filter(!state %in% c("alaska", "hawaii")) %>%
+  left_join(., usa, by = "state")
+
+ggplot() + 
+  geom_polygon(data = cdc_df_map, aes(x = long.y, y = lat.y, 
+                                      group = state, fill = health_exp), color = "white") +
+  scale_fill_gradient2(low = "red", mid = "white", high = "blue", space = "Lab",
+                       midpoint = mean(cdc_df_map$health_exp),
+                       name = "US Dollars") +
+  coord_fixed(1) +
+  geom_point(data = cdc_df_map, aes(x = lat.x, y = long.x), 
+             color = "grey13", size = 0.5, alpha = 0.3) +
+  theme_bw() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.title = element_text(size = 10),
+        plot.caption = element_text(size = 8),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank()) +
+  labs(title = "Healthcare Expenditure per Capita",
+       caption = 
+         "Points represent 500 most populated cities in the US,\n excluding Hawaii and Alaska") + 
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+This map suggests that there very well may be regional differences in healthcare spending. Exploring this question shows clear graphical differences in regional spending:
+
+```{r, echo = FALSE}
+cdc_df %>%
+  distinct(state, .keep_all = TRUE) %>%
+  mutate(text_label = str_c("Health Expenditures per Capita: ", health_exp, '\nState: ', StateAbbr)) %>%
+  mutate(region = fct_reorder(region, health_exp)) %>%
+  plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
+  layout(
+    xaxis = list(title = "Region"),
+    yaxis = list(title = "Health Expenditures per Capita per State"),
+    title = "Comparing Healthcare Expenditure Across Regions",
+    font = "Open Sans",
+    titlefont = "Open Sans"
+  )
+```
+
+Further analysis shows that there is a statistically significant difference between regions:
+
+```{r, echo = FALSE}
+cdc_df %>%
+  distinct(state, .keep_all = TRUE) %>%
+  mutate(region = fct_reorder(region, health_exp)) %>%
+  lm(health_exp ~ region, data = .) %>%
+  broom::tidy() %>% 
+  knitr::kable()
+```
+
+
+
+```{r, echo = FALSE}
+reg = cdc_df %>%
+  distinct(state, .keep_all = TRUE) %>%
+  mutate(region = fct_reorder(region, health_exp)) %>%
+  lm(health_exp ~ region, data = .)
+
+anova(reg) %>% 
+  broom::tidy() %>% 
+  knitr::kable()
+```
+

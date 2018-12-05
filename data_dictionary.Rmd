@@ -1,5 +1,5 @@
 ---
-title: "data_dictionary"
+title: "Data Dictionary"
 output: github_document
 editor_options: 
   chunk_output_type: console
@@ -11,45 +11,12 @@ library(httr)
 library(tidyverse)
 library(rvest)
 library(stringr)
+library(kableExtra)
 ```
 
-```{r}
-url = "https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny"
 
 
-read_dict = function(url) {
-  
-  h = read_html(url)
-  
-  var_name = h %>%
-    html_nodes(".column-summary .column-name") %>%
-    html_text()
-  
-  var_description = h %>%
-    html_nodes(".Linkify") %>%
-    html_text()
-  
-  var_type = h %>%
-    html_nodes(".type-name") %>%
-    html_text()
-  
-  tibble(
-    name = var_name,
-    description = var_description,
-    type = var_type
-  )
-}
-
-
-
-data_dictionary = read_dict("https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny")
-
-```
-This doesn't read in anything?
-So for now I copied from the webpage into an excel file (will try to figure this out to get the selector gadget to work before submission)
-
-
-```{r}
+```{r, echo = FALSE, message = FALSE}
 data_dictionary = readxl::read_xlsx("./data/data_dictionary.xlsx") 
 data_dictionary = data_dictionary %>%
   janitor::clean_names() %>%
@@ -68,6 +35,10 @@ region_dict = tibble(column_name = c("region", "division"),
 )
 
 data_dictionary = full_join(data_dictionary, region_dict)
+
+data_dictionary %>% 
+  knitr::kable() %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
 ```
 
 

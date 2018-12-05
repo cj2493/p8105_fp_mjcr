@@ -1,0 +1,137 @@
+---
+title: "regression"
+author: "Courtney Johnson"
+date: "December 2, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(modelr)
+library(purrr)
+```
+
+```{r, load_data}
+cdc_df = read_csv("./data/cdc_df.csv")
+```
+
+```{r, outcome_practices}
+bp_full_mod = lm(BPHIGH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(bp_full_mod)
+bp_minus_1 = update(bp_full_mod, . ~ . -COREM_AdjPrev)
+summary(bp_minus_1)
+bp_minus_2 = update(bp_minus_1, . ~ . -CHOLSCREEN_AdjPrev)
+summary(bp_minus_2)
+
+bp_stepwise = step(bp_full_mod)
+summary(bp_stepwise)
+
+cancer_full_mod = lm(CANCER_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(cancer_full_mod)
+cancer_minus_1 = update(cancer_full_mod, . ~ . -COREW_AdjPrev)
+summary(cancer_minus_1)
+cancer_minus_2 = update(cancer_minus_1, . ~ . -LPA_AdjPrev)
+summary(cancer_minus_2)
+cancer_minus_3 = update(cancer_minus_2, . ~ . -CHOLSCREEN_AdjPrev)
+summary(cancer_minus_3)
+cancer_minus_4 = update(cancer_minus_3, . ~ . -PAPTEST_AdjPrev)
+summary(cancer_minus_4)
+cancer_step = step(cancer_full_mod)
+summary(cancer_step)
+
+chd_full_mod = lm(CHD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(chd_full_mod)
+chd_step = step(chd_full_mod)
+summary(chd_step)
+
+
+copd_full_mod = lm(COPD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(copd_full_mod)
+copd_minus_1 = update(copd_full_mod, . ~ . -CHOLSCREEN_AdjPrev)
+summary(copd_minus_1)
+copd_minus_2 = update(copd_minus_1, . ~ . -PAPTEST_AdjPrev)
+summary(copd_minus_2)
+copd_minus_3 = update(copd_minus_2, . ~ . -COREM_AdjPrev)
+summary(copd_minus_3)
+copd_step = step(copd_full_mod)
+summary(copd_step)
+
+
+diab_full_mod = lm(DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(diab_full_mod)
+diab_minus_1 = update(diab_full_mod, . ~ . -COLON_SCREEN_AdjPrev)
+summary(diab_minus_1)
+diab_minus_2 = update(diab_minus_1, . ~ . -PAPTEST_AdjPrev)
+summary(diab_minus_2)
+diab_minus_3 = update(diab_minus_2, . ~ . -COREM_AdjPrev)
+summary(diab_minus_3)
+
+diab_step = step(diab_full_mod)
+summary(diab_step)
+
+chol_full_mod = lm(HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(chol_full_mod)
+chol_minus_1 = update(chol_full_mod, . ~ . -CHOLSCREEN_AdjPrev) #the first thing I took out!
+summary(chol_minus_1)
+chol_minus_2 = update(chol_minus_1, . ~ . -COREW_AdjPrev)
+summary(chol_minus_2)
+chol_minus_3 = update(chol_minus_2, . ~ . -COREM_AdjPrev)
+summary(chol_minus_3)
+chol_minus_4 = update(chol_minus_3, . ~ . -MAMMOUSE_AdjPrev)
+summary(chol_minus_4)
+chol_minus_5 = update(chol_minus_4, . ~ . -PAPTEST_AdjPrev)
+summary(chol_minus_5)
+
+chol_step = step(chol_full_mod)
+summary(chol_step) # same model for both
+
+obes_full_mod = lm(OBESITY_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(obes_full_mod)
+obes_minus_1 = update(obes_full_mod, . ~ . -COREW_AdjPrev)
+summary(obes_minus_1)
+
+obes_step = step(obes_full_mod)
+summary(obes_step) # this is also the same now
+
+phlth_full_mod = lm(PHLTH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(phlth_full_mod)
+phlth_minus_1 = update(phlth_full_mod, . ~ . -MAMMOUSE_AdjPrev)
+summary(phlth_minus_1)
+
+phlth_step = step(phlth_full_mod)
+summary(phlth_step) # same
+
+stroke_full_mod = lm(STROKE_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(stroke_full_mod)
+stroke_minus_1 = update(stroke_full_mod, . ~ . -COREM_AdjPrev)
+summary(stroke_minus_1)
+
+stroke_step = step(stroke_full_mod)
+summary(stroke_step) #same
+```
+
+
+```{r}
+cv_df =
+  crossv_mc(cdc_df, 500) %>% 
+  mutate(train = map(train, as_tibble),
+         test = map(test, as_tibble))
+
+cv_df = 
+  cv_df %>% 
+  mutate(cancer_minus_4 = map(train, ~lm(CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
+         chol_minus_5   = map(train, ~lm(HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
+         diab_minus_3   = map(train, ~lm(DIABETES_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev, data = .x))) %>% 
+  mutate(rmse_cancer    = map2_dbl(cancer_minus_4, test, ~rmse(model = .x, data = .y)),
+         rmse_chol      = map2_dbl(chol_minus_5, test, ~rmse(model = .x, data = .y)),
+         rmse_diabetes  = map2_dbl(diab_minus_3, test, ~rmse(model = .x, data = .y)))
+
+cv_df %>% 
+  select(starts_with("rmse")) %>% 
+  gather(key = model, value = rmse) %>% 
+  mutate(model = str_replace(model, "rmse_", ""), 
+         model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()
+```
+

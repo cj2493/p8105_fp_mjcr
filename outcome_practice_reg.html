@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Courtney Johnson" />
+
+
+<title>regression</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="flex_dashboard.html">Flex Dashboard</a>
+</li>
+<li>
+  <a href="http://github.com/cj2493/p8105_fp_mjcr/">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">regression</h1>
+<h4 class="author"><em>Courtney Johnson</em></h4>
+<h4 class="date"><em>December 2, 2018</em></h4>
+
+</div>
+
+
+<pre class="r"><code>cdc_df = read_csv(&quot;./data/cdc_df.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   state = col_character(),
+##   StateAbbr = col_character(),
+##   PlaceName = col_character(),
+##   Population2010 = col_integer(),
+##   Geolocation = col_character(),
+##   health_exp = col_integer(),
+##   region = col_character(),
+##   division = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<pre class="r"><code>bp_full_mod = lm(BPHIGH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(bp_full_mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = BPHIGH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
+##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.0483 -1.4481 -0.1607  1.3381  9.4938 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           9.02063    4.26853   2.113   0.0351 *  
+## COREM_AdjPrev        -0.01133    0.04229  -0.268   0.7890    
+## COREW_AdjPrev         0.10251    0.04031   2.543   0.0113 *  
+## DENTAL_AdjPrev       -0.36618    0.03435 -10.660  &lt; 2e-16 ***
+## LPA_AdjPrev           0.46771    0.05276   8.865  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev     -0.27007    0.05830  -4.633 4.63e-06 ***
+## PAPTEST_AdjPrev       0.14844    0.05883   2.523   0.0120 *  
+## CHECKUP_AdjPrev       0.27475    0.04215   6.518 1.77e-10 ***
+## CHOLSCREEN_AdjPrev   -0.11937    0.06292  -1.897   0.0584 .  
+## COLON_SCREEN_AdjPrev  0.47334    0.05405   8.758  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.221 on 490 degrees of freedom
+## Multiple R-squared:  0.7644, Adjusted R-squared:  0.7601 
+## F-statistic: 176.6 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>bp_minus_1 = update(bp_full_mod, . ~ . -COREM_AdjPrev)
+summary(bp_minus_1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = BPHIGH_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.0928 -1.4515 -0.1773  1.3698  9.5252 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           8.72942    4.12378   2.117  0.03478 *  
+## COREW_AdjPrev         0.09586    0.03171   3.022  0.00264 ** 
+## DENTAL_AdjPrev       -0.36612    0.03432 -10.669  &lt; 2e-16 ***
+## LPA_AdjPrev           0.46834    0.05266   8.894  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev     -0.26135    0.04831  -5.410 9.87e-08 ***
+## PAPTEST_AdjPrev       0.14469    0.05710   2.534  0.01158 *  
+## CHECKUP_AdjPrev       0.27112    0.03987   6.800 3.05e-11 ***
+## CHOLSCREEN_AdjPrev   -0.11608    0.06165  -1.883  0.06031 .  
+## COLON_SCREEN_AdjPrev  0.46923    0.05178   9.062  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.219 on 491 degrees of freedom
+## Multiple R-squared:  0.7644, Adjusted R-squared:  0.7605 
+## F-statistic: 199.1 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>bp_minus_2 = update(bp_minus_1, . ~ . -CHOLSCREEN_AdjPrev)
+summary(bp_minus_2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = BPHIGH_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.1222 -1.5398 -0.1487  1.2530  9.3714 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           5.88238    3.84648   1.529   0.1268    
+## COREW_AdjPrev         0.10110    0.03167   3.192   0.0015 ** 
+## DENTAL_AdjPrev       -0.37475    0.03410 -10.990  &lt; 2e-16 ***
+## LPA_AdjPrev           0.47580    0.05265   9.038  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev     -0.27521    0.04787  -5.749 1.57e-08 ***
+## PAPTEST_AdjPrev       0.12527    0.05630   2.225   0.0265 *  
+## CHECKUP_AdjPrev       0.23575    0.03526   6.686 6.25e-11 ***
+## COLON_SCREEN_AdjPrev  0.46156    0.05175   8.919  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.224 on 492 degrees of freedom
+## Multiple R-squared:  0.7627, Adjusted R-squared:  0.7593 
+## F-statistic: 225.9 on 7 and 492 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>bp_stepwise = step(bp_full_mod)</code></pre>
+<pre><code>## Start:  AIC=807.79
+## BPHIGH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS    AIC
+## - COREM_AdjPrev         1      0.35 2417.1 805.86
+## &lt;none&gt;                              2416.8 807.79
+## - CHOLSCREEN_AdjPrev    1     17.75 2434.5 809.45
+## - PAPTEST_AdjPrev       1     31.40 2448.2 812.24
+## - COREW_AdjPrev         1     31.90 2448.7 812.35
+## - MAMMOUSE_AdjPrev      1    105.85 2522.6 827.22
+## - CHECKUP_AdjPrev       1    209.54 2626.3 847.36
+## - COLON_SCREEN_AdjPrev  1    378.28 2795.1 878.50
+## - LPA_AdjPrev           1    387.58 2804.3 880.16
+## - DENTAL_AdjPrev        1    560.49 2977.3 910.08
+## 
+## Step:  AIC=805.86
+## BPHIGH_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + 
+##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + 
+##     COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS    AIC
+## &lt;none&gt;                              2417.1 805.86
+## - CHOLSCREEN_AdjPrev    1     17.45 2434.6 807.46
+## - PAPTEST_AdjPrev       1     31.62 2448.8 810.36
+## - COREW_AdjPrev         1     44.97 2462.1 813.08
+## - MAMMOUSE_AdjPrev      1    144.08 2561.2 832.81
+## - CHECKUP_AdjPrev       1    227.61 2644.7 848.86
+## - LPA_AdjPrev           1    389.40 2806.5 878.55
+## - COLON_SCREEN_AdjPrev  1    404.31 2821.4 881.20
+## - DENTAL_AdjPrev        1    560.33 2977.5 908.11</code></pre>
+<pre class="r"><code>summary(bp_stepwise)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = BPHIGH_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.0928 -1.4515 -0.1773  1.3698  9.5252 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           8.72942    4.12378   2.117  0.03478 *  
+## COREW_AdjPrev         0.09586    0.03171   3.022  0.00264 ** 
+## DENTAL_AdjPrev       -0.36612    0.03432 -10.669  &lt; 2e-16 ***
+## LPA_AdjPrev           0.46834    0.05266   8.894  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev     -0.26135    0.04831  -5.410 9.87e-08 ***
+## PAPTEST_AdjPrev       0.14469    0.05710   2.534  0.01158 *  
+## CHECKUP_AdjPrev       0.27112    0.03987   6.800 3.05e-11 ***
+## CHOLSCREEN_AdjPrev   -0.11608    0.06165  -1.883  0.06031 .  
+## COLON_SCREEN_AdjPrev  0.46923    0.05178   9.062  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.219 on 491 degrees of freedom
+## Multiple R-squared:  0.7644, Adjusted R-squared:  0.7605 
+## F-statistic: 199.1 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>cancer_full_mod = lm(CANCER_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(cancer_full_mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
+##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.99672 -0.19209  0.01202  0.22395  0.93081 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           4.396047   0.627176   7.009 7.97e-12 ***
+## COREM_AdjPrev         0.008319   0.006214   1.339    0.181    
+## COREW_AdjPrev         0.001945   0.005923   0.328    0.743    
+## DENTAL_AdjPrev       -0.035446   0.005047  -7.023 7.29e-12 ***
+## LPA_AdjPrev          -0.004077   0.007752  -0.526    0.599    
+## MAMMOUSE_AdjPrev     -0.041423   0.008566  -4.836 1.78e-06 ***
+## PAPTEST_AdjPrev       0.012257   0.008644   1.418    0.157    
+## CHECKUP_AdjPrev      -0.006210   0.006193  -1.003    0.317    
+## CHOLSCREEN_AdjPrev   -0.006452   0.009245  -0.698    0.486    
+## COLON_SCREEN_AdjPrev  0.104761   0.007941  13.192  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3263 on 490 degrees of freedom
+## Multiple R-squared:  0.5725, Adjusted R-squared:  0.5647 
+## F-statistic: 72.91 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>cancer_minus_1 = update(cancer_full_mod, . ~ . -COREW_AdjPrev)
+summary(cancer_minus_1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.00198 -0.19192  0.01383  0.22213  0.92520 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           4.367011   0.620345   7.040 6.53e-12 ***
+## COREM_AdjPrev         0.009576   0.004889   1.959   0.0507 .  
+## DENTAL_AdjPrev       -0.035335   0.005031  -7.023 7.26e-12 ***
+## LPA_AdjPrev          -0.003953   0.007736  -0.511   0.6096    
+## MAMMOUSE_AdjPrev     -0.041121   0.008509  -4.833 1.80e-06 ***
+## PAPTEST_AdjPrev       0.012045   0.008612   1.399   0.1626    
+## CHECKUP_AdjPrev      -0.006416   0.006156  -1.042   0.2978    
+## CHOLSCREEN_AdjPrev   -0.006293   0.009224  -0.682   0.4954    
+## COLON_SCREEN_AdjPrev  0.105311   0.007756  13.578  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.326 on 491 degrees of freedom
+## Multiple R-squared:  0.5724, Adjusted R-squared:  0.5654 
+## F-statistic: 82.16 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>cancer_minus_2 = update(cancer_minus_1, . ~ . -LPA_AdjPrev)
+summary(cancer_minus_2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
+##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + 
+##     COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.00226 -0.19302  0.01428  0.22022  0.91568 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           4.145930   0.444189   9.334  &lt; 2e-16 ***
+## COREM_AdjPrev         0.009622   0.004884   1.970   0.0494 *  
+## DENTAL_AdjPrev       -0.034062   0.004368  -7.799 3.76e-14 ***
+## MAMMOUSE_AdjPrev     -0.041540   0.008462  -4.909 1.25e-06 ***
+## PAPTEST_AdjPrev       0.012963   0.008417   1.540   0.1242    
+## CHECKUP_AdjPrev      -0.008105   0.005190  -1.562   0.1190    
+## CHOLSCREEN_AdjPrev   -0.005916   0.009187  -0.644   0.5199    
+## COLON_SCREEN_AdjPrev  0.106766   0.007209  14.811  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3258 on 492 degrees of freedom
+## Multiple R-squared:  0.5722, Adjusted R-squared:  0.5661 
+## F-statistic:    94 on 7 and 492 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>cancer_minus_3 = update(cancer_minus_2, . ~ . -CHOLSCREEN_AdjPrev)
+summary(cancer_minus_3)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
+##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.00113 -0.18884  0.01572  0.22361  0.90726 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           4.010292   0.390837  10.261  &lt; 2e-16 ***
+## COREM_AdjPrev         0.010271   0.004777   2.150   0.0320 *  
+## DENTAL_AdjPrev       -0.034625   0.004277  -8.096 4.47e-15 ***
+## MAMMOUSE_AdjPrev     -0.041612   0.008457  -4.921 1.18e-06 ***
+## PAPTEST_AdjPrev       0.011672   0.008170   1.429   0.1537    
+## CHECKUP_AdjPrev      -0.009913   0.004361  -2.273   0.0235 *  
+## COLON_SCREEN_AdjPrev  0.105899   0.007077  14.963  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3256 on 493 degrees of freedom
+## Multiple R-squared:  0.5718, Adjusted R-squared:  0.5666 
+## F-statistic: 109.7 on 6 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>cancer_minus_4 = update(cancer_minus_3, . ~ . -PAPTEST_AdjPrev)
+summary(cancer_minus_4)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
+##     MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.03868 -0.20284  0.01556  0.22721  0.86591 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           4.327473   0.322006  13.439  &lt; 2e-16 ***
+## COREM_AdjPrev         0.011737   0.004670   2.513   0.0123 *  
+## DENTAL_AdjPrev       -0.033185   0.004160  -7.976 1.06e-14 ***
+## MAMMOUSE_AdjPrev     -0.036228   0.007579  -4.780 2.31e-06 ***
+## CHECKUP_AdjPrev      -0.009509   0.004357  -2.183   0.0295 *  
+## COLON_SCREEN_AdjPrev  0.106566   0.007070  15.074  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3259 on 494 degrees of freedom
+## Multiple R-squared:  0.5701, Adjusted R-squared:  0.5657 
+## F-statistic:   131 on 5 and 494 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>cancer_step = step(cancer_full_mod)</code></pre>
+<pre><code>## Start:  AIC=-1110.01
+## CANCER_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS      AIC
+## - COREW_AdjPrev         1    0.0115 52.186 -1111.90
+## - LPA_AdjPrev           1    0.0295 52.204 -1111.73
+## - CHOLSCREEN_AdjPrev    1    0.0519 52.226 -1111.51
+## - CHECKUP_AdjPrev       1    0.1070 52.282 -1110.98
+## - COREM_AdjPrev         1    0.1908 52.365 -1110.18
+## &lt;none&gt;                              52.174 -1110.01
+## - PAPTEST_AdjPrev       1    0.2141 52.389 -1109.96
+## - MAMMOUSE_AdjPrev      1    2.4900 54.664 -1088.70
+## - DENTAL_AdjPrev        1    5.2520 57.426 -1064.05
+## - COLON_SCREEN_AdjPrev  1   18.5301 70.705  -960.05
+## 
+## Step:  AIC=-1111.9
+## CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + 
+##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + 
+##     COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS      AIC
+## - LPA_AdjPrev           1    0.0277 52.214 -1113.63
+## - CHOLSCREEN_AdjPrev    1    0.0495 52.235 -1113.42
+## - CHECKUP_AdjPrev       1    0.1155 52.301 -1112.79
+## - PAPTEST_AdjPrev       1    0.2079 52.394 -1111.91
+## &lt;none&gt;                              52.186 -1111.90
+## - COREM_AdjPrev         1    0.4078 52.594 -1110.01
+## - MAMMOUSE_AdjPrev      1    2.4825 54.668 -1090.66
+## - DENTAL_AdjPrev        1    5.2427 57.429 -1066.03
+## - COLON_SCREEN_AdjPrev  1   19.5955 71.781  -954.49
+## 
+## Step:  AIC=-1113.63
+## CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + MAMMOUSE_AdjPrev + 
+##     PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + 
+##     COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS      AIC
+## - CHOLSCREEN_AdjPrev    1    0.0440 52.258 -1115.21
+## &lt;none&gt;                              52.214 -1113.63
+## - PAPTEST_AdjPrev       1    0.2517 52.465 -1113.23
+## - CHECKUP_AdjPrev       1    0.2588 52.473 -1113.16
+## - COREM_AdjPrev         1    0.4118 52.626 -1111.70
+## - MAMMOUSE_AdjPrev      1    2.5572 54.771 -1091.72
+## - DENTAL_AdjPrev        1    6.4547 58.668 -1057.35
+## - COLON_SCREEN_AdjPrev  1   23.2805 75.494  -931.28
+## 
+## Step:  AIC=-1115.21
+## CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + MAMMOUSE_AdjPrev + 
+##     PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS      AIC
+## &lt;none&gt;                              52.258 -1115.21
+## - PAPTEST_AdjPrev       1    0.2164 52.474 -1115.14
+## - COREM_AdjPrev         1    0.4901 52.748 -1112.54
+## - CHECKUP_AdjPrev       1    0.5476 52.805 -1112.00
+## - MAMMOUSE_AdjPrev      1    2.5665 54.824 -1093.24
+## - DENTAL_AdjPrev        1    6.9483 59.206 -1054.79
+## - COLON_SCREEN_AdjPrev  1   23.7318 75.990  -930.01</code></pre>
+<pre class="r"><code>summary(cancer_step)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
+##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.00113 -0.18884  0.01572  0.22361  0.90726 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           4.010292   0.390837  10.261  &lt; 2e-16 ***
+## COREM_AdjPrev         0.010271   0.004777   2.150   0.0320 *  
+## DENTAL_AdjPrev       -0.034625   0.004277  -8.096 4.47e-15 ***
+## MAMMOUSE_AdjPrev     -0.041612   0.008457  -4.921 1.18e-06 ***
+## PAPTEST_AdjPrev       0.011672   0.008170   1.429   0.1537    
+## CHECKUP_AdjPrev      -0.009913   0.004361  -2.273   0.0235 *  
+## COLON_SCREEN_AdjPrev  0.105899   0.007077  14.963  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3256 on 493 degrees of freedom
+## Multiple R-squared:  0.5718, Adjusted R-squared:  0.5666 
+## F-statistic: 109.7 on 6 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>chd_full_mod = lm(CHD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(chd_full_mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = CHD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.13705 -0.25581  0.00189  0.27391  1.34751 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           5.489929   0.739003   7.429 4.91e-13 ***
+## COREM_AdjPrev         0.016060   0.007322   2.193 0.028745 *  
+## COREW_AdjPrev        -0.015011   0.006979  -2.151 0.031976 *  
+## DENTAL_AdjPrev       -0.072822   0.005947 -12.245  &lt; 2e-16 ***
+## LPA_AdjPrev           0.100326   0.009134  10.983  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev     -0.042176   0.010093  -4.179 3.47e-05 ***
+## PAPTEST_AdjPrev       0.029984   0.010186   2.944 0.003397 ** 
+## CHECKUP_AdjPrev       0.026476   0.007298   3.628 0.000316 ***
+## CHOLSCREEN_AdjPrev   -0.046093   0.010893  -4.231 2.77e-05 ***
+## COLON_SCREEN_AdjPrev  0.079578   0.009357   8.504 2.23e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3845 on 490 degrees of freedom
+## Multiple R-squared:  0.8311, Adjusted R-squared:  0.828 
+## F-statistic: 267.9 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>chd_step = step(chd_full_mod)</code></pre>
+<pre><code>## Start:  AIC=-945.93
+## CHD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS     AIC
+## &lt;none&gt;                              72.439 -945.93
+## - COREW_AdjPrev         1    0.6839 73.123 -943.23
+## - COREM_AdjPrev         1    0.7113 73.150 -943.05
+## - PAPTEST_AdjPrev       1    1.2811 73.720 -939.17
+## - CHECKUP_AdjPrev       1    1.9458 74.385 -934.68
+## - MAMMOUSE_AdjPrev      1    2.5814 75.020 -930.42
+## - CHOLSCREEN_AdjPrev    1    2.6469 75.086 -929.99
+## - COLON_SCREEN_AdjPrev  1   10.6921 83.131 -879.10
+## - LPA_AdjPrev           1   17.8337 90.273 -837.89
+## - DENTAL_AdjPrev        1   22.1668 94.606 -814.44</code></pre>
+<pre class="r"><code>summary(chd_step)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = CHD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.13705 -0.25581  0.00189  0.27391  1.34751 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           5.489929   0.739003   7.429 4.91e-13 ***
+## COREM_AdjPrev         0.016060   0.007322   2.193 0.028745 *  
+## COREW_AdjPrev        -0.015011   0.006979  -2.151 0.031976 *  
+## DENTAL_AdjPrev       -0.072822   0.005947 -12.245  &lt; 2e-16 ***
+## LPA_AdjPrev           0.100326   0.009134  10.983  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev     -0.042176   0.010093  -4.179 3.47e-05 ***
+## PAPTEST_AdjPrev       0.029984   0.010186   2.944 0.003397 ** 
+## CHECKUP_AdjPrev       0.026476   0.007298   3.628 0.000316 ***
+## CHOLSCREEN_AdjPrev   -0.046093   0.010893  -4.231 2.77e-05 ***
+## COLON_SCREEN_AdjPrev  0.079578   0.009357   8.504 2.23e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3845 on 490 degrees of freedom
+## Multiple R-squared:  0.8311, Adjusted R-squared:  0.828 
+## F-statistic: 267.9 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>copd_full_mod = lm(COPD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(copd_full_mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = COPD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.17340 -0.52192 -0.06556  0.53491  3.09667 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           5.101217   1.548538   3.294  0.00106 ** 
+## COREM_AdjPrev         0.029820   0.015343   1.944  0.05251 .  
+## COREW_AdjPrev        -0.046356   0.014624  -3.170  0.00162 ** 
+## DENTAL_AdjPrev       -0.154150   0.012462 -12.370  &lt; 2e-16 ***
+## LPA_AdjPrev           0.146027   0.019141   7.629 1.24e-13 ***
+## MAMMOUSE_AdjPrev     -0.103307   0.021149  -4.885 1.41e-06 ***
+## PAPTEST_AdjPrev      -0.017881   0.021344  -0.838  0.40257    
+## CHECKUP_AdjPrev       0.028908   0.015292   1.890  0.05930 .  
+## CHOLSCREEN_AdjPrev    0.007228   0.022826   0.317  0.75165    
+## COLON_SCREEN_AdjPrev  0.234210   0.019608  11.945  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8057 on 490 degrees of freedom
+## Multiple R-squared:   0.73,  Adjusted R-squared:  0.7251 
+## F-statistic: 147.2 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>copd_minus_1 = update(copd_full_mod, . ~ . -CHOLSCREEN_AdjPrev)
+summary(copd_minus_1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = COPD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.19373 -0.51051 -0.06047  0.53076  3.10873 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           5.29610    1.41967   3.731 0.000213 ***
+## COREM_AdjPrev         0.02887    0.01503   1.920 0.055377 .  
+## COREW_AdjPrev        -0.04611    0.01459  -3.161 0.001672 ** 
+## DENTAL_AdjPrev       -0.15364    0.01235 -12.445  &lt; 2e-16 ***
+## LPA_AdjPrev           0.14553    0.01906   7.636 1.18e-13 ***
+## MAMMOUSE_AdjPrev     -0.10321    0.02113  -4.885 1.40e-06 ***
+## PAPTEST_AdjPrev      -0.01640    0.02081  -0.788 0.430882    
+## CHECKUP_AdjPrev       0.03133    0.01323   2.368 0.018262 *  
+## COLON_SCREEN_AdjPrev  0.23501    0.01943  12.098  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8049 on 491 degrees of freedom
+## Multiple R-squared:   0.73,  Adjusted R-squared:  0.7256 
+## F-statistic: 165.9 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>copd_minus_2 = update(copd_minus_1, . ~ . -PAPTEST_AdjPrev)
+summary(copd_minus_2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = COPD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.25424 -0.50444 -0.06789  0.52975  3.15917 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           4.69887    1.20017   3.915 0.000103 ***
+## COREM_AdjPrev         0.02646    0.01471   1.798 0.072744 .  
+## COREW_AdjPrev        -0.04537    0.01455  -3.117 0.001933 ** 
+## DENTAL_AdjPrev       -0.15444    0.01230 -12.558  &lt; 2e-16 ***
+## LPA_AdjPrev           0.14896    0.01855   8.031 7.18e-15 ***
+## MAMMOUSE_AdjPrev     -0.11082    0.01879  -5.899 6.81e-09 ***
+## CHECKUP_AdjPrev       0.02947    0.01301   2.265 0.023959 *  
+## COLON_SCREEN_AdjPrev  0.23524    0.01942  12.116  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8046 on 492 degrees of freedom
+## Multiple R-squared:  0.7296, Adjusted R-squared:  0.7258 
+## F-statistic: 189.7 on 7 and 492 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>copd_minus_3 = update(copd_minus_2, . ~ . -COREM_AdjPrev)
+summary(copd_minus_3)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = COPD_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.2417 -0.4984 -0.0860  0.5194  3.2608 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           5.49543    1.11797   4.916 1.21e-06 ***
+## COREW_AdjPrev        -0.02914    0.01145  -2.546  0.01120 *  
+## DENTAL_AdjPrev       -0.15480    0.01232 -12.560  &lt; 2e-16 ***
+## LPA_AdjPrev           0.14631    0.01853   7.896 1.89e-14 ***
+## MAMMOUSE_AdjPrev     -0.12942    0.01572  -8.235 1.63e-15 ***
+## CHECKUP_AdjPrev       0.03677    0.01239   2.967  0.00315 ** 
+## COLON_SCREEN_AdjPrev  0.24461    0.01874  13.050  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8065 on 493 degrees of freedom
+## Multiple R-squared:  0.7278, Adjusted R-squared:  0.7245 
+## F-statistic: 219.7 on 6 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>copd_step = step(copd_full_mod)</code></pre>
+<pre><code>## Start:  AIC=-206.17
+## COPD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS      AIC
+## - CHOLSCREEN_AdjPrev    1     0.065 318.14 -208.065
+## - PAPTEST_AdjPrev       1     0.456 318.53 -207.452
+## &lt;none&gt;                              318.07 -206.167
+## - CHECKUP_AdjPrev       1     2.320 320.39 -204.534
+## - COREM_AdjPrev         1     2.452 320.52 -204.327
+## - COREW_AdjPrev         1     6.522 324.59 -198.018
+## - MAMMOUSE_AdjPrev      1    15.488 333.56 -184.395
+## - LPA_AdjPrev           1    37.782 355.85 -152.046
+## - COLON_SCREEN_AdjPrev  1    92.616 410.69  -80.389
+## - DENTAL_AdjPrev        1    99.326 417.40  -72.285
+## 
+## Step:  AIC=-208.06
+## COPD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS      AIC
+## - PAPTEST_AdjPrev       1     0.403 318.54 -209.433
+## &lt;none&gt;                              318.14 -208.065
+## - COREM_AdjPrev         1     2.390 320.53 -206.323
+## - CHECKUP_AdjPrev       1     3.634 321.77 -204.386
+## - COREW_AdjPrev         1     6.472 324.61 -199.995
+## - MAMMOUSE_AdjPrev      1    15.461 333.60 -186.338
+## - LPA_AdjPrev           1    37.780 355.92 -153.957
+## - COLON_SCREEN_AdjPrev  1    94.837 412.97  -79.613
+## - DENTAL_AdjPrev        1   100.356 418.49  -72.975
+## 
+## Step:  AIC=-209.43
+## COPD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS      AIC
+## &lt;none&gt;                              318.54 -209.433
+## - COREM_AdjPrev         1     2.094 320.63 -208.157
+## - CHECKUP_AdjPrev       1     3.321 321.86 -206.247
+## - COREW_AdjPrev         1     6.291 324.83 -201.654
+## - MAMMOUSE_AdjPrev      1    22.530 341.07 -177.263
+## - LPA_AdjPrev           1    41.761 360.30 -149.837
+## - COLON_SCREEN_AdjPrev  1    95.041 413.58  -80.879
+## - DENTAL_AdjPrev        1   102.105 420.64  -72.411</code></pre>
+<pre class="r"><code>summary(copd_step)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = COPD_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.25424 -0.50444 -0.06789  0.52975  3.15917 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           4.69887    1.20017   3.915 0.000103 ***
+## COREM_AdjPrev         0.02646    0.01471   1.798 0.072744 .  
+## COREW_AdjPrev        -0.04537    0.01455  -3.117 0.001933 ** 
+## DENTAL_AdjPrev       -0.15444    0.01230 -12.558  &lt; 2e-16 ***
+## LPA_AdjPrev           0.14896    0.01855   8.031 7.18e-15 ***
+## MAMMOUSE_AdjPrev     -0.11082    0.01879  -5.899 6.81e-09 ***
+## CHECKUP_AdjPrev       0.02947    0.01301   2.265 0.023959 *  
+## COLON_SCREEN_AdjPrev  0.23524    0.01942  12.116  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8046 on 492 degrees of freedom
+## Multiple R-squared:  0.7296, Adjusted R-squared:  0.7258 
+## F-statistic: 189.7 on 7 and 492 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>diab_full_mod = lm(DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(diab_full_mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
+##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.82244 -0.49835 -0.05334  0.38831  2.75411 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          10.06293    1.47109   6.840 2.36e-11 ***
+## COREM_AdjPrev        -0.02625    0.01458  -1.801 0.072368 .  
+## COREW_AdjPrev        -0.04125    0.01389  -2.969 0.003130 ** 
+## DENTAL_AdjPrev       -0.13247    0.01184 -11.190  &lt; 2e-16 ***
+## LPA_AdjPrev           0.18620    0.01818  10.240  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev      0.06480    0.02009   3.225 0.001342 ** 
+## PAPTEST_AdjPrev       0.02470    0.02028   1.218 0.223783    
+## CHECKUP_AdjPrev       0.08751    0.01453   6.024 3.35e-09 ***
+## CHOLSCREEN_AdjPrev   -0.08273    0.02168  -3.815 0.000153 ***
+## COLON_SCREEN_AdjPrev -0.01221    0.01863  -0.655 0.512550    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7654 on 490 degrees of freedom
+## Multiple R-squared:  0.902,  Adjusted R-squared:  0.9002 
+## F-statistic: 501.1 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>diab_minus_1 = update(diab_full_mod, . ~ . -COLON_SCREEN_AdjPrev)
+summary(diab_minus_1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
+##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.84766 -0.49395 -0.05276  0.38941  2.77487 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         9.99942    1.46704   6.816 2.75e-11 ***
+## COREM_AdjPrev      -0.02896    0.01397  -2.073  0.03869 *  
+## COREW_AdjPrev      -0.04317    0.01357  -3.181  0.00156 ** 
+## DENTAL_AdjPrev     -0.13398    0.01161 -11.544  &lt; 2e-16 ***
+## LPA_AdjPrev         0.19060    0.01689  11.284  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev    0.05983    0.01860   3.218  0.00138 ** 
+## PAPTEST_AdjPrev     0.02526    0.02025   1.248  0.21269    
+## CHECKUP_AdjPrev     0.08616    0.01437   5.995 3.94e-09 ***
+## CHOLSCREEN_AdjPrev -0.08457    0.02149  -3.935 9.51e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7649 on 491 degrees of freedom
+## Multiple R-squared:  0.9019, Adjusted R-squared:  0.9003 
+## F-statistic: 564.3 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>diab_minus_2 = update(diab_minus_1, . ~ . -PAPTEST_AdjPrev)
+summary(diab_minus_2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.85808 -0.49600 -0.04818  0.38557  2.80165 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)        10.71227    1.35200   7.923 1.56e-14 ***
+## COREM_AdjPrev      -0.02485    0.01358  -1.830 0.067884 .  
+## COREW_AdjPrev      -0.04462    0.01353  -3.298 0.001045 ** 
+## DENTAL_AdjPrev     -0.13334    0.01160 -11.493  &lt; 2e-16 ***
+## LPA_AdjPrev         0.18632    0.01655  11.259  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev    0.07053    0.01651   4.272 2.33e-05 ***
+## CHECKUP_AdjPrev     0.08680    0.01437   6.040 3.04e-09 ***
+## CHOLSCREEN_AdjPrev -0.07881    0.02100  -3.753 0.000196 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7654 on 492 degrees of freedom
+## Multiple R-squared:  0.9016, Adjusted R-squared:  0.9002 
+## F-statistic:   644 on 7 and 492 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>diab_minus_3 = update(diab_minus_2, . ~ . -COREM_AdjPrev)
+summary(diab_minus_3)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = DIABETES_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.94594 -0.48832 -0.03568  0.38740  2.84917 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         9.669195   1.228864   7.868 2.29e-14 ***
+## COREW_AdjPrev      -0.062549   0.009354  -6.687 6.19e-11 ***
+## DENTAL_AdjPrev     -0.134701   0.011605 -11.607  &lt; 2e-16 ***
+## LPA_AdjPrev         0.193171   0.016159  11.954  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev    0.084542   0.014663   5.766 1.44e-08 ***
+## CHECKUP_AdjPrev     0.076247   0.013194   5.779 1.33e-08 ***
+## CHOLSCREEN_AdjPrev -0.074111   0.020892  -3.547 0.000426 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7672 on 493 degrees of freedom
+## Multiple R-squared:  0.9009, Adjusted R-squared:  0.8997 
+## F-statistic: 747.2 on 6 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>diab_step = step(diab_full_mod)</code></pre>
+<pre><code>## Start:  AIC=-257.48
+## DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS     AIC
+## - COLON_SCREEN_AdjPrev  1     0.252 287.30 -259.04
+## - PAPTEST_AdjPrev       1     0.869 287.92 -257.97
+## &lt;none&gt;                              287.05 -257.48
+## - COREM_AdjPrev         1     1.899 288.95 -256.18
+## - COREW_AdjPrev         1     5.165 292.21 -250.56
+## - MAMMOUSE_AdjPrev      1     6.094 293.14 -248.97
+## - CHOLSCREEN_AdjPrev    1     8.528 295.58 -244.84
+## - CHECKUP_AdjPrev       1    21.258 308.31 -223.76
+## - LPA_AdjPrev           1    61.432 348.48 -162.51
+## - DENTAL_AdjPrev        1    73.354 360.40 -145.69
+## 
+## Step:  AIC=-259.04
+## DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev
+## 
+##                      Df Sum of Sq    RSS     AIC
+## - PAPTEST_AdjPrev     1     0.911 288.21 -259.46
+## &lt;none&gt;                            287.30 -259.04
+## - COREM_AdjPrev       1     2.515 289.81 -256.68
+## - COREW_AdjPrev       1     5.920 293.22 -250.84
+## - MAMMOUSE_AdjPrev    1     6.058 293.36 -250.61
+## - CHOLSCREEN_AdjPrev  1     9.062 296.36 -245.51
+## - CHECKUP_AdjPrev     1    21.030 308.33 -225.72
+## - LPA_AdjPrev         1    74.504 361.80 -145.75
+## - DENTAL_AdjPrev      1    77.972 365.27 -140.98
+## 
+## Step:  AIC=-259.46
+## DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev
+## 
+##                      Df Sum of Sq    RSS     AIC
+## &lt;none&gt;                            288.21 -259.46
+## - COREM_AdjPrev       1     1.961 290.17 -258.07
+## - COREW_AdjPrev       1     6.371 294.58 -250.53
+## - CHOLSCREEN_AdjPrev  1     8.250 296.46 -247.35
+## - MAMMOUSE_AdjPrev    1    10.689 298.90 -243.25
+## - CHECKUP_AdjPrev     1    21.371 309.58 -225.69
+## - LPA_AdjPrev         1    74.254 362.47 -146.84
+## - DENTAL_AdjPrev      1    77.381 365.59 -142.54</code></pre>
+<pre class="r"><code>summary(diab_step)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.85808 -0.49600 -0.04818  0.38557  2.80165 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)        10.71227    1.35200   7.923 1.56e-14 ***
+## COREM_AdjPrev      -0.02485    0.01358  -1.830 0.067884 .  
+## COREW_AdjPrev      -0.04462    0.01353  -3.298 0.001045 ** 
+## DENTAL_AdjPrev     -0.13334    0.01160 -11.493  &lt; 2e-16 ***
+## LPA_AdjPrev         0.18632    0.01655  11.259  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev    0.07053    0.01651   4.272 2.33e-05 ***
+## CHECKUP_AdjPrev     0.08680    0.01437   6.040 3.04e-09 ***
+## CHOLSCREEN_AdjPrev -0.07881    0.02100  -3.753 0.000196 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7654 on 492 degrees of freedom
+## Multiple R-squared:  0.9016, Adjusted R-squared:  0.9002 
+## F-statistic:   644 on 7 and 492 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>chol_full_mod = lm(HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(chol_full_mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
+##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.1205 -1.0260 -0.1267  1.0662  4.0526 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          27.77026    2.87815   9.649  &lt; 2e-16 ***
+## COREM_AdjPrev         0.02756    0.02852   0.967  0.33420    
+## COREW_AdjPrev        -0.01536    0.02718  -0.565  0.57226    
+## DENTAL_AdjPrev       -0.06052    0.02316  -2.613  0.00925 ** 
+## LPA_AdjPrev           0.16194    0.03558   4.552 6.71e-06 ***
+## MAMMOUSE_AdjPrev      0.03897    0.03931   0.992  0.32193    
+## PAPTEST_AdjPrev      -0.04332    0.03967  -1.092  0.27536    
+## CHECKUP_AdjPrev       0.04384    0.02842   1.543  0.12358    
+## CHOLSCREEN_AdjPrev   -0.01541    0.04243  -0.363  0.71658    
+## COLON_SCREEN_AdjPrev  0.05408    0.03644   1.484  0.13844    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.497 on 490 degrees of freedom
+## Multiple R-squared:  0.3996, Adjusted R-squared:  0.3886 
+## F-statistic: 36.23 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>chol_minus_1 = update(chol_full_mod, . ~ . -CHOLSCREEN_AdjPrev) #the first thing I took out!
+summary(chol_minus_1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
+##     CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.1102 -1.0240 -0.1195  1.0687  4.0630 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          27.35474    2.63872  10.367  &lt; 2e-16 ***
+## COREM_AdjPrev         0.02959    0.02794   1.059  0.29023    
+## COREW_AdjPrev        -0.01588    0.02712  -0.585  0.55851    
+## DENTAL_AdjPrev       -0.06162    0.02295  -2.685  0.00749 ** 
+## LPA_AdjPrev           0.16301    0.03542   4.602 5.34e-06 ***
+## MAMMOUSE_AdjPrev      0.03876    0.03927   0.987  0.32411    
+## PAPTEST_AdjPrev      -0.04647    0.03868  -1.201  0.23016    
+## CHECKUP_AdjPrev       0.03868    0.02459   1.573  0.11636    
+## COLON_SCREEN_AdjPrev  0.05237    0.03611   1.451  0.14755    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.496 on 491 degrees of freedom
+## Multiple R-squared:  0.3994, Adjusted R-squared:  0.3896 
+## F-statistic: 40.82 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>chol_minus_2 = update(chol_minus_1, . ~ . -COREW_AdjPrev)
+summary(chol_minus_2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = HIGHCHOL_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.1151 -1.0096 -0.1394  1.0648  4.0575 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          27.55737    2.61417  10.542  &lt; 2e-16 ***
+## COREM_AdjPrev         0.01946    0.02194   0.887  0.37540    
+## DENTAL_AdjPrev       -0.06262    0.02287  -2.739  0.00639 ** 
+## LPA_AdjPrev           0.16208    0.03536   4.583 5.81e-06 ***
+## MAMMOUSE_AdjPrev      0.03627    0.03901   0.930  0.35296    
+## PAPTEST_AdjPrev      -0.04500    0.03857  -1.167  0.24390    
+## CHECKUP_AdjPrev       0.03993    0.02448   1.631  0.10346    
+## COLON_SCREEN_AdjPrev  0.04773    0.03520   1.356  0.17574    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.495 on 492 degrees of freedom
+## Multiple R-squared:  0.399,  Adjusted R-squared:  0.3905 
+## F-statistic: 46.66 on 7 and 492 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>chol_minus_3 = update(chol_minus_2, . ~ . -COREM_AdjPrev)
+summary(chol_minus_3)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + 
+##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.1274 -1.0351 -0.1584  1.0355  4.1204 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          27.90211    2.58458  10.796  &lt; 2e-16 ***
+## DENTAL_AdjPrev       -0.06226    0.02286  -2.724  0.00668 ** 
+## LPA_AdjPrev           0.16202    0.03536   4.583 5.83e-06 ***
+## MAMMOUSE_AdjPrev      0.01386    0.02973   0.466  0.64119    
+## PAPTEST_AdjPrev      -0.03786    0.03771  -1.004  0.31590    
+## CHECKUP_AdjPrev       0.04577    0.02358   1.941  0.05279 .  
+## COLON_SCREEN_AdjPrev  0.06410    0.02997   2.139  0.03291 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.495 on 493 degrees of freedom
+## Multiple R-squared:  0.398,  Adjusted R-squared:  0.3907 
+## F-statistic: 54.33 on 6 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>chol_minus_4 = update(chol_minus_3, . ~ . -MAMMOUSE_AdjPrev)
+summary(chol_minus_4)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + 
+##     PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.1056 -1.0341 -0.1511  1.0368  4.1235 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          27.89537    2.58249  10.802  &lt; 2e-16 ***
+## DENTAL_AdjPrev       -0.06049    0.02252  -2.686  0.00748 ** 
+## LPA_AdjPrev           0.16411    0.03504   4.683 3.66e-06 ***
+## PAPTEST_AdjPrev      -0.03035    0.03407  -0.891  0.37351    
+## CHECKUP_AdjPrev       0.04888    0.02259   2.164  0.03095 *  
+## COLON_SCREEN_AdjPrev  0.06581    0.02972   2.215  0.02724 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.494 on 494 degrees of freedom
+## Multiple R-squared:  0.3978, Adjusted R-squared:  0.3917 
+## F-statistic: 65.26 on 5 and 494 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>chol_minus_5 = update(chol_minus_4, . ~ . -PAPTEST_AdjPrev)
+summary(chol_minus_5)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + 
+##     CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.1079 -1.0528 -0.1173  1.0362  4.1262 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          26.37818    1.94070  13.592  &lt; 2e-16 ***
+## DENTAL_AdjPrev       -0.06397    0.02217  -2.885  0.00409 ** 
+## LPA_AdjPrev           0.17050    0.03430   4.971 9.18e-07 ***
+## CHECKUP_AdjPrev       0.04013    0.02034   1.973  0.04901 *  
+## COLON_SCREEN_AdjPrev  0.06145    0.02931   2.097  0.03650 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.493 on 495 degrees of freedom
+## Multiple R-squared:  0.3968, Adjusted R-squared:  0.3919 
+## F-statistic: 81.41 on 4 and 495 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>chol_step = step(chol_full_mod)</code></pre>
+<pre><code>## Start:  AIC=413.67
+## HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS    AIC
+## - CHOLSCREEN_AdjPrev    1     0.296 1099.1 411.80
+## - COREW_AdjPrev         1     0.716 1099.5 412.00
+## - COREM_AdjPrev         1     2.095 1100.9 412.62
+## - MAMMOUSE_AdjPrev      1     2.204 1101.0 412.67
+## - PAPTEST_AdjPrev       1     2.674 1101.4 412.89
+## &lt;none&gt;                              1098.8 413.67
+## - COLON_SCREEN_AdjPrev  1     4.939 1103.7 413.91
+## - CHECKUP_AdjPrev       1     5.336 1104.1 414.09
+## - DENTAL_AdjPrev        1    15.313 1114.1 418.59
+## - LPA_AdjPrev           1    46.467 1145.2 432.38
+## 
+## Step:  AIC=411.8
+## HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS    AIC
+## - COREW_AdjPrev         1     0.767 1099.8 410.15
+## - MAMMOUSE_AdjPrev      1     2.181 1101.2 410.80
+## - COREM_AdjPrev         1     2.509 1101.6 410.94
+## - PAPTEST_AdjPrev       1     3.231 1102.3 411.27
+## &lt;none&gt;                              1099.1 411.80
+## - COLON_SCREEN_AdjPrev  1     4.710 1103.8 411.94
+## - CHECKUP_AdjPrev       1     5.539 1104.6 412.32
+## - DENTAL_AdjPrev        1    16.141 1115.2 417.09
+## - LPA_AdjPrev           1    47.402 1146.5 430.92
+## 
+## Step:  AIC=410.15
+## HIGHCHOL_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + 
+##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS    AIC
+## - COREM_AdjPrev         1     1.760 1101.6 408.95
+## - MAMMOUSE_AdjPrev      1     1.932 1101.8 409.03
+## - PAPTEST_AdjPrev       1     3.043 1102.9 409.53
+## - COLON_SCREEN_AdjPrev  1     4.110 1103.9 410.02
+## &lt;none&gt;                              1099.8 410.15
+## - CHECKUP_AdjPrev       1     5.949 1105.8 410.85
+## - DENTAL_AdjPrev        1    16.766 1116.6 415.72
+## - LPA_AdjPrev           1    46.957 1146.8 429.06
+## 
+## Step:  AIC=408.95
+## HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + 
+##     PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS    AIC
+## - MAMMOUSE_AdjPrev      1     0.486 1102.1 407.17
+## - PAPTEST_AdjPrev       1     2.252 1103.8 407.97
+## &lt;none&gt;                              1101.6 408.95
+## - CHECKUP_AdjPrev       1     8.421 1110.0 410.76
+## - COLON_SCREEN_AdjPrev  1    10.225 1111.8 411.57
+## - DENTAL_AdjPrev        1    16.580 1118.2 414.42
+## - LPA_AdjPrev           1    46.925 1148.5 427.81
+## 
+## Step:  AIC=407.17
+## HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + PAPTEST_AdjPrev + 
+##     CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS    AIC
+## - PAPTEST_AdjPrev       1     1.770 1103.8 405.98
+## &lt;none&gt;                              1102.1 407.17
+## - CHECKUP_AdjPrev       1    10.447 1112.5 409.89
+## - COLON_SCREEN_AdjPrev  1    10.942 1113.0 410.11
+## - DENTAL_AdjPrev        1    16.094 1118.2 412.42
+## - LPA_AdjPrev           1    48.921 1151.0 426.89
+## 
+## Step:  AIC=405.98
+## HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + CHECKUP_AdjPrev + 
+##     COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS    AIC
+## &lt;none&gt;                              1103.8 405.98
+## - CHECKUP_AdjPrev       1     8.684 1112.5 407.89
+## - COLON_SCREEN_AdjPrev  1     9.806 1113.7 408.40
+## - DENTAL_AdjPrev        1    18.559 1122.4 412.31
+## - LPA_AdjPrev           1    55.115 1159.0 428.34</code></pre>
+<pre class="r"><code>summary(chol_step) # same model for both</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + 
+##     CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.1079 -1.0528 -0.1173  1.0362  4.1262 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          26.37818    1.94070  13.592  &lt; 2e-16 ***
+## DENTAL_AdjPrev       -0.06397    0.02217  -2.885  0.00409 ** 
+## LPA_AdjPrev           0.17050    0.03430   4.971 9.18e-07 ***
+## CHECKUP_AdjPrev       0.04013    0.02034   1.973  0.04901 *  
+## COLON_SCREEN_AdjPrev  0.06145    0.02931   2.097  0.03650 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.493 on 495 degrees of freedom
+## Multiple R-squared:  0.3968, Adjusted R-squared:  0.3919 
+## F-statistic: 81.41 on 4 and 495 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>obes_full_mod = lm(OBESITY_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(obes_full_mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = OBESITY_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
+##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.6840 -1.8109  0.1089  1.6607  9.4265 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          20.58127    5.20246   3.956 8.74e-05 ***
+## COREM_AdjPrev         0.09185    0.05154   1.782   0.0754 .  
+## COREW_AdjPrev        -0.01229    0.04913  -0.250   0.8025    
+## DENTAL_AdjPrev       -0.22632    0.04187  -5.406 1.01e-07 ***
+## LPA_AdjPrev           0.85999    0.06430  13.374  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev     -0.43454    0.07105  -6.116 1.97e-09 ***
+## PAPTEST_AdjPrev       0.35325    0.07171   4.926 1.15e-06 ***
+## CHECKUP_AdjPrev       0.24524    0.05138   4.774 2.39e-06 ***
+## CHOLSCREEN_AdjPrev   -0.62789    0.07669  -8.188 2.32e-15 ***
+## COLON_SCREEN_AdjPrev  0.54924    0.06587   8.338 7.71e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.707 on 490 degrees of freedom
+## Multiple R-squared:  0.7834, Adjusted R-squared:  0.7794 
+## F-statistic: 196.9 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>obes_minus_1 = update(obes_full_mod, . ~ . -COREW_AdjPrev)
+summary(obes_minus_1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = OBESITY_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.6508 -1.7824  0.0817  1.6506  9.4785 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          20.76483    5.14556   4.035 6.32e-05 ***
+## COREM_AdjPrev         0.08391    0.04055   2.069   0.0391 *  
+## DENTAL_AdjPrev       -0.22702    0.04173  -5.440 8.42e-08 ***
+## LPA_AdjPrev           0.85920    0.06417  13.390  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev     -0.43645    0.07058  -6.184 1.32e-09 ***
+## PAPTEST_AdjPrev       0.35459    0.07144   4.964 9.56e-07 ***
+## CHECKUP_AdjPrev       0.24655    0.05106   4.829 1.84e-06 ***
+## CHOLSCREEN_AdjPrev   -0.62890    0.07651  -8.220 1.83e-15 ***
+## COLON_SCREEN_AdjPrev  0.54576    0.06433   8.483 2.59e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.704 on 491 degrees of freedom
+## Multiple R-squared:  0.7834, Adjusted R-squared:  0.7798 
+## F-statistic: 221.9 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>obes_step = step(obes_full_mod)</code></pre>
+<pre><code>## Start:  AIC=1005.65
+## OBESITY_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS    AIC
+## - COREW_AdjPrev         1      0.46 3590.5 1003.7
+## &lt;none&gt;                              3590.0 1005.6
+## - COREM_AdjPrev         1     23.27 3613.3 1006.9
+## - CHECKUP_AdjPrev       1    166.95 3757.0 1026.4
+## - PAPTEST_AdjPrev       1    177.81 3767.8 1027.8
+## - DENTAL_AdjPrev        1    214.10 3804.1 1032.6
+## - MAMMOUSE_AdjPrev      1    274.03 3864.0 1040.4
+## - CHOLSCREEN_AdjPrev    1    491.17 4081.2 1067.8
+## - COLON_SCREEN_AdjPrev  1    509.32 4099.3 1070.0
+## - LPA_AdjPrev           1   1310.39 4900.4 1159.2
+## 
+## Step:  AIC=1003.72
+## OBESITY_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + 
+##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + 
+##     COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS    AIC
+## &lt;none&gt;                              3590.5 1003.7
+## - COREM_AdjPrev         1     31.31 3621.8 1006.1
+## - CHECKUP_AdjPrev       1    170.49 3761.0 1024.9
+## - PAPTEST_AdjPrev       1    180.16 3770.6 1026.2
+## - DENTAL_AdjPrev        1    216.41 3806.9 1031.0
+## - MAMMOUSE_AdjPrev      1    279.66 3870.1 1039.2
+## - CHOLSCREEN_AdjPrev    1    494.10 4084.6 1066.2
+## - COLON_SCREEN_AdjPrev  1    526.28 4116.8 1070.1
+## - LPA_AdjPrev           1   1311.13 4901.6 1157.3</code></pre>
+<pre class="r"><code>summary(obes_step) # this is also the same now</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = OBESITY_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.6508 -1.7824  0.0817  1.6506  9.4785 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          20.76483    5.14556   4.035 6.32e-05 ***
+## COREM_AdjPrev         0.08391    0.04055   2.069   0.0391 *  
+## DENTAL_AdjPrev       -0.22702    0.04173  -5.440 8.42e-08 ***
+## LPA_AdjPrev           0.85920    0.06417  13.390  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev     -0.43645    0.07058  -6.184 1.32e-09 ***
+## PAPTEST_AdjPrev       0.35459    0.07144   4.964 9.56e-07 ***
+## CHECKUP_AdjPrev       0.24655    0.05106   4.829 1.84e-06 ***
+## CHOLSCREEN_AdjPrev   -0.62890    0.07651  -8.220 1.83e-15 ***
+## COLON_SCREEN_AdjPrev  0.54576    0.06433   8.483 2.59e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.704 on 491 degrees of freedom
+## Multiple R-squared:  0.7834, Adjusted R-squared:  0.7798 
+## F-statistic: 221.9 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>phlth_full_mod = lm(PHLTH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(phlth_full_mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = PHLTH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
+##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.7941 -0.5190 -0.0279  0.5818  3.5285 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          21.04190    1.73311  12.141  &lt; 2e-16 ***
+## COREM_AdjPrev        -0.03298    0.01717  -1.920   0.0554 .  
+## COREW_AdjPrev        -0.09723    0.01637  -5.941 5.39e-09 ***
+## DENTAL_AdjPrev       -0.27070    0.01395 -19.410  &lt; 2e-16 ***
+## LPA_AdjPrev           0.18915    0.02142   8.830  &lt; 2e-16 ***
+## MAMMOUSE_AdjPrev     -0.00676    0.02367  -0.286   0.7753    
+## PAPTEST_AdjPrev       0.10724    0.02389   4.489 8.91e-06 ***
+## CHECKUP_AdjPrev      -0.03897    0.01711  -2.277   0.0232 *  
+## CHOLSCREEN_AdjPrev   -0.11055    0.02555  -4.327 1.83e-05 ***
+## COLON_SCREEN_AdjPrev  0.16697    0.02194   7.608 1.43e-13 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.9017 on 490 degrees of freedom
+## Multiple R-squared:  0.8912, Adjusted R-squared:  0.8892 
+## F-statistic: 445.9 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>phlth_minus_1 = update(phlth_full_mod, . ~ . -MAMMOUSE_AdjPrev)
+summary(phlth_minus_1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = PHLTH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.7885 -0.5170 -0.0281  0.5812  3.5089 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          20.99722    1.72442  12.176  &lt; 2e-16 ***
+## COREM_AdjPrev        -0.03024    0.01423  -2.125   0.0341 *  
+## COREW_AdjPrev        -0.09773    0.01626  -6.012 3.59e-09 ***
+## DENTAL_AdjPrev       -0.27121    0.01382 -19.620  &lt; 2e-16 ***
+## LPA_AdjPrev           0.18860    0.02131   8.848  &lt; 2e-16 ***
+## PAPTEST_AdjPrev       0.10422    0.02140   4.870 1.51e-06 ***
+## CHECKUP_AdjPrev      -0.04058    0.01615  -2.512   0.0123 *  
+## CHOLSCREEN_AdjPrev   -0.11066    0.02552  -4.336 1.76e-05 ***
+## COLON_SCREEN_AdjPrev  0.16460    0.02030   8.107 4.17e-15 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.9009 on 491 degrees of freedom
+## Multiple R-squared:  0.8912, Adjusted R-squared:  0.8894 
+## F-statistic: 502.6 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>phlth_step = step(phlth_full_mod)</code></pre>
+<pre><code>## Start:  AIC=-93.56
+## PHLTH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS     AIC
+## - MAMMOUSE_AdjPrev      1     0.066 398.48 -95.478
+## &lt;none&gt;                              398.41 -93.562
+## - COREM_AdjPrev         1     2.999 401.41 -91.812
+## - CHECKUP_AdjPrev       1     4.216 402.63 -90.298
+## - CHOLSCREEN_AdjPrev    1    15.225 413.64 -76.811
+## - PAPTEST_AdjPrev       1    16.387 414.80 -75.407
+## - COREW_AdjPrev         1    28.695 427.11 -60.787
+## - COLON_SCREEN_AdjPrev  1    47.069 445.48 -39.728
+## - LPA_AdjPrev           1    63.391 461.80 -21.735
+## - DENTAL_AdjPrev        1   306.317 704.73 189.602
+## 
+## Step:  AIC=-95.48
+## PHLTH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + 
+##     COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS     AIC
+## &lt;none&gt;                              398.48 -95.478
+## - COREM_AdjPrev         1     3.665 402.14 -92.901
+## - CHECKUP_AdjPrev       1     5.122 403.60 -91.092
+## - CHOLSCREEN_AdjPrev    1    15.258 413.74 -78.690
+## - PAPTEST_AdjPrev       1    19.248 417.73 -73.892
+## - COREW_AdjPrev         1    29.330 427.81 -61.967
+## - COLON_SCREEN_AdjPrev  1    53.339 451.82 -34.666
+## - LPA_AdjPrev           1    63.542 462.02 -23.500
+## - DENTAL_AdjPrev        1   312.399 710.88 191.945</code></pre>
+<pre class="r"><code>summary(phlth_step) # same</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = PHLTH_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.7885 -0.5170 -0.0281  0.5812  3.5089 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)          20.99722    1.72442  12.176  &lt; 2e-16 ***
+## COREM_AdjPrev        -0.03024    0.01423  -2.125   0.0341 *  
+## COREW_AdjPrev        -0.09773    0.01626  -6.012 3.59e-09 ***
+## DENTAL_AdjPrev       -0.27121    0.01382 -19.620  &lt; 2e-16 ***
+## LPA_AdjPrev           0.18860    0.02131   8.848  &lt; 2e-16 ***
+## PAPTEST_AdjPrev       0.10422    0.02140   4.870 1.51e-06 ***
+## CHECKUP_AdjPrev      -0.04058    0.01615  -2.512   0.0123 *  
+## CHOLSCREEN_AdjPrev   -0.11066    0.02552  -4.336 1.76e-05 ***
+## COLON_SCREEN_AdjPrev  0.16460    0.02030   8.107 4.17e-15 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.9009 on 491 degrees of freedom
+## Multiple R-squared:  0.8912, Adjusted R-squared:  0.8894 
+## F-statistic: 502.6 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>stroke_full_mod = lm(STROKE_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+summary(stroke_full_mod)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = STROKE_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
+##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
+##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, 
+##     data = cdc_df)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68873 -0.20037 -0.02208  0.16381  1.26324 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           3.608545   0.550224   6.558 1.38e-10 ***
+## COREM_AdjPrev         0.001476   0.005452   0.271 0.786665    
+## COREW_AdjPrev        -0.022864   0.005196  -4.400 1.33e-05 ***
+## DENTAL_AdjPrev       -0.074816   0.004428 -16.897  &lt; 2e-16 ***
+## LPA_AdjPrev           0.038313   0.006801   5.633 2.98e-08 ***
+## MAMMOUSE_AdjPrev     -0.028023   0.007515  -3.729 0.000215 ***
+## PAPTEST_AdjPrev       0.014087   0.007584   1.858 0.063837 .  
+## CHECKUP_AdjPrev       0.028978   0.005434   5.333 1.48e-07 ***
+## CHOLSCREEN_AdjPrev   -0.021005   0.008111  -2.590 0.009887 ** 
+## COLON_SCREEN_AdjPrev  0.070080   0.006967  10.059  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2863 on 490 degrees of freedom
+## Multiple R-squared:  0.8236, Adjusted R-squared:  0.8203 
+## F-statistic: 254.1 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>stroke_minus_1 = update(stroke_full_mod, . ~ . -COREM_AdjPrev)
+summary(stroke_minus_1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = STROKE_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.6899 -0.1999 -0.0248  0.1665  1.2665 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           3.646504   0.531567   6.860 2.08e-11 ***
+## COREW_AdjPrev        -0.021997   0.004088  -5.381 1.15e-07 ***
+## DENTAL_AdjPrev       -0.074824   0.004424 -16.915  &lt; 2e-16 ***
+## LPA_AdjPrev           0.038231   0.006788   5.632 3.00e-08 ***
+## MAMMOUSE_AdjPrev     -0.029160   0.006227  -4.683 3.67e-06 ***
+## PAPTEST_AdjPrev       0.014575   0.007360   1.980  0.04822 *  
+## CHECKUP_AdjPrev       0.029452   0.005140   5.730 1.75e-08 ***
+## CHOLSCREEN_AdjPrev   -0.021434   0.007947  -2.697  0.00724 ** 
+## COLON_SCREEN_AdjPrev  0.070616   0.006674  10.580  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.286 on 491 degrees of freedom
+## Multiple R-squared:  0.8235, Adjusted R-squared:  0.8207 
+## F-statistic: 286.4 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>stroke_step = step(stroke_full_mod)</code></pre>
+<pre><code>## Start:  AIC=-1240.91
+## STROKE_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS     AIC
+## - COREM_AdjPrev         1    0.0060 40.163 -1242.8
+## &lt;none&gt;                              40.157 -1240.9
+## - PAPTEST_AdjPrev       1    0.2828 40.440 -1239.4
+## - CHOLSCREEN_AdjPrev    1    0.5497 40.707 -1236.1
+## - MAMMOUSE_AdjPrev      1    1.1396 41.296 -1228.9
+## - COREW_AdjPrev         1    1.5868 41.744 -1223.5
+## - CHECKUP_AdjPrev       1    2.3309 42.488 -1214.7
+## - LPA_AdjPrev           1    2.6008 42.758 -1211.5
+## - COLON_SCREEN_AdjPrev  1    8.2921 48.449 -1149.0
+## - DENTAL_AdjPrev        1   23.3975 63.554 -1013.4
+## 
+## Step:  AIC=-1242.83
+## STROKE_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + 
+##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + 
+##     COLON_SCREEN_AdjPrev
+## 
+##                        Df Sum of Sq    RSS     AIC
+## &lt;none&gt;                              40.163 -1242.8
+## - PAPTEST_AdjPrev       1    0.3208 40.484 -1240.9
+## - CHOLSCREEN_AdjPrev    1    0.5950 40.758 -1237.5
+## - MAMMOUSE_AdjPrev      1    1.7936 41.956 -1223.0
+## - COREW_AdjPrev         1    2.3683 42.531 -1216.2
+## - LPA_AdjPrev           1    2.5948 42.758 -1213.5
+## - CHECKUP_AdjPrev       1    2.6860 42.849 -1212.5
+## - COLON_SCREEN_AdjPrev  1    9.1569 49.320 -1142.1
+## - DENTAL_AdjPrev        1   23.4031 63.566 -1015.3</code></pre>
+<pre class="r"><code>summary(stroke_step) #same</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = STROKE_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + 
+##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
+##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -0.6899 -0.1999 -0.0248  0.1665  1.2665 
+## 
+## Coefficients:
+##                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)           3.646504   0.531567   6.860 2.08e-11 ***
+## COREW_AdjPrev        -0.021997   0.004088  -5.381 1.15e-07 ***
+## DENTAL_AdjPrev       -0.074824   0.004424 -16.915  &lt; 2e-16 ***
+## LPA_AdjPrev           0.038231   0.006788   5.632 3.00e-08 ***
+## MAMMOUSE_AdjPrev     -0.029160   0.006227  -4.683 3.67e-06 ***
+## PAPTEST_AdjPrev       0.014575   0.007360   1.980  0.04822 *  
+## CHECKUP_AdjPrev       0.029452   0.005140   5.730 1.75e-08 ***
+## CHOLSCREEN_AdjPrev   -0.021434   0.007947  -2.697  0.00724 ** 
+## COLON_SCREEN_AdjPrev  0.070616   0.006674  10.580  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.286 on 491 degrees of freedom
+## Multiple R-squared:  0.8235, Adjusted R-squared:  0.8207 
+## F-statistic: 286.4 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>cv_df =
+  crossv_mc(cdc_df, 500) %&gt;% 
+  mutate(train = map(train, as_tibble),
+         test = map(test, as_tibble))
+
+cv_df = 
+  cv_df %&gt;% 
+  mutate(cancer_minus_4 = map(train, ~lm(CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
+         chol_minus_5   = map(train, ~lm(HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = .x)),
+         diab_minus_3   = map(train, ~lm(DIABETES_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev, data = .x))) %&gt;% 
+  mutate(rmse_cancer    = map2_dbl(cancer_minus_4, test, ~rmse(model = .x, data = .y)),
+         rmse_chol      = map2_dbl(chol_minus_5, test, ~rmse(model = .x, data = .y)),
+         rmse_diabetes  = map2_dbl(diab_minus_3, test, ~rmse(model = .x, data = .y)))
+
+cv_df %&gt;% 
+  select(starts_with(&quot;rmse&quot;)) %&gt;% 
+  gather(key = model, value = rmse) %&gt;% 
+  mutate(model = str_replace(model, &quot;rmse_&quot;, &quot;&quot;), 
+         model = fct_inorder(model)) %&gt;% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()</code></pre>
+<p><img src="outcome_practice_reg_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

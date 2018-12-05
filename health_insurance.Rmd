@@ -1,0 +1,152 @@
+---
+title: "Health Insurance"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(ggmap)
+library(flexdashboard)
+library(viridis)
+library(p8105.datasets)
+library(plotly)
+library(stringr)
+library(kableExtra)
+library(patchwork)
+
+```
+
+```{r, echo = FALSE, message = FALSE}
+cdc_df = read_csv("./data/cdc_df.csv")
+```
+
+```{r, echo = FALSE, message = FALSE, cache = TRUE}
+
+usa = map_data("state") %>%
+  rename(state = "region")
+
+cdc_df_map = read_csv("./data/cdc_df.csv") %>%
+  separate(Geolocation, into = c("long", "lat"), sep = ",") %>%
+  mutate(long = str_replace(long, "\\(", ""),
+         lat = str_replace(lat, "\\)", ""),
+         long = as.numeric(long),
+         lat = as.numeric(lat),
+         state = factor(state),
+         state = tolower(state)) %>%
+  filter(!state %in% c("alaska", "hawaii")) %>%
+  left_join(., usa, by = "state")
+
+
+ggplot() + 
+  geom_polygon(data = cdc_df_map, aes(x = long.y, y = lat.y, group = state, 
+                                      fill = ACCESS2_AdjPrev), 
+               color = "white") +
+  scale_fill_gradient2(low = "dark blue", mid = "white", high = "red", space = "Lab",
+                       midpoint = mean(cdc_df_map$ACCESS2_AdjPrev),
+                       name = "% Lacking") +
+  coord_fixed(1) +
+  geom_point(data = cdc_df_map, aes(x = lat.x, y = long.x), 
+             color = "grey13", size = 0.5, alpha = 0.3) +
+  theme_bw() +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.title = element_text(size = 10),
+        plot.caption = element_text(size = 8),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank()) +
+  labs(title = "Lack of Health Insurance",
+       caption = 
+         "Points represent 500 most populated cities in the US,\n excluding Hawaii and Alaska") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+Analysis of correlations between the prevalence of lack of health insurance and health practices shows a significant linear relationship between all practices except for one. 
+
+```{r, echo = FALSE}
+health_practice = c("Health Checkup", "Cholestrol Screening", "Colon Screening", "Dental", "COREM", "COREW", "LPA", "Mammogram", "Pap Test", "Poor Physical Health")
+
+linear = c("No", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")
+
+direction = c("NA", "Negative", "Negative", "Negative", "Negative", "Negative", "Positive", "Negative", "Negative", "Positive")
+
+p_value = c(0.711, '<2e-16', '<2e-16', '<2e-16', '<2e-16', '<2e-16', '<2e-16', '<2e-16', '<2e-16', '<2e-16')
+
+insurance_asso = tibble(
+  "Health Practice" = health_practice,
+  "Linear Association?" = linear,
+  "Direction of Association" = direction,
+  "p-value" = p_value
+) 
+
+insurance_asso %>% 
+  knitr::kable() %>% 
+  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
+```
+
+This preliminary analysis shows that health insurance status could be used as a predictor of certain health practices. Any reliable statistical model would need to factor in multiple variables but here we can see some of the associations mentioned:
+
+```{r, echo = FALSE}
+dental = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = DENTAL_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Dental")
+
+colon = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = COLON_SCREEN_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Colon Screening")
+
+lpa = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = LPA_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("No Physical Activity")
+
+phlth = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = PHLTH_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Poor Physical Health")
+
+(dental | colon) / (lpa | phlth)
+```
+
+
+
+```{r, echo = FALSE, message = FALSE, cache = TRUE}
+read_csv("./data/cdc_df.csv") %>%
+  mutate(region = fct_reorder(region, ACCESS2_AdjPrev),
+         text_label = str_c("% Lack Health Insurance: ", 
+                            ACCESS2_AdjPrev, '\nCity: ', PlaceName)) %>%
+  plot_ly(y = ~ACCESS2_AdjPrev, color = ~region, type = "box", text = ~text_label) %>%
+  layout(yaxis = list(title = "Percent Lack Health Insurance"),
+    title = "Comparing Lack of Health Insurance Across Regions"
+  )
+```
+
+
+
+
+```{r, echo = FALSE, message = FALSE, cache = TRUE}
+HI_reg = read_csv("./data/cdc_df.csv") %>%
+  lm(ACCESS2_AdjPrev ~ region, data = .)
+
+anova(HI_reg) %>% 
+  knitr::kable(digits = 15) %>% 
+  kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
+```
+

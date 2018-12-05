@@ -11,7 +11,7 @@
 
 
 
-<title>Data Dictionary</title>
+<title>Modeling Health Outcomes</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -214,336 +214,307 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Data Dictionary</h1>
+<h1 class="title toc-ignore">Modeling Health Outcomes</h1>
 
 </div>
 
 
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<p>In this section, we will explore some linear models predicting health outcomes from commonly used health practices.</p>
+<div id="predictor-variables" class="section level3">
+<h3>Predictor Variables</h3>
+<p>For each of the models we will show, we first fit a model on disease prevalences with common health practices as predictors, and eliminated predictors until all of the predictors in the model were significant.</p>
+<p>For a detailed description of all of the health practice variables for which data was collected, see the <a href="data_dictionary.html">data dictionary</a>.</p>
+</div>
+<div id="cancer" class="section level3">
+<h3>Cancer</h3>
+<p>For the prevalence of cancer (excluding skin cancer) for adults 18 and older, the following health practices were predictors in a multiple linear regression:</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:left;">
-column_name
+Health Practice
 </th>
 <th style="text-align:left;">
-description
+Effect on Cancer Prevalence
+</th>
+<th style="text-align:right;">
+Coefficient Estimate
 </th>
 <th style="text-align:left;">
-type
+P-Value
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:left;">
-StateAbbr
+Core Practices for Men
 </td>
 <td style="text-align:left;">
-State abbreviation
+Positive
+</td>
+<td style="text-align:right;">
+0.0120
 </td>
 <td style="text-align:left;">
-Plain Text
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-PlaceName
-</td>
-<td style="text-align:left;">
-City name
-</td>
-<td style="text-align:left;">
-Plain Text
+0.012
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-Population2010
+Dental Visits
 </td>
 <td style="text-align:left;">
-Population Count 2010
+Negative
+</td>
+<td style="text-align:right;">
+-0.0330
 </td>
 <td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ACCESS2_AdjPrev
-</td>
-<td style="text-align:left;">
-Age-adjusted prevalence estimate of current lack of health insurance among adults aged 18-64 years, 2014
-</td>
-<td style="text-align:left;">
-Number
+1.06e-14
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-BPHIGH_AdjPrev
+Mammogram Usage
 </td>
 <td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of high blood pressure among adults aged &gt;=18 years, 2013
+Negative
+</td>
+<td style="text-align:right;">
+-0.0360
 </td>
 <td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-BPMED_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of taking medicine for high blood pressure control among adults aged &gt;=18 years with high blood pressure, 2013
-</td>
-<td style="text-align:left;">
-Number
+2.31e-06
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-CANCER_AdjPrev
+Routine Checkups
 </td>
 <td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of cancer (excluding skin cancer) among adults aged &gt;=18 years, 2014
+Negative
+</td>
+<td style="text-align:right;">
+-0.0095
 </td>
 <td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CHD_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of coronary heart disease among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
+0.0295
 </td>
 </tr>
 <tr>
 <td style="text-align:left;">
-CHECKUP_AdjPrev
+Colon Screening
 </td>
 <td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of visits to doctor for routine checkup within the past year among adults aged &gt;=18 years, 2014
+Positive
+</td>
+<td style="text-align:right;">
+0.1070
 </td>
 <td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CHOLSCREEN_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of cholesterol screening among adults aged &gt;=18 years, 2013
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-COLON_SCREEN_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of fecal occult blood test, sigmoidoscopy, or colonoscopy among adults aged 50–75 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-COPD_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of chronic obstructive pulmonary disease among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-COREM_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of older adult men aged &gt;=65 years who are up to date on a core set of clinical preventive services: Flu shot past year, PPV shot ever, Colorectal cancer screening, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-COREW_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of older adult women aged &gt;=65 years who are up to date on a core set of clinical preventive services: Flu shot past year, PPV shot ever, Colorectal cancer screening, and Mammogram past 2 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-DENTAL_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of visits to dentist or dental clinic among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-DIABETES_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of diagnosed diabetes among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-HIGHCHOL_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of high cholesterol among adults aged &gt;=18 years who have been screened in the past 5 years, 2013
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-LPA_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of no leisure-time physical activity among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-MAMMOUSE_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of mammography use among women aged 50–74 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-OBESITY_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of obesity among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-PAPTEST_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of papanicolaou smear use among adult women aged 21–65 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-PHLTH_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of physical health not good for &gt;=14 days among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-STROKE_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of stroke among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Geolocation
-</td>
-<td style="text-align:left;">
-Latitude, longitude of city centroid
-</td>
-<td style="text-align:left;">
-Locatio
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-state
-</td>
-<td style="text-align:left;">
-full name of the state
-</td>
-<td style="text-align:left;">
-Plain Text
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-health_exp
-</td>
-<td style="text-align:left;">
-total healthcare expenditures per capita by state in 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-region
-</td>
-<td style="text-align:left;">
-geographical region of the state
-</td>
-<td style="text-align:left;">
-Plain Text
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-division
-</td>
-<td style="text-align:left;">
-more specific division within the region
-</td>
-<td style="text-align:left;">
-Plain Text
+&lt; 2e-16
 </td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="high-cholesterol" class="section level3">
+<h3>High Cholesterol</h3>
+<p>For the prevalence of high cholesterol in adults over 18 who have been screened in the last 5 years, the following health practices were predictors in a multiple linear regression:</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Health Practice
+</th>
+<th style="text-align:left;">
+Effect on High Cholesterol Prevalence
+</th>
+<th style="text-align:right;">
+Coefficient Estimate
+</th>
+<th style="text-align:left;">
+P-Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Dental Visits
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.0640
+</td>
+<td style="text-align:left;">
+0.004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lack of Physical Activity
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.1710
+</td>
+<td style="text-align:left;">
+9.18e-07
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Routine Checkups
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.0401
+</td>
+<td style="text-align:left;">
+0.049
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Colon Screening
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.0610
+</td>
+<td style="text-align:left;">
+0.037
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="diabetes" class="section level3">
+<h3>Diabetes</h3>
+<p>For the prevalence of diabetes in adults 18 and older, the following health practices were predictors in a multiple linear regression:</p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Health Practice
+</th>
+<th style="text-align:left;">
+Effect on Diabetes Prevalence
+</th>
+<th style="text-align:right;">
+Coefficient Estimate
+</th>
+<th style="text-align:left;">
+P-Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Core Practices for Women
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.063
+</td>
+<td style="text-align:left;">
+6.19e-11
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dental Visits
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.135
+</td>
+<td style="text-align:left;">
+&lt; 2e-16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lack of Physical Activity
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.193
+</td>
+<td style="text-align:left;">
+&lt; 2e-16
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mammogram Usage
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.085
+</td>
+<td style="text-align:left;">
+1.44e-08
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Routine Checkups
+</td>
+<td style="text-align:left;">
+Positive
+</td>
+<td style="text-align:right;">
+0.076
+</td>
+<td style="text-align:left;">
+1.33e-08
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cholesterol Screening
+</td>
+<td style="text-align:left;">
+Negative
+</td>
+<td style="text-align:right;">
+-0.074
+</td>
+<td style="text-align:left;">
+4e-04
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="cross-validation" class="section level3">
+<h3>Cross Validation</h3>
+<p>Now, we want to assess the predictive ability of these models to see if they are at all useful.<br />
+So, we use cross validation: we split the data into training and testing sets, run the models on the training sets and assess their accuracy on the testing sets.<br />
+Once we do this, we show the RMSE graphically.</p>
+<p><img src="health_outcome_files/figure-html/cross_validation-1.png" width="672" /></p>
+<p>From this, we can see that the health practice variables from the dataset have the most predictive power for prevalence of cancer, and the least for high cholesterol. Intuitively, this makes sense for a couple of reasons. First, cholesterol levels are highly related to genetics, and this dataset has no variables collected on genetics. Also, many of the practices measured by this dataset are cancer screening practices.</p>
+</div>
 
 
 

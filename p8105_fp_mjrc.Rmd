@@ -9,6 +9,10 @@ library(tidyverse)
 library(httr)
 library(rvest)
 library(openintro)
+library(ggmap)
+
+library(patchwork)
+
 
 ```
 
@@ -65,22 +69,212 @@ regions_df = read_csv("https://raw.githubusercontent.com/cphalpert/census-region
 cdc_df = left_join(cdc_df, regions_df, by = "state")
 ```
 
+Create data dictionary:
+
+```{r}
+full_data_dictionary = readxl::read_xlsx("./data/data_dictionary.xlsx") 
+full_data_dictionary = full_data_dictionary %>%
+  janitor::clean_names() %>%
+  filter(column_name %in% c("StateAbbr", "PlaceName", "Population2010", "ACCESS2_AdjPrev", "BPHIGH_AdjPrev", "BPMED_AdjPrev", "CANCER_AdjPrev", "CHD_AdjPrev", "CHECKUP_AdjPrev", "CHOLSCREEN_AdjPrev", "COLON_SCREEN_AdjPrev", "COPD_AdjPrev", "COREM_AdjPrev", "COREW_AdjPrev", "DENTAL_AdjPrev", "DIABETES_AdjPrev", "HIGHCHOL_AdjPrev", "LPA_AdjPrev", "MAMMOUSE_AdjPrev", "OBESITY_AdjPrev", "PAPTEST_AdjPrev", "PHLTH_AdjPrev", "STROKE_AdjPrev", "Geolocation"))
+
+health_exp_dictionary = tibble(column_name = c("state", "health_exp"),
+                               description = c("full name of the state", "total healthcare expenditures per capita by state in 2014"),
+                               type = c("Plain Text", "Number"))
+
+full_data_dictionary = full_join(full_data_dictionary, health_exp_dictionary)
+
+region_dict = tibble(column_name = c("region", "division"),
+                     description = c("geographical region of the state", "more specific division within the region"),
+                     type = c("Plain Text", "Plain Text")
+  
+)
+
+full_data_dictionary = full_join(full_data_dictionary, region_dict)
+```
+
 Export merged data:
 
 ```{r}
 write_csv(cdc_df, path = "./data/cdc_df.csv")
+write_csv(full_data_dictionary, path = "./data/full_data_dictionary.csv")
 ```
 
 
 List of health practice variables and health outcome variables:
 
 ```{r}
-#health_practices = BPMED_AdjPrev, CHECKUP_AdjPrev, CHOLSCREEN_AdjPrev, COLON_SCREEN_AdjPrev, COREM_AdjPrev, COREW_AdjPrev, DENTAL_AdjPrev, LPA_AdjPrev, MAMMOUSE_AdjPrev, PAPTEST_AdjPrev
+health_practices = cdc_df %>%
+  select(BPMED_AdjPrev, CHECKUP_AdjPrev, CHOLSCREEN_AdjPrev, COLON_SCREEN_AdjPrev, COREM_AdjPrev, COREW_AdjPrev, DENTAL_AdjPrev, LPA_AdjPrev, MAMMOUSE_AdjPrev, PAPTEST_AdjPrev)
 
-#health_outcomes = BPHIGH_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, COPD_AdjPrev, DIABETES_AdjPrev, HIGHCHOL_AdjPrev, OBESITY_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev
+health_outcomes = cdc_df %>%
+  select(BPHIGH_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, COPD_AdjPrev, DIABETES_AdjPrev, HIGHCHOL_AdjPrev, OBESITY_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev)
 
-#miscellaneous = StateAbbr, PlaceName, Population2010, ACCESS2_AdjPrev, Geolocation, state, health_exp, region, division
+miscellaneous = cdc_df %>%
+  select(StateAbbr, PlaceName, Population2010, ACCESS2_AdjPrev, Geolocation, state, health_exp, region, division)
 ```
+
+
+
+
+Analyze some variables: region
+
+```{r}
+
+cdc_df %>%
+  distinct(state, .keep_all = TRUE) %>%
+  mutate(region = fct_reorder(region, health_exp)) %>%
+  lm(health_exp ~ region, data = .) %>%
+  summary
+
+cdc_df %>%
+  distinct(state, .keep_all = TRUE) %>%
+  mutate(division = fct_reorder(division, health_exp)) %>%
+  lm(health_exp ~ division, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(health_exp ~ ACCESS2_AdjPrev, data = .) %>%
+  summary
+
+
+```
+
+
+Analyze some variables: expenditure
+
+```{r}
+cdc_df %>%
+  lm(DIABETES_AdjPrev ~ CHECKUP_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(OBESITY_AdjPrev ~ health_exp + CHECKUP_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(BPHIGH_AdjPrev ~ health_exp + CHECKUP_AdjPrev, data = .) %>%
+  summary
+
+library(betareg)
+
+cdc_df %>%
+  mutate(DIABETES_AdjPrev = DIABETES_AdjPrev/100,
+         CHECKUP_AdjPrev = CHECKUP_AdjPrev/100) %>%
+  betareg(DIABETES_AdjPrev ~ CHECKUP_AdjPrev + health_exp, data = .) %>%
+  summary
+
+
+```
+
+
+Analyzing relationship b/w insurance and health practices:
+
+```{r}
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ CHECKUP_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ DENTAL_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ CHOLSCREEN_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ COLON_SCREEN_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ COREM_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ COREW_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ LPA_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ MAMMOUSE_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ PAPTEST_AdjPrev, data = .) %>%
+  summary
+
+cdc_df %>%
+  lm(ACCESS2_AdjPrev ~ PHLTH_AdjPrev, data = .) %>%
+  summary
+```
+
+
+```{r}
+dental = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = DENTAL_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Dental")
+
+chol = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = CHOLSCREEN_AdjPrev, color = region)) + 
+  geom_point()
+
+colon = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = COLON_SCREEN_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Colon Screening")
+
+corem = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = COREM_AdjPrev, color = region)) + 
+  geom_point()
+
+corew = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = COREW_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Women w/ all Preventative Services")
+
+lpa = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = LPA_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("No Physical Activity")
+
+mammouse = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = MAMMOUSE_AdjPrev, color = region)) + 
+  geom_point()
+
+obesity = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = OBESITY_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Obesity")
+
+paptest = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = PAPTEST_AdjPrev, color = region)) + 
+  geom_point()
+
+phlth = cdc_df %>% 
+  ggplot(aes(x = ACCESS2_AdjPrev, y = PHLTH_AdjPrev)) + 
+  geom_point(alpha = 0.5) + 
+  theme_bw() +
+  xlab("% Without Insurance") +
+  ylab("Poor Physical Health")
+
+(dental | colon | corew) / (obesity | lpa | phlth)
+```
+
+
 
 
 
