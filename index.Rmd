@@ -32,10 +32,10 @@ Cancer screening and other proactive health practices that we have mentioned ten
 
 ### Group Members
 
-* [Melanie Mayer](mm4963@cumc.columbia.edu)  
-* [Jaisal Amin](ja3314@cumc.columbia.edu)
-* [Courtney Johnson](cj2493@cumc.columbia.edu) 
-* [Dayoung Yu](dry2115@cumc.columbia.edu)
+* [Melanie Mayer](mailto:mm4963@cumc.columbia.edu)  
+* [Jaisal Amin](mailto:ja3314@cumc.columbia.edu)
+* [Courtney Johnson](mailto:cj2493@cumc.columbia.edu) 
+* [Dayoung Yu](mailto:dry2115@cumc.columbia.edu)
 
 
 Our final report can be found [here](https://github.com/cj2493/p8105_fp_mjcr/blob/master/final_report.md).
