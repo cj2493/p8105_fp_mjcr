@@ -37,3 +37,5 @@ Cancer screening and other proactive health practices that we have mentioned ten
 * [Courtney Johnson](cj2493@cumc.columbia.edu) 
 * [Dayoung Yu](dry2115@cumc.columbia.edu)
 
+
+Our final report can be found [here](https://github.com/cj2493/p8105_fp_mjcr/blob/master/final_report.md).
