@@ -64,7 +64,7 @@ https://drive.google.com/file/d/1jlps3e265Q9eZoBXcgKTu5YrKwOOHTFc/view?usp=shari
 Download the data sets from the google drive links given above. In the code below, replace the "read_csv" locations to the local locations where data is downloaded.
 
 Code for reading in, merging, and cleaning data:
-```{r}
+```{r, message = FALSE}
 cdc_df = read_csv("./data/500_Cities__City-level_Data__GIS_Friendly_Format___2016_release.csv")
 #Select variables of interest
 cdc_df = cdc_df %>%
@@ -95,7 +95,7 @@ https://drive.google.com/file/d/1Myn3kicEjmmeD2PGoOehSlA30UtFfaV9/view?usp=shari
 
   
 Code to create a data dictionary: 
-```{r, data_dictionary}
+```{r, data_dictionary, message = FALSE}
 data_dictionary = readxl::read_xlsx("./data/data_dictionary.xlsx") 
 data_dictionary = data_dictionary %>%
   janitor::clean_names() %>%
@@ -109,9 +109,6 @@ region_dict = tibble(column_name = c("region", "division"),
                      type = c("Plain Text", "Plain Text")
 )
 data_dictionary = full_join(data_dictionary, region_dict)
-data_dictionary %>% 
-  knitr::kable() %>% 
-  kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
 ```
 
 
@@ -162,7 +159,7 @@ From the plots above, we see that as the percentage of uninsured people increase
 To explore the relationship between commonly used health practices and health outcomes, we tried to fit some multiple linear regression models using backwards selection.  The models we created were attempting to predict the prevalence of cancer, high cholesterol and diabetes. For each model, we started with all of the health practice variables: core screenings for men, core screenings for women, dental visits, lack of physical activity, mammogram usage, routine checkups, 
 cholesterol screenings, and colon screenings. All of these variables are also in terms of prevalence. Then, to show the results in a way that people who aren't statisticians could understand, I produced a table for each model that showed which variables were included in the final model and the direction of effect they had on the disease prevalence.  
 
-```{r, cancer_model}
+```{r, cancer_model, include = FALSE}
 cancer_full_mod = lm(CANCER_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
 summary(cancer_full_mod)
 cancer_minus_1 = update(cancer_full_mod, . ~ . -COREW_AdjPrev)
@@ -188,11 +185,10 @@ cancer_tbl = tibble(
   "P-Value" = p_val
 )
 cancer_tbl %>%
-  knitr::kable() %>%
-  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
+  knitr::kable() 
 ```
 
-```{r, chol_model}
+```{r, chol_model, include = FALSE}
 chol_full_mod = lm(HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
 summary(chol_full_mod)
 chol_minus_1 = update(chol_full_mod, . ~ . -CHOLSCREEN_AdjPrev) 
@@ -220,11 +216,10 @@ chol_tbl = tibble(
   "P-Value" = p_val
 )
 chol_tbl %>%
-  knitr::kable() %>%
-  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
+  knitr::kable() 
 ```
 
-```{r, diab_model}
+```{r, diab_model, include = FALSE}
 diab_full_mod = lm(DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
 summary(diab_full_mod)
 diab_minus_1 = update(diab_full_mod, . ~ . -COLON_SCREEN_AdjPrev)
@@ -247,13 +242,12 @@ diab_tbl = tibble(
   "P-Value" = p_val
 )
 diab_tbl %>%
-  knitr::kable() %>%
-  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
+  knitr::kable() 
 ```
 
 We ran simple linear regressions to determine if there was an association between the prevalence of lack of insurance and the prevalence of health outcomes -- colon/cancer/cholestrol screenings, mammograms, etc. The purpose here was not to build a predictive model, only to test association and therefore any statistics related to model reliability were disregarded.
 
-```{r, insurance_slrs}
+```{r, insurance_slrs, include = FALSE}
 cdc_df %>%
   lm(ACCESS2_AdjPrev ~ CHECKUP_AdjPrev, data = .) %>%
   summary
@@ -298,8 +292,7 @@ insurance_asso = tibble(
   "p-value" = p_value
 ) 
 insurance_asso %>% 
-  knitr::kable() %>% 
-  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
+  knitr::kable() 
 ```
 
 ```{r, insurance_plots}
@@ -332,7 +325,7 @@ phlth = cdc_df %>%
 
 We also wanted to look at lack of health insurance prevalence and health expenditure by state and compare across regions. We created graphs to display differences and ran an ANOVA to test significance.
 
-```{r, insurance_map}
+```{r, insurance_map, message = FALSE}
 usa = map_data("state") %>%
   rename(state = "region")
 cdc_df_map = read_csv("./data/cdc_df.csv") %>%
@@ -373,7 +366,7 @@ ggplot() +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-```{r, expend_map}
+```{r, expend_map, message = FALSE}
 usa = map_data("state") %>%
   rename(state = "region")
 cdc_df_map = read_csv("./data/cdc_df.csv") %>%
@@ -418,14 +411,22 @@ cdc_df %>%
   distinct(state, .keep_all = TRUE) %>%
   mutate(text_label = str_c("Health Expenditures per Capita: ", health_exp, '\nState: ', StateAbbr)) %>%
   mutate(region = fct_reorder(region, health_exp)) %>%
-  plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
-  layout(
-    xaxis = list(title = "Region"),
-    yaxis = list(title = "Health Expenditures per Capita per State"),
-    title = "Comparing Healthcare Expenditure Across Regions",
-    font = "Open Sans",
-    titlefont = "Open Sans"
+  ggplot(aes(x = region, y = health_exp)) +
+  geom_boxplot() +
+  labs(
+    x = "Region",
+    y = "Health Expenditures per Capita per State", 
+    title = "Comparing Healthcare Expenditure Across Regions"
   )
+  
+ # plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
+#  layout(
+ #   xaxis = list(title = "Region"),
+  #  yaxis = list(title = "Health Expenditures per Capita per State"),
+   # title = "Comparing Healthcare Expenditure Across Regions",
+  #  font = "Open Sans",
+   # titlefont = "Open Sans"
+ # )
 ```
 
 ```{r, echo = FALSE}

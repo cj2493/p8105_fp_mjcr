@@ -44,35 +44,8 @@ Courtney Johnson; cj2493</p>
 <h3 id="instructions-for-reading-in-data">Instructions for reading in data:</h3>
 <p>Download the data sets from the google drive links given above. In the code below, replace the &quot;read_csv&quot; locations to the local locations where data is downloaded.</p>
 <p>Code for reading in, merging, and cleaning data:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df =<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;./data/500_Cities__City-level_Data__GIS_Friendly_Format___2016_release.csv&quot;</span>)</code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   .default = col_character(),
-##   Population2010 = col_integer(),
-##   ACCESS2_CrudePrev = col_double(),
-##   ACCESS2_AdjPrev = col_double(),
-##   ARTHRITIS_CrudePrev = col_double(),
-##   ARTHRITIS_AdjPrev = col_double(),
-##   BINGE_CrudePrev = col_double(),
-##   BINGE_AdjPrev = col_double(),
-##   BPHIGH_CrudePrev = col_double(),
-##   BPHIGH_AdjPrev = col_double(),
-##   BPMED_CrudePrev = col_double(),
-##   BPMED_AdjPrev = col_double(),
-##   CANCER_CrudePrev = col_double(),
-##   CANCER_AdjPrev = col_double(),
-##   CASTHMA_CrudePrev = col_double(),
-##   CASTHMA_AdjPrev = col_double(),
-##   CHD_CrudePrev = col_double(),
-##   CHD_AdjPrev = col_double(),
-##   CHECKUP_CrudePrev = col_double(),
-##   CHECKUP_AdjPrev = col_double(),
-##   CHOLSCREEN_CrudePrev = col_double()
-##   # ... with 37 more columns
-## )
-
-## See spec(...) for full column specifications.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Select variables of interest</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df =<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;./data/500_Cities__City-level_Data__GIS_Friendly_Format___2016_release.csv&quot;</span>)
+<span class="co">#Select variables of interest</span>
 cdc_df =<span class="st"> </span>cdc_df <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(StateAbbr, PlaceName, Population2010, ACCESS2_AdjPrev, BPHIGH_AdjPrev, BPMED_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, CHECKUP_AdjPrev, CHOLSCREEN_AdjPrev, COLON_SCREEN_AdjPrev, COPD_AdjPrev,COREM_AdjPrev, COREW_AdjPrev, DENTAL_AdjPrev, DIABETES_AdjPrev, HIGHCHOL_AdjPrev, LPA_AdjPrev, MAMMOUSE_AdjPrev, OBESITY_AdjPrev, PAPTEST_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev, Geolocation)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">state =</span> <span class="kw">abbr2state</span>(StateAbbr)) <span class="op">%&gt;%</span>
@@ -82,27 +55,16 @@ healthcare_exp_df =<span class="st"> </span><span class="kw">read_csv</span>(<sp
                              <span class="dt">skip =</span> <span class="dv">4</span>, <span class="dt">n_max =</span> <span class="dv">51</span>, <span class="dt">col_names =</span> F) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">rename</span>(<span class="dt">state =</span> <span class="st">&quot;X1&quot;</span>, <span class="dt">health_exp =</span> <span class="st">&quot;X2&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">health_exp =</span> <span class="kw">str_replace</span>(health_exp, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">$&quot;</span>, <span class="st">&quot;&quot;</span>),
-         <span class="dt">health_exp  =</span> <span class="kw">as.numeric</span>(health_exp))</code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   X1 = col_character(),
-##   X2 = col_character()
-## )</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Add state healthcare expenditure data to CDC data</span>
+         <span class="dt">health_exp  =</span> <span class="kw">as.numeric</span>(health_exp))
+<span class="co">#Add state healthcare expenditure data to CDC data</span>
 cdc_df =<span class="st"> </span><span class="kw">left_join</span>(cdc_df, healthcare_exp_df, <span class="dt">by =</span> <span class="st">&quot;state&quot;</span>)
 cdc_df =<span class="st"> </span>cdc_df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">state =</span> <span class="kw">abbr2state</span>(StateAbbr))
 <span class="co">#Merge data regions per state</span>
 regions_df =<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span>janitor<span class="op">::</span><span class="kw">clean_names</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>state_code)</code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   State = col_character(),
-##   `State Code` = col_character(),
-##   Region = col_character(),
-##   Division = col_character()
-## )</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df =<span class="st"> </span><span class="kw">left_join</span>(cdc_df, regions_df, <span class="dt">by =</span> <span class="st">&quot;state&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>state_code)
+  
+cdc_df =<span class="st"> </span><span class="kw">left_join</span>(cdc_df, regions_df, <span class="dt">by =</span> <span class="st">&quot;state&quot;</span>)</code></pre></div>
 <p>Similar to downloading our initial data, variable obtaining issues progressed when attempting to scrape the data for our data dictionary. Therefore, we copied the data dictionary given on the website and pasted into an excel file. Below is the link to the excel data dictionary file:</p>
 <p><a href="https://drive.google.com/file/d/1Myn3kicEjmmeD2PGoOehSlA30UtFfaV9/view?usp=sharing" class="uri">https://drive.google.com/file/d/1Myn3kicEjmmeD2PGoOehSlA30UtFfaV9/view?usp=sharing</a></p>
 <p>Code to create a data dictionary:</p>
@@ -113,342 +75,12 @@ data_dictionary =<span class="st"> </span>data_dictionary <span class="op">%&gt;
 health_exp_dictionary =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">column_name =</span> <span class="kw">c</span>(<span class="st">&quot;state&quot;</span>, <span class="st">&quot;health_exp&quot;</span>),
                                <span class="dt">description =</span> <span class="kw">c</span>(<span class="st">&quot;full name of the state&quot;</span>, <span class="st">&quot;total healthcare expenditures per capita by state in 2014&quot;</span>),
                                <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&quot;Plain Text&quot;</span>, <span class="st">&quot;Number&quot;</span>))
-data_dictionary =<span class="st"> </span><span class="kw">full_join</span>(data_dictionary, health_exp_dictionary)</code></pre></div>
-<pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">region_dict =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">column_name =</span> <span class="kw">c</span>(<span class="st">&quot;region&quot;</span>, <span class="st">&quot;division&quot;</span>),
+data_dictionary =<span class="st"> </span><span class="kw">full_join</span>(data_dictionary, health_exp_dictionary)
+region_dict =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">column_name =</span> <span class="kw">c</span>(<span class="st">&quot;region&quot;</span>, <span class="st">&quot;division&quot;</span>),
                      <span class="dt">description =</span> <span class="kw">c</span>(<span class="st">&quot;geographical region of the state&quot;</span>, <span class="st">&quot;more specific division within the region&quot;</span>),
                      <span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&quot;Plain Text&quot;</span>, <span class="st">&quot;Plain Text&quot;</span>)
 )
 data_dictionary =<span class="st"> </span><span class="kw">full_join</span>(data_dictionary, region_dict)</code></pre></div>
-<pre><code>## Joining, by = c(&quot;column_name&quot;, &quot;description&quot;, &quot;type&quot;)</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_dictionary <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="dt">full_width =</span> F, <span class="dt">position =</span> <span class="st">&quot;center&quot;</span>)</code></pre></div>
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-column\_name
-</th>
-<th style="text-align:left;">
-description
-</th>
-<th style="text-align:left;">
-type
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-StateAbbr
-</td>
-<td style="text-align:left;">
-State abbreviation
-</td>
-<td style="text-align:left;">
-Plain Text
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-PlaceName
-</td>
-<td style="text-align:left;">
-City name
-</td>
-<td style="text-align:left;">
-Plain Text
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Population2010
-</td>
-<td style="text-align:left;">
-Population Count 2010
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-ACCESS2\_AdjPrev
-</td>
-<td style="text-align:left;">
-Age-adjusted prevalence estimate of current lack of health insurance among adults aged 18-64 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-BPHIGH\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of high blood pressure among adults aged &gt;=18 years, 2013
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-BPMED\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of taking medicine for high blood pressure control among adults aged &gt;=18 years with high blood pressure, 2013
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CANCER\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of cancer (excluding skin cancer) among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CHD\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of coronary heart disease among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CHECKUP\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of visits to doctor for routine checkup within the past year among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-CHOLSCREEN\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of cholesterol screening among adults aged &gt;=18 years, 2013
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-COLON\_SCREEN\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of fecal occult blood test, sigmoidoscopy, or colonoscopy among adults aged 50–75 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-COPD\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of chronic obstructive pulmonary disease among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-COREM\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of older adult men aged &gt;=65 years who are up to date on a core set of clinical preventive services: Flu shot past year, PPV shot ever, Colorectal cancer screening, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-COREW\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of older adult women aged &gt;=65 years who are up to date on a core set of clinical preventive services: Flu shot past year, PPV shot ever, Colorectal cancer screening, and Mammogram past 2 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-DENTAL\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of visits to dentist or dental clinic among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-DIABETES\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of diagnosed diabetes among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-HIGHCHOL\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of high cholesterol among adults aged &gt;=18 years who have been screened in the past 5 years, 2013
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-LPA\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of no leisure-time physical activity among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-MAMMOUSE\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of mammography use among women aged 50–74 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-OBESITY\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of obesity among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-PAPTEST\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of papanicolaou smear use among adult women aged 21–65 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-PHLTH\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of physical health not good for &gt;=14 days among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-STROKE\_AdjPrev
-</td>
-<td style="text-align:left;">
-Model-based estimate for age-adjusted prevalence of stroke among adults aged &gt;=18 years, 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Geolocation
-</td>
-<td style="text-align:left;">
-Latitude, longitude of city centroid
-</td>
-<td style="text-align:left;">
-Locatio
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-state
-</td>
-<td style="text-align:left;">
-full name of the state
-</td>
-<td style="text-align:left;">
-Plain Text
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-health\_exp
-</td>
-<td style="text-align:left;">
-total healthcare expenditures per capita by state in 2014
-</td>
-<td style="text-align:left;">
-Number
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-region
-</td>
-<td style="text-align:left;">
-geographical region of the state
-</td>
-<td style="text-align:left;">
-Plain Text
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-division
-</td>
-<td style="text-align:left;">
-more specific division within the region
-</td>
-<td style="text-align:left;">
-Plain Text
-</td>
-</tr>
-</tbody>
-</table>
 <h2 id="exploratory-analysis">Exploratory Analysis:</h2>
 <p>Shiny plots were created to explore the associations between health factors and health outcomes. We defined two health factors of interest: (1) prevalence of uninsured people by city and (2) health care expenditure by state. To give visualizations of the type of plots created, the code below illustrates the plots for the health outcome, cancer. However, in the Shiny document, users can toggle between 9 outcomes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># transform data to long form</span>
@@ -488,147 +120,6 @@ outcome_transform <span class="op">%&gt;%</span>
 <h2 id="additional-analysis">Additional Analysis:</h2>
 <h3 id="regression-analysis">Regression Analysis:</h3>
 <p>To explore the relationship between commonly used health practices and health outcomes, we tried to fit some multiple linear regression models using backwards selection. The models we created were attempting to predict the prevalence of cancer, high cholesterol and diabetes. For each model, we started with all of the health practice variables: core screenings for men, core screenings for women, dental visits, lack of physical activity, mammogram usage, routine checkups, cholesterol screenings, and colon screenings. All of these variables are also in terms of prevalence. Then, to show the results in a way that people who aren't statisticians could understand, I produced a table for each model that showed which variables were included in the final model and the direction of effect they had on the disease prevalence.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cancer_full_mod =<span class="st"> </span><span class="kw">lm</span>(CANCER_AdjPrev <span class="op">~</span><span class="st"> </span>COREM_AdjPrev <span class="op">+</span><span class="st"> </span>COREW_AdjPrev <span class="op">+</span><span class="st"> </span>DENTAL_AdjPrev <span class="op">+</span><span class="st"> </span>LPA_AdjPrev <span class="op">+</span><span class="st"> </span>MAMMOUSE_AdjPrev <span class="op">+</span><span class="st"> </span>PAPTEST_AdjPrev <span class="op">+</span><span class="st"> </span>CHECKUP_AdjPrev <span class="op">+</span><span class="st"> </span>CHOLSCREEN_AdjPrev <span class="op">+</span><span class="st"> </span>COLON_SCREEN_AdjPrev, <span class="dt">data =</span> cdc_df)
-<span class="kw">summary</span>(cancer_full_mod)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
-##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
-##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, 
-##     data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.99672 -0.19209  0.01202  0.22395  0.93081 
-## 
-## Coefficients:
-##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           4.396047   0.627176   7.009 7.97e-12 ***
-## COREM_AdjPrev         0.008319   0.006214   1.339    0.181    
-## COREW_AdjPrev         0.001945   0.005923   0.328    0.743    
-## DENTAL_AdjPrev       -0.035446   0.005047  -7.023 7.29e-12 ***
-## LPA_AdjPrev          -0.004077   0.007752  -0.526    0.599    
-## MAMMOUSE_AdjPrev     -0.041423   0.008566  -4.836 1.78e-06 ***
-## PAPTEST_AdjPrev       0.012257   0.008644   1.418    0.157    
-## CHECKUP_AdjPrev      -0.006210   0.006193  -1.003    0.317    
-## CHOLSCREEN_AdjPrev   -0.006452   0.009245  -0.698    0.486    
-## COLON_SCREEN_AdjPrev  0.104761   0.007941  13.192  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.3263 on 490 degrees of freedom
-## Multiple R-squared:  0.5725, Adjusted R-squared:  0.5647 
-## F-statistic: 72.91 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cancer_minus_<span class="dv">1</span> =<span class="st"> </span><span class="kw">update</span>(cancer_full_mod, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>COREW_AdjPrev)
-<span class="kw">summary</span>(cancer_minus_<span class="dv">1</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
-##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
-##     CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.00198 -0.19192  0.01383  0.22213  0.92520 
-## 
-## Coefficients:
-##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           4.367011   0.620345   7.040 6.53e-12 ***
-## COREM_AdjPrev         0.009576   0.004889   1.959   0.0507 .  
-## DENTAL_AdjPrev       -0.035335   0.005031  -7.023 7.26e-12 ***
-## LPA_AdjPrev          -0.003953   0.007736  -0.511   0.6096    
-## MAMMOUSE_AdjPrev     -0.041121   0.008509  -4.833 1.80e-06 ***
-## PAPTEST_AdjPrev       0.012045   0.008612   1.399   0.1626    
-## CHECKUP_AdjPrev      -0.006416   0.006156  -1.042   0.2978    
-## CHOLSCREEN_AdjPrev   -0.006293   0.009224  -0.682   0.4954    
-## COLON_SCREEN_AdjPrev  0.105311   0.007756  13.578  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.326 on 491 degrees of freedom
-## Multiple R-squared:  0.5724, Adjusted R-squared:  0.5654 
-## F-statistic: 82.16 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cancer_minus_<span class="dv">2</span> =<span class="st"> </span><span class="kw">update</span>(cancer_minus_<span class="dv">1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>LPA_AdjPrev)
-<span class="kw">summary</span>(cancer_minus_<span class="dv">2</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
-##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + 
-##     COLON_SCREEN_AdjPrev, data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.00226 -0.19302  0.01428  0.22022  0.91568 
-## 
-## Coefficients:
-##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           4.145930   0.444189   9.334  &lt; 2e-16 ***
-## COREM_AdjPrev         0.009622   0.004884   1.970   0.0494 *  
-## DENTAL_AdjPrev       -0.034062   0.004368  -7.799 3.76e-14 ***
-## MAMMOUSE_AdjPrev     -0.041540   0.008462  -4.909 1.25e-06 ***
-## PAPTEST_AdjPrev       0.012963   0.008417   1.540   0.1242    
-## CHECKUP_AdjPrev      -0.008105   0.005190  -1.562   0.1190    
-## CHOLSCREEN_AdjPrev   -0.005916   0.009187  -0.644   0.5199    
-## COLON_SCREEN_AdjPrev  0.106766   0.007209  14.811  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.3258 on 492 degrees of freedom
-## Multiple R-squared:  0.5722, Adjusted R-squared:  0.5661 
-## F-statistic:    94 on 7 and 492 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cancer_minus_<span class="dv">3</span> =<span class="st"> </span><span class="kw">update</span>(cancer_minus_<span class="dv">2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>CHOLSCREEN_AdjPrev)
-<span class="kw">summary</span>(cancer_minus_<span class="dv">3</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
-##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
-##     data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.00113 -0.18884  0.01572  0.22361  0.90726 
-## 
-## Coefficients:
-##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           4.010292   0.390837  10.261  &lt; 2e-16 ***
-## COREM_AdjPrev         0.010271   0.004777   2.150   0.0320 *  
-## DENTAL_AdjPrev       -0.034625   0.004277  -8.096 4.47e-15 ***
-## MAMMOUSE_AdjPrev     -0.041612   0.008457  -4.921 1.18e-06 ***
-## PAPTEST_AdjPrev       0.011672   0.008170   1.429   0.1537    
-## CHECKUP_AdjPrev      -0.009913   0.004361  -2.273   0.0235 *  
-## COLON_SCREEN_AdjPrev  0.105899   0.007077  14.963  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.3256 on 493 degrees of freedom
-## Multiple R-squared:  0.5718, Adjusted R-squared:  0.5666 
-## F-statistic: 109.7 on 6 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cancer_minus_<span class="dv">4</span> =<span class="st"> </span><span class="kw">update</span>(cancer_minus_<span class="dv">3</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>PAPTEST_AdjPrev)
-<span class="kw">summary</span>(cancer_minus_<span class="dv">4</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = CANCER_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
-##     MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
-##     data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.03868 -0.20284  0.01556  0.22721  0.86591 
-## 
-## Coefficients:
-##                       Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)           4.327473   0.322006  13.439  &lt; 2e-16 ***
-## COREM_AdjPrev         0.011737   0.004670   2.513   0.0123 *  
-## DENTAL_AdjPrev       -0.033185   0.004160  -7.976 1.06e-14 ***
-## MAMMOUSE_AdjPrev     -0.036228   0.007579  -4.780 2.31e-06 ***
-## CHECKUP_AdjPrev      -0.009509   0.004357  -2.183   0.0295 *  
-## COLON_SCREEN_AdjPrev  0.106566   0.007070  15.074  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.3259 on 494 degrees of freedom
-## Multiple R-squared:  0.5701, Adjusted R-squared:  0.5657 
-## F-statistic:   131 on 5 and 494 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">health_practice =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Core Practices for Men&quot;</span>, <span class="st">&quot;Dental Visits&quot;</span>, <span class="st">&quot;Mammogram Usage&quot;</span>,
                     <span class="st">&quot;Routine Checkups&quot;</span>, <span class="st">&quot;Colon Screening&quot;</span>)
 effect =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Positive&quot;</span>)
@@ -641,9 +132,8 @@ cancer_tbl =<span class="st"> </span><span class="kw">tibble</span>(
   <span class="st">&quot;P-Value&quot;</span> =<span class="st"> </span>p_val
 )
 cancer_tbl <span class="op">%&gt;%</span>
-<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="dt">full_width =</span> T, <span class="dt">position =</span> <span class="st">&quot;center&quot;</span>)</code></pre></div>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>() </code></pre></div>
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -733,171 +223,6 @@ Positive
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chol_full_mod =<span class="st"> </span><span class="kw">lm</span>(HIGHCHOL_AdjPrev <span class="op">~</span><span class="st"> </span>COREM_AdjPrev <span class="op">+</span><span class="st"> </span>COREW_AdjPrev <span class="op">+</span><span class="st"> </span>DENTAL_AdjPrev <span class="op">+</span><span class="st"> </span>LPA_AdjPrev <span class="op">+</span><span class="st"> </span>MAMMOUSE_AdjPrev <span class="op">+</span><span class="st"> </span>PAPTEST_AdjPrev <span class="op">+</span><span class="st"> </span>CHECKUP_AdjPrev <span class="op">+</span><span class="st"> </span>CHOLSCREEN_AdjPrev <span class="op">+</span><span class="st"> </span>COLON_SCREEN_AdjPrev, <span class="dt">data =</span> cdc_df)
-<span class="kw">summary</span>(chol_full_mod)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
-##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
-##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, 
-##     data = cdc_df)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.1205 -1.0260 -0.1267  1.0662  4.0526 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)          27.77026    2.87815   9.649  &lt; 2e-16 ***
-## COREM_AdjPrev         0.02756    0.02852   0.967  0.33420    
-## COREW_AdjPrev        -0.01536    0.02718  -0.565  0.57226    
-## DENTAL_AdjPrev       -0.06052    0.02316  -2.613  0.00925 ** 
-## LPA_AdjPrev           0.16194    0.03558   4.552 6.71e-06 ***
-## MAMMOUSE_AdjPrev      0.03897    0.03931   0.992  0.32193    
-## PAPTEST_AdjPrev      -0.04332    0.03967  -1.092  0.27536    
-## CHECKUP_AdjPrev       0.04384    0.02842   1.543  0.12358    
-## CHOLSCREEN_AdjPrev   -0.01541    0.04243  -0.363  0.71658    
-## COLON_SCREEN_AdjPrev  0.05408    0.03644   1.484  0.13844    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1.497 on 490 degrees of freedom
-## Multiple R-squared:  0.3996, Adjusted R-squared:  0.3886 
-## F-statistic: 36.23 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chol_minus_<span class="dv">1</span> =<span class="st"> </span><span class="kw">update</span>(chol_full_mod, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>CHOLSCREEN_AdjPrev) 
-<span class="kw">summary</span>(chol_minus_<span class="dv">1</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
-##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
-##     CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.1102 -1.0240 -0.1195  1.0687  4.0630 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)          27.35474    2.63872  10.367  &lt; 2e-16 ***
-## COREM_AdjPrev         0.02959    0.02794   1.059  0.29023    
-## COREW_AdjPrev        -0.01588    0.02712  -0.585  0.55851    
-## DENTAL_AdjPrev       -0.06162    0.02295  -2.685  0.00749 ** 
-## LPA_AdjPrev           0.16301    0.03542   4.602 5.34e-06 ***
-## MAMMOUSE_AdjPrev      0.03876    0.03927   0.987  0.32411    
-## PAPTEST_AdjPrev      -0.04647    0.03868  -1.201  0.23016    
-## CHECKUP_AdjPrev       0.03868    0.02459   1.573  0.11636    
-## COLON_SCREEN_AdjPrev  0.05237    0.03611   1.451  0.14755    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1.496 on 491 degrees of freedom
-## Multiple R-squared:  0.3994, Adjusted R-squared:  0.3896 
-## F-statistic: 40.82 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chol_minus_<span class="dv">2</span> =<span class="st"> </span><span class="kw">update</span>(chol_minus_<span class="dv">1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>COREW_AdjPrev)
-<span class="kw">summary</span>(chol_minus_<span class="dv">2</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = HIGHCHOL_AdjPrev ~ COREM_AdjPrev + DENTAL_AdjPrev + 
-##     LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + 
-##     COLON_SCREEN_AdjPrev, data = cdc_df)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.1151 -1.0096 -0.1394  1.0648  4.0575 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)          27.55737    2.61417  10.542  &lt; 2e-16 ***
-## COREM_AdjPrev         0.01946    0.02194   0.887  0.37540    
-## DENTAL_AdjPrev       -0.06262    0.02287  -2.739  0.00639 ** 
-## LPA_AdjPrev           0.16208    0.03536   4.583 5.81e-06 ***
-## MAMMOUSE_AdjPrev      0.03627    0.03901   0.930  0.35296    
-## PAPTEST_AdjPrev      -0.04500    0.03857  -1.167  0.24390    
-## CHECKUP_AdjPrev       0.03993    0.02448   1.631  0.10346    
-## COLON_SCREEN_AdjPrev  0.04773    0.03520   1.356  0.17574    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1.495 on 492 degrees of freedom
-## Multiple R-squared:  0.399,  Adjusted R-squared:  0.3905 
-## F-statistic: 46.66 on 7 and 492 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chol_minus_<span class="dv">3</span> =<span class="st"> </span><span class="kw">update</span>(chol_minus_<span class="dv">2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>COREM_AdjPrev)
-<span class="kw">summary</span>(chol_minus_<span class="dv">3</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + 
-##     MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
-##     data = cdc_df)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.1274 -1.0351 -0.1584  1.0355  4.1204 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)          27.90211    2.58458  10.796  &lt; 2e-16 ***
-## DENTAL_AdjPrev       -0.06226    0.02286  -2.724  0.00668 ** 
-## LPA_AdjPrev           0.16202    0.03536   4.583 5.83e-06 ***
-## MAMMOUSE_AdjPrev      0.01386    0.02973   0.466  0.64119    
-## PAPTEST_AdjPrev      -0.03786    0.03771  -1.004  0.31590    
-## CHECKUP_AdjPrev       0.04577    0.02358   1.941  0.05279 .  
-## COLON_SCREEN_AdjPrev  0.06410    0.02997   2.139  0.03291 *  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1.495 on 493 degrees of freedom
-## Multiple R-squared:  0.398,  Adjusted R-squared:  0.3907 
-## F-statistic: 54.33 on 6 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chol_minus_<span class="dv">4</span> =<span class="st"> </span><span class="kw">update</span>(chol_minus_<span class="dv">3</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>MAMMOUSE_AdjPrev)
-<span class="kw">summary</span>(chol_minus_<span class="dv">4</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + 
-##     PAPTEST_AdjPrev + CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, 
-##     data = cdc_df)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.1056 -1.0341 -0.1511  1.0368  4.1235 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)          27.89537    2.58249  10.802  &lt; 2e-16 ***
-## DENTAL_AdjPrev       -0.06049    0.02252  -2.686  0.00748 ** 
-## LPA_AdjPrev           0.16411    0.03504   4.683 3.66e-06 ***
-## PAPTEST_AdjPrev      -0.03035    0.03407  -0.891  0.37351    
-## CHECKUP_AdjPrev       0.04888    0.02259   2.164  0.03095 *  
-## COLON_SCREEN_AdjPrev  0.06581    0.02972   2.215  0.02724 *  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1.494 on 494 degrees of freedom
-## Multiple R-squared:  0.3978, Adjusted R-squared:  0.3917 
-## F-statistic: 65.26 on 5 and 494 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chol_minus_<span class="dv">5</span> =<span class="st"> </span><span class="kw">update</span>(chol_minus_<span class="dv">4</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>PAPTEST_AdjPrev)
-<span class="kw">summary</span>(chol_minus_<span class="dv">5</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = HIGHCHOL_AdjPrev ~ DENTAL_AdjPrev + LPA_AdjPrev + 
-##     CHECKUP_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.1079 -1.0528 -0.1173  1.0362  4.1262 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)          26.37818    1.94070  13.592  &lt; 2e-16 ***
-## DENTAL_AdjPrev       -0.06397    0.02217  -2.885  0.00409 ** 
-## LPA_AdjPrev           0.17050    0.03430   4.971 9.18e-07 ***
-## CHECKUP_AdjPrev       0.04013    0.02034   1.973  0.04901 *  
-## COLON_SCREEN_AdjPrev  0.06145    0.02931   2.097  0.03650 *  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 1.493 on 495 degrees of freedom
-## Multiple R-squared:  0.3968, Adjusted R-squared:  0.3919 
-## F-statistic: 81.41 on 4 and 495 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">health_practice =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Dental Visits&quot;</span>, <span class="st">&quot;Lack of Physical Activity&quot;</span>,
                     <span class="st">&quot;Routine Checkups&quot;</span>, <span class="st">&quot;Colon Screening&quot;</span>)
 effect =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Positive&quot;</span>)
@@ -910,9 +235,8 @@ chol_tbl =<span class="st"> </span><span class="kw">tibble</span>(
   <span class="st">&quot;P-Value&quot;</span> =<span class="st"> </span>p_val
 )
 chol_tbl <span class="op">%&gt;%</span>
-<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="dt">full_width =</span> T, <span class="dt">position =</span> <span class="st">&quot;center&quot;</span>)</code></pre></div>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>() </code></pre></div>
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -988,121 +312,6 @@ Positive
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diab_full_mod =<span class="st"> </span><span class="kw">lm</span>(DIABETES_AdjPrev <span class="op">~</span><span class="st"> </span>COREM_AdjPrev <span class="op">+</span><span class="st"> </span>COREW_AdjPrev <span class="op">+</span><span class="st"> </span>DENTAL_AdjPrev <span class="op">+</span><span class="st"> </span>LPA_AdjPrev <span class="op">+</span><span class="st"> </span>MAMMOUSE_AdjPrev <span class="op">+</span><span class="st"> </span>PAPTEST_AdjPrev <span class="op">+</span><span class="st"> </span>CHECKUP_AdjPrev <span class="op">+</span><span class="st"> </span>CHOLSCREEN_AdjPrev <span class="op">+</span><span class="st"> </span>COLON_SCREEN_AdjPrev, <span class="dt">data =</span> cdc_df)
-<span class="kw">summary</span>(diab_full_mod)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
-##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
-##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, 
-##     data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.82244 -0.49835 -0.05334  0.38831  2.75411 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)          10.06293    1.47109   6.840 2.36e-11 ***
-## COREM_AdjPrev        -0.02625    0.01458  -1.801 0.072368 .  
-## COREW_AdjPrev        -0.04125    0.01389  -2.969 0.003130 ** 
-## DENTAL_AdjPrev       -0.13247    0.01184 -11.190  &lt; 2e-16 ***
-## LPA_AdjPrev           0.18620    0.01818  10.240  &lt; 2e-16 ***
-## MAMMOUSE_AdjPrev      0.06480    0.02009   3.225 0.001342 ** 
-## PAPTEST_AdjPrev       0.02470    0.02028   1.218 0.223783    
-## CHECKUP_AdjPrev       0.08751    0.01453   6.024 3.35e-09 ***
-## CHOLSCREEN_AdjPrev   -0.08273    0.02168  -3.815 0.000153 ***
-## COLON_SCREEN_AdjPrev -0.01221    0.01863  -0.655 0.512550    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.7654 on 490 degrees of freedom
-## Multiple R-squared:  0.902,  Adjusted R-squared:  0.9002 
-## F-statistic: 501.1 on 9 and 490 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diab_minus_<span class="dv">1</span> =<span class="st"> </span><span class="kw">update</span>(diab_full_mod, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>COLON_SCREEN_AdjPrev)
-<span class="kw">summary</span>(diab_minus_<span class="dv">1</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
-##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + 
-##     CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev, data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.84766 -0.49395 -0.05276  0.38941  2.77487 
-## 
-## Coefficients:
-##                    Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)         9.99942    1.46704   6.816 2.75e-11 ***
-## COREM_AdjPrev      -0.02896    0.01397  -2.073  0.03869 *  
-## COREW_AdjPrev      -0.04317    0.01357  -3.181  0.00156 ** 
-## DENTAL_AdjPrev     -0.13398    0.01161 -11.544  &lt; 2e-16 ***
-## LPA_AdjPrev         0.19060    0.01689  11.284  &lt; 2e-16 ***
-## MAMMOUSE_AdjPrev    0.05983    0.01860   3.218  0.00138 ** 
-## PAPTEST_AdjPrev     0.02526    0.02025   1.248  0.21269    
-## CHECKUP_AdjPrev     0.08616    0.01437   5.995 3.94e-09 ***
-## CHOLSCREEN_AdjPrev -0.08457    0.02149  -3.935 9.51e-05 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.7649 on 491 degrees of freedom
-## Multiple R-squared:  0.9019, Adjusted R-squared:  0.9003 
-## F-statistic: 564.3 on 8 and 491 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diab_minus_<span class="dv">2</span> =<span class="st"> </span><span class="kw">update</span>(diab_minus_<span class="dv">1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>PAPTEST_AdjPrev)
-<span class="kw">summary</span>(diab_minus_<span class="dv">2</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + 
-##     DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + 
-##     CHOLSCREEN_AdjPrev, data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.85808 -0.49600 -0.04818  0.38557  2.80165 
-## 
-## Coefficients:
-##                    Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)        10.71227    1.35200   7.923 1.56e-14 ***
-## COREM_AdjPrev      -0.02485    0.01358  -1.830 0.067884 .  
-## COREW_AdjPrev      -0.04462    0.01353  -3.298 0.001045 ** 
-## DENTAL_AdjPrev     -0.13334    0.01160 -11.493  &lt; 2e-16 ***
-## LPA_AdjPrev         0.18632    0.01655  11.259  &lt; 2e-16 ***
-## MAMMOUSE_AdjPrev    0.07053    0.01651   4.272 2.33e-05 ***
-## CHECKUP_AdjPrev     0.08680    0.01437   6.040 3.04e-09 ***
-## CHOLSCREEN_AdjPrev -0.07881    0.02100  -3.753 0.000196 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.7654 on 492 degrees of freedom
-## Multiple R-squared:  0.9016, Adjusted R-squared:  0.9002 
-## F-statistic:   644 on 7 and 492 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">diab_minus_<span class="dv">3</span> =<span class="st"> </span><span class="kw">update</span>(diab_minus_<span class="dv">2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span>COREM_AdjPrev)
-<span class="kw">summary</span>(diab_minus_<span class="dv">3</span>)</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = DIABETES_AdjPrev ~ COREW_AdjPrev + DENTAL_AdjPrev + 
-##     LPA_AdjPrev + MAMMOUSE_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev, 
-##     data = cdc_df)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.94594 -0.48832 -0.03568  0.38740  2.84917 
-## 
-## Coefficients:
-##                     Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)         9.669195   1.228864   7.868 2.29e-14 ***
-## COREW_AdjPrev      -0.062549   0.009354  -6.687 6.19e-11 ***
-## DENTAL_AdjPrev     -0.134701   0.011605 -11.607  &lt; 2e-16 ***
-## LPA_AdjPrev         0.193171   0.016159  11.954  &lt; 2e-16 ***
-## MAMMOUSE_AdjPrev    0.084542   0.014663   5.766 1.44e-08 ***
-## CHECKUP_AdjPrev     0.076247   0.013194   5.779 1.33e-08 ***
-## CHOLSCREEN_AdjPrev -0.074111   0.020892  -3.547 0.000426 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.7672 on 493 degrees of freedom
-## Multiple R-squared:  0.9009, Adjusted R-squared:  0.8997 
-## F-statistic: 747.2 on 6 and 493 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">health_practice =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Core Practices for Women&quot;</span>, <span class="st">&quot;Dental Visits&quot;</span>, <span class="st">&quot;Lack of Physical Activity&quot;</span>, <span class="st">&quot;Mammogram Usage&quot;</span>, <span class="st">&quot;Routine Checkups&quot;</span>, <span class="st">&quot;Cholesterol Screening&quot;</span>)
 effect =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Negative&quot;</span>)
 estimate =<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.063</span>, <span class="op">-</span><span class="fl">0.135</span>, <span class="fl">0.193</span>, <span class="fl">0.085</span>, <span class="fl">0.076</span>, <span class="op">-</span><span class="fl">0.074</span>)
@@ -1114,9 +323,8 @@ diab_tbl =<span class="st"> </span><span class="kw">tibble</span>(
   <span class="st">&quot;P-Value&quot;</span> =<span class="st"> </span>p_val
 )
 diab_tbl <span class="op">%&gt;%</span>
-<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>() <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="dt">full_width =</span> T, <span class="dt">position =</span> <span class="st">&quot;center&quot;</span>)</code></pre></div>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>() </code></pre></div>
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -1221,216 +429,6 @@ Negative
 </tbody>
 </table>
 <p>We ran simple linear regressions to determine if there was an association between the prevalence of lack of insurance and the prevalence of health outcomes -- colon/cancer/cholestrol screenings, mammograms, etc. The purpose here was not to build a predictive model, only to test association and therefore any statistics related to model reliability were disregarded.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">lm</span>(ACCESS2_AdjPrev <span class="op">~</span><span class="st"> </span>CHECKUP_AdjPrev, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">  </span>summary</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = ACCESS2_AdjPrev ~ CHECKUP_AdjPrev, data = .)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -14.3033  -4.8734  -0.8666   3.9749  30.8858 
-## 
-## Coefficients:
-##                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)     16.67317    4.15554   4.012 6.94e-05 ***
-## CHECKUP_AdjPrev  0.02259    0.06097   0.370    0.711    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 6.857 on 498 degrees of freedom
-## Multiple R-squared:  0.0002755,  Adjusted R-squared:  -0.001732 
-## F-statistic: 0.1372 on 1 and 498 DF,  p-value: 0.7112</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">lm</span>(ACCESS2_AdjPrev <span class="op">~</span><span class="st"> </span>DENTAL_AdjPrev, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">  </span>summary</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = ACCESS2_AdjPrev ~ DENTAL_AdjPrev, data = .)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -11.5583  -2.1019  -0.1286   1.7714  19.7386 
-## 
-## Coefficients:
-##                Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)    64.75462    1.44079   44.94   &lt;2e-16 ***
-## DENTAL_AdjPrev -0.75038    0.02306  -32.54   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 3.879 on 498 degrees of freedom
-## Multiple R-squared:  0.6802, Adjusted R-squared:  0.6795 
-## F-statistic:  1059 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">lm</span>(ACCESS2_AdjPrev <span class="op">~</span><span class="st"> </span>CHOLSCREEN_AdjPrev, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">  </span>summary</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = ACCESS2_AdjPrev ~ CHOLSCREEN_AdjPrev, data = .)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -11.4146  -4.7829  -0.7015   3.9088  20.8205 
-## 
-## Coefficients:
-##                    Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)        99.27618    6.38321   15.55   &lt;2e-16 ***
-## CHOLSCREEN_AdjPrev -1.09796    0.08638  -12.71   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 5.959 on 498 degrees of freedom
-## Multiple R-squared:  0.245,  Adjusted R-squared:  0.2435 
-## F-statistic: 161.6 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">lm</span>(ACCESS2_AdjPrev <span class="op">~</span><span class="st"> </span>COLON_SCREEN_AdjPrev, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">  </span>summary</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = ACCESS2_AdjPrev ~ COLON_SCREEN_AdjPrev, data = .)
-## 
-## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -9.662 -2.687 -0.535  2.568 13.338 
-## 
-## Coefficients:
-##                      Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)          81.64527    2.00151   40.79   &lt;2e-16 ***
-## COLON_SCREEN_AdjPrev -1.01284    0.03183  -31.82   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 3.938 on 498 degrees of freedom
-## Multiple R-squared:  0.6703, Adjusted R-squared:  0.6696 
-## F-statistic:  1012 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">lm</span>(ACCESS2_AdjPrev <span class="op">~</span><span class="st"> </span>COREM_AdjPrev, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">  </span>summary</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = ACCESS2_AdjPrev ~ COREM_AdjPrev, data = .)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -12.0230  -4.1028  -0.1845   3.6097  28.4732 
-## 
-## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   39.03085    1.67760   23.27   &lt;2e-16 ***
-## COREM_AdjPrev -0.65385    0.05201  -12.57   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 5.975 on 498 degrees of freedom
-## Multiple R-squared:  0.2409, Adjusted R-squared:  0.2394 
-## F-statistic: 158.1 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">lm</span>(ACCESS2_AdjPrev <span class="op">~</span><span class="st"> </span>COREW_AdjPrev, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">  </span>summary</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = ACCESS2_AdjPrev ~ COREW_AdjPrev, data = .)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -12.8653  -3.7809  -0.4643   3.1987  26.5916 
-## 
-## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   42.61860    1.47487   28.90   &lt;2e-16 ***
-## COREW_AdjPrev -0.79882    0.04759  -16.78   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 5.481 on 498 degrees of freedom
-## Multiple R-squared:  0.3613, Adjusted R-squared:   0.36 
-## F-statistic: 281.7 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">lm</span>(ACCESS2_AdjPrev <span class="op">~</span><span class="st"> </span>LPA_AdjPrev, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">  </span>summary</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = ACCESS2_AdjPrev ~ LPA_AdjPrev, data = .)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -11.0931  -2.8884  -0.1922   2.8727  19.6451 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) -4.99785    0.87664  -5.701 2.04e-08 ***
-## LPA_AdjPrev  0.96496    0.03554  27.150  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 4.355 on 498 degrees of freedom
-## Multiple R-squared:  0.5968, Adjusted R-squared:  0.596 
-## F-statistic: 737.1 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">lm</span>(ACCESS2_AdjPrev <span class="op">~</span><span class="st"> </span>MAMMOUSE_AdjPrev, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">  </span>summary</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = ACCESS2_AdjPrev ~ MAMMOUSE_AdjPrev, data = .)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -12.4533  -4.5578  -0.8023   3.7676  22.5717 
-## 
-## Coefficients:
-##                  Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)      80.29846    5.35431   15.00   &lt;2e-16 ***
-## MAMMOUSE_AdjPrev -0.79808    0.06873  -11.61   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 6.084 on 498 degrees of freedom
-## Multiple R-squared:  0.213,  Adjusted R-squared:  0.2115 
-## F-statistic: 134.8 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">lm</span>(ACCESS2_AdjPrev <span class="op">~</span><span class="st"> </span>PAPTEST_AdjPrev, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">  </span>summary</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = ACCESS2_AdjPrev ~ PAPTEST_AdjPrev, data = .)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -13.9574  -3.6682  -0.2634   2.9858  18.5909 
-## 
-## Coefficients:
-##                  Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)     120.21507    5.41489   22.20   &lt;2e-16 ***
-## PAPTEST_AdjPrev  -1.26490    0.06708  -18.86   &lt;2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 5.238 on 498 degrees of freedom
-## Multiple R-squared:  0.4165, Adjusted R-squared:  0.4154 
-## F-statistic: 355.5 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cdc_df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">lm</span>(ACCESS2_AdjPrev <span class="op">~</span><span class="st"> </span>PHLTH_AdjPrev, <span class="dt">data =</span> .) <span class="op">%&gt;%</span>
-<span class="st">  </span>summary</code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = ACCESS2_AdjPrev ~ PHLTH_AdjPrev, data = .)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -15.636  -2.915  -0.440   2.083  22.033 
-## 
-## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   -4.90960    0.99643  -4.927 1.14e-06 ***
-## PHLTH_AdjPrev  1.84260    0.07763  23.734  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 4.698 on 498 degrees of freedom
-## Multiple R-squared:  0.5308, Adjusted R-squared:  0.5298 
-## F-statistic: 563.3 on 1 and 498 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">health_practice =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Health Checkup&quot;</span>, <span class="st">&quot;Cholestrol Screening&quot;</span>, <span class="st">&quot;Colon Screening&quot;</span>, <span class="st">&quot;Dental&quot;</span>, <span class="st">&quot;COREM&quot;</span>, <span class="st">&quot;COREW&quot;</span>, <span class="st">&quot;LPA&quot;</span>, <span class="st">&quot;Mammogram&quot;</span>, <span class="st">&quot;Pap Test&quot;</span>, <span class="st">&quot;Poor Physical Health&quot;</span>)
 linear =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;Yes&quot;</span>, <span class="st">&quot;Yes&quot;</span>)
 direction =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;NA&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Positive&quot;</span>)
@@ -1442,9 +440,8 @@ insurance_asso =<span class="st"> </span><span class="kw">tibble</span>(
   <span class="st">&quot;p-value&quot;</span> =<span class="st"> </span>p_value
 ) 
 insurance_asso <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">kable_styling</span>(<span class="dt">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="dt">full_width =</span> T, <span class="dt">position =</span> <span class="st">&quot;center&quot;</span>)</code></pre></div>
-<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<span class="st">  </span>knitr<span class="op">::</span><span class="kw">kable</span>() </code></pre></div>
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -1642,22 +639,8 @@ cdc_df_map =<span class="st"> </span><span class="kw">read_csv</span>(<span clas
          <span class="dt">state =</span> <span class="kw">factor</span>(state),
          <span class="dt">state =</span> <span class="kw">tolower</span>(state)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>state <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;alaska&quot;</span>, <span class="st">&quot;hawaii&quot;</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">left_join</span>(., usa, <span class="dt">by =</span> <span class="st">&quot;state&quot;</span>)</code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   .default = col_double(),
-##   state = col_character(),
-##   StateAbbr = col_character(),
-##   PlaceName = col_character(),
-##   Population2010 = col_integer(),
-##   Geolocation = col_character(),
-##   health_exp = col_integer(),
-##   region = col_character(),
-##   division = col_character()
-## )
-
-## See spec(...) for full column specifications.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(., usa, <span class="dt">by =</span> <span class="st">&quot;state&quot;</span>)
+<span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> cdc_df_map, <span class="kw">aes</span>(<span class="dt">x =</span> long.y, <span class="dt">y =</span> lat.y, <span class="dt">group =</span> state, 
                                       <span class="dt">fill =</span> ACCESS2_AdjPrev), 
                <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span>
@@ -1695,22 +678,8 @@ cdc_df_map =<span class="st"> </span><span class="kw">read_csv</span>(<span clas
          <span class="dt">state =</span> <span class="kw">factor</span>(state),
          <span class="dt">state =</span> <span class="kw">tolower</span>(state)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>state <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;alaska&quot;</span>, <span class="st">&quot;hawaii&quot;</span>)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">left_join</span>(., usa, <span class="dt">by =</span> <span class="st">&quot;state&quot;</span>)</code></pre></div>
-<pre><code>## Parsed with column specification:
-## cols(
-##   .default = col_double(),
-##   state = col_character(),
-##   StateAbbr = col_character(),
-##   PlaceName = col_character(),
-##   Population2010 = col_integer(),
-##   Geolocation = col_character(),
-##   health_exp = col_integer(),
-##   region = col_character(),
-##   division = col_character()
-## )
-
-## See spec(...) for full column specifications.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(., usa, <span class="dt">by =</span> <span class="st">&quot;state&quot;</span>)
+<span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> cdc_df_map, <span class="kw">aes</span>(<span class="dt">x =</span> long.y, <span class="dt">y =</span> lat.y, 
                                       <span class="dt">group =</span> state, <span class="dt">fill =</span> health_exp), <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_gradient2</span>(<span class="dt">low =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">mid =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">space =</span> <span class="st">&quot;Lab&quot;</span>,
@@ -1740,17 +709,22 @@ cdc_df_map =<span class="st"> </span><span class="kw">read_csv</span>(<span clas
 <span class="st">  </span><span class="kw">distinct</span>(state, <span class="dt">.keep_all =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">text_label =</span> <span class="kw">str_c</span>(<span class="st">&quot;Health Expenditures per Capita: &quot;</span>, health_exp, <span class="st">'</span><span class="ch">\n</span><span class="st">State: '</span>, StateAbbr)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">region =</span> <span class="kw">fct_reorder</span>(region, health_exp)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">plot_ly</span>(<span class="dt">y =</span> <span class="op">~</span>health_exp, <span class="dt">color =</span> <span class="op">~</span>region, <span class="dt">type =</span> <span class="st">&quot;box&quot;</span>, <span class="dt">text =</span> <span class="op">~</span>text_label) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">layout</span>(
-    <span class="dt">xaxis =</span> <span class="kw">list</span>(<span class="dt">title =</span> <span class="st">&quot;Region&quot;</span>),
-    <span class="dt">yaxis =</span> <span class="kw">list</span>(<span class="dt">title =</span> <span class="st">&quot;Health Expenditures per Capita per State&quot;</span>),
-    <span class="dt">title =</span> <span class="st">&quot;Comparing Healthcare Expenditure Across Regions&quot;</span>,
-    <span class="dt">font =</span> <span class="st">&quot;Open Sans&quot;</span>,
-    <span class="dt">titlefont =</span> <span class="st">&quot;Open Sans&quot;</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> region, <span class="dt">y =</span> health_exp)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(
+    <span class="dt">x =</span> <span class="st">&quot;Region&quot;</span>,
+    <span class="dt">y =</span> <span class="st">&quot;Health Expenditures per Capita per State&quot;</span>, 
+    <span class="dt">title =</span> <span class="st">&quot;Comparing Healthcare Expenditure Across Regions&quot;</span>
   )</code></pre></div>
-<!--html_preserve-->
-<script type="application/json" data-for="htmlwidget-8bee257b99e7dacfa38b">{"x":{"visdat":{"4c5078a216d3":["function () ","plotlyVisDat"]},"cur_data":"4c5078a216d3","attrs":{"4c5078a216d3":{"y":{},"text":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Region"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Health Expenditures per Capita per State"},"title":"Comparing Healthcare Expenditure Across Regions","font":"Open Sans","titlefont":"Open Sans","hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"data":[{"y":[11064,6452,7549,6804,7299,6927,8221,6714,7214,8044,5982,7913,8320],"text":["Health Expenditures per Capita: 11064<br />State: AK","Health Expenditures per Capita: 6452<br />State: AZ","Health Expenditures per Capita: 7549<br />State: CA","Health Expenditures per Capita: 6804<br />State: CO","Health Expenditures per Capita: 7299<br />State: HI","Health Expenditures per Capita: 6927<br />State: ID","Health Expenditures per Capita: 8221<br />State: MT","Health Expenditures per Capita: 6714<br />State: NV","Health Expenditures per Capita: 7214<br />State: NM","Health Expenditures per Capita: 8044<br />State: OR","Health Expenditures per Capita: 5982<br />State: UT","Health Expenditures per Capita: 7913<br />State: WA","Health Expenditures per Capita: 8320<br />State: WY"],"type":"box","name":"West","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[7281,7408,10254,11944,8076,6587,8004,7815,8602,7646,7264,7627,7311,7372,6998,7556,9462],"text":["Health Expenditures per Capita: 7281<br />State: AL","Health Expenditures per Capita: 7408<br />State: AR","Health Expenditures per Capita: 10254<br />State: DE","Health Expenditures per Capita: 11944<br />State: DC","Health Expenditures per Capita: 8076<br />State: FL","Health Expenditures per Capita: 6587<br />State: GA","Health Expenditures per Capita: 8004<br />State: KY","Health Expenditures per Capita: 7815<br />State: LA","Health Expenditures per Capita: 8602<br />State: MD","Health Expenditures per Capita: 7646<br />State: MS","Health Expenditures per Capita: 7264<br />State: NC","Health Expenditures per Capita: 7627<br />State: OK","Health Expenditures per Capita: 7311<br />State: SC","Health Expenditures per Capita: 7372<br />State: TN","Health Expenditures per Capita: 6998<br />State: TX","Health Expenditures per Capita: 7556<br />State: VA","Health Expenditures per Capita: 9462<br />State: WV"],"type":"box","name":"South","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[8262,8300,8200,7651,8055,8871,8107,8412,9851,8712,8933,8702],"text":["Health Expenditures per Capita: 8262<br />State: IL","Health Expenditures per Capita: 8300<br />State: IN","Health Expenditures per Capita: 8200<br />State: IA","Health Expenditures per Capita: 7651<br />State: KS","Health Expenditures per Capita: 8055<br />State: MI","Health Expenditures per Capita: 8871<br />State: MN","Health Expenditures per Capita: 8107<br />State: MO","Health Expenditures per Capita: 8412<br />State: NE","Health Expenditures per Capita: 9851<br />State: ND","Health Expenditures per Capita: 8712<br />State: OH","Health Expenditures per Capita: 8933<br />State: SD","Health Expenditures per Capita: 8702<br />State: WI"],"type":"box","name":"Midwest","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"y":[9859,9531,10559,9589,8859,9778,9258,9551,10190],"text":["Health Expenditures per Capita: 9859<br />State: CT","Health Expenditures per Capita: 9531<br />State: ME","Health Expenditures per Capita: 10559<br />State: MA","Health Expenditures per Capita: 9589<br />State: NH","Health Expenditures per Capita: 8859<br />State: NJ","Health Expenditures per Capita: 9778<br />State: NY","Health Expenditures per Capita: 9258<br />State: PA","Health Expenditures per Capita: 9551<br />State: RI","Health Expenditures per Capita: 10190<br />State: VT"],"type":"box","name":"Northeast","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"line":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":[]}</script>
-<!--/html_preserve-->
+<p><img src="data:image/png;base64,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" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="co"># plot_ly(y = ~health_exp, color = ~region, type = &quot;box&quot;, text = ~text_label) %&gt;%</span>
+<span class="co">#  layout(</span>
+ <span class="co">#   xaxis = list(title = &quot;Region&quot;),</span>
+  <span class="co">#  yaxis = list(title = &quot;Health Expenditures per Capita per State&quot;),</span>
+   <span class="co"># title = &quot;Comparing Healthcare Expenditure Across Regions&quot;,</span>
+  <span class="co">#  font = &quot;Open Sans&quot;,</span>
+   <span class="co"># titlefont = &quot;Open Sans&quot;</span>
+ <span class="co"># )</span></code></pre></div>
 <table>
 <thead>
 <tr>
