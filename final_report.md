@@ -765,17 +765,6 @@ cdc_df %>%
 
 ![](final_report_files/figure-markdown_github/region_boxplot-1.png)
 
-``` r
- # plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
-#  layout(
- #   xaxis = list(title = "Region"),
-  #  yaxis = list(title = "Health Expenditures per Capita per State"),
-   # title = "Comparing Healthcare Expenditure Across Regions",
-  #  font = "Open Sans",
-   # titlefont = "Open Sans"
- # )
-```
-
 <table>
 <thead>
 <tr>
@@ -842,7 +831,7 @@ NA
 </tr>
 </tbody>
 </table>
-<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">

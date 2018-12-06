@@ -204,6 +204,7 @@ summary(chol_minus_5)
 ```
 
 ```{r, chol_tbl}
+
 health_practice = c("Dental Visits", "Lack of Physical Activity",
                     "Routine Checkups", "Colon Screening")
 effect = c("Negative", "Positive", "Positive", "Positive")
@@ -231,6 +232,7 @@ summary(diab_minus_3)
 ```
 
 ```{r, diab_tbl}
+
 health_practice = c("Core Practices for Women", "Dental Visits", "Lack of Physical Activity", "Mammogram Usage", "Routine Checkups", "Cholesterol Screening")
 effect = c("Negative", "Negative", "Positive", "Positive", "Positive", "Negative")
 estimate = c(-0.063, -0.135, 0.193, 0.085, 0.076, -0.074)
@@ -418,15 +420,6 @@ cdc_df %>%
     y = "Health Expenditures per Capita per State", 
     title = "Comparing Healthcare Expenditure Across Regions"
   )
-  
- # plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
-#  layout(
- #   xaxis = list(title = "Region"),
-  #  yaxis = list(title = "Health Expenditures per Capita per State"),
-   # title = "Comparing Healthcare Expenditure Across Regions",
-  #  font = "Open Sans",
-   # titlefont = "Open Sans"
- # )
 ```
 
 ```{r, echo = FALSE}
@@ -448,8 +441,7 @@ regional_anova = tibble(
   "P-Value" = p_value
 )
 regional_anova %>% 
-  knitr::kable() %>% 
-  kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
+  knitr::kable() 
 ```
 
 ## Discussion:  
