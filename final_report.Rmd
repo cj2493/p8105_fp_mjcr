@@ -185,11 +185,8 @@ cancer_tbl = tibble(
   "P-Value" = p_val
 )
 cancer_tbl %>%
-  knitr::kable() %>%
-  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
+  knitr::kable() 
 ```
-
-Once we obtained the other two models, we created similar tables in the same way:
 
 ```{r, chol_model, include = FALSE}
 chol_full_mod = lm(HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
@@ -206,7 +203,7 @@ chol_minus_5 = update(chol_minus_4, . ~ . -PAPTEST_AdjPrev)
 summary(chol_minus_5)
 ```
 
-```{r, chol_tbl, echo = FALSE}
+```{r, chol_tbl}
 health_practice = c("Dental Visits", "Lack of Physical Activity",
                     "Routine Checkups", "Colon Screening")
 effect = c("Negative", "Positive", "Positive", "Positive")
@@ -219,8 +216,7 @@ chol_tbl = tibble(
   "P-Value" = p_val
 )
 chol_tbl %>%
-  knitr::kable() %>%
-  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
+  knitr::kable() 
 ```
 
 ```{r, diab_model, include = FALSE}
@@ -234,7 +230,7 @@ diab_minus_3 = update(diab_minus_2, . ~ . -COREM_AdjPrev)
 summary(diab_minus_3)
 ```
 
-```{r, diab_tbl, echo = FALSE}
+```{r, diab_tbl}
 health_practice = c("Core Practices for Women", "Dental Visits", "Lack of Physical Activity", "Mammogram Usage", "Routine Checkups", "Cholesterol Screening")
 effect = c("Negative", "Negative", "Positive", "Positive", "Positive", "Negative")
 estimate = c(-0.063, -0.135, 0.193, 0.085, 0.076, -0.074)
@@ -246,8 +242,7 @@ diab_tbl = tibble(
   "P-Value" = p_val
 )
 diab_tbl %>%
-  knitr::kable() %>%
-  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
+  knitr::kable() 
 ```
 
 We ran simple linear regressions to determine if there was an association between the prevalence of lack of insurance and the prevalence of health outcomes -- colon/cancer/cholestrol screenings, mammograms, etc. The purpose here was not to build a predictive model, only to test association and therefore any statistics related to model reliability were disregarded.
@@ -297,14 +292,9 @@ insurance_asso = tibble(
   "p-value" = p_value
 ) 
 insurance_asso %>% 
-  knitr::kable() %>% 
-  kable_styling(bootstrap_options = "striped", full_width = T, position = "center")
+  knitr::kable() 
 ```
 
-
-   
-        
-           
 ```{r, insurance_plots}
 dental = cdc_df %>% 
   ggplot(aes(x = ACCESS2_AdjPrev, y = DENTAL_AdjPrev)) + 
@@ -421,14 +411,22 @@ cdc_df %>%
   distinct(state, .keep_all = TRUE) %>%
   mutate(text_label = str_c("Health Expenditures per Capita: ", health_exp, '\nState: ', StateAbbr)) %>%
   mutate(region = fct_reorder(region, health_exp)) %>%
-  plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
-  layout(
-    xaxis = list(title = "Region"),
-    yaxis = list(title = "Health Expenditures per Capita per State"),
-    title = "Comparing Healthcare Expenditure Across Regions",
-    font = "Open Sans",
-    titlefont = "Open Sans"
+  ggplot(aes(x = region, y = health_exp)) +
+  geom_boxplot() +
+  labs(
+    x = "Region",
+    y = "Health Expenditures per Capita per State", 
+    title = "Comparing Healthcare Expenditure Across Regions"
   )
+  
+ # plot_ly(y = ~health_exp, color = ~region, type = "box", text = ~text_label) %>%
+#  layout(
+ #   xaxis = list(title = "Region"),
+  #  yaxis = list(title = "Health Expenditures per Capita per State"),
+   # title = "Comparing Healthcare Expenditure Across Regions",
+  #  font = "Open Sans",
+   # titlefont = "Open Sans"
+ # )
 ```
 
 ```{r, echo = FALSE}
