@@ -64,7 +64,7 @@ Link to original data set:
 
 https://www.kff.org/other/state-indicator/health-spending-per-capita/?currentTimeframe=0&sortModel=%7B%22colId%22:%22Location%22,%22sort%22:%22asc%22%7D
 
-Once again we attempted to scrape this data from the website but due to the interactiveness of the table on the website we were not able to do so succesfully. This table provides information on the healthcare expenditure per capita by each state in 2014, and therefore will not change in the future. 
+Once again we attempted to scrape this data from the website but due to the interactivity of the table on the website we were not able to do so successfully. This table provides information on the healthcare expenditure per capita by each state in 2014, and therefore will not change in the future. 
 
 Link to our health care expenditure data:
 
@@ -118,7 +118,7 @@ cdc_df = left_join(cdc_df, regions_df, by = "state")
 ```
 
 
-We found it important to have an easily accesible, clear data dictionary. Similar to downloading our initial data, variable obtaining issues progressed when attempting to scrape the data for our data dictionary. Therefore, we copied the data dictionary given on the website and pasted into an excel file. Below is the link to the excel data dictionary file:
+We found it important to have an easily accessible, clear data dictionary. Similar to downloading our initial data, variable obtaining issues progressed when attempting to scrape the data for our data dictionary. Therefore, we copied the data dictionary given on the website and pasted into an excel file. Below is the link to the excel data dictionary file:
 
 https://drive.google.com/file/d/1Myn3kicEjmmeD2PGoOehSlA30UtFfaV9/view?usp=sharing
 
@@ -313,7 +313,7 @@ diab_tbl %>%
   knitr::kable() 
 ```
 
-We ran simple linear regressions to determine if there was an association between the prevalence of lack of insurance and the prevalence of health outcomes -- colon/cancer/cholestrol screenings, mammograms, etc. The purpose here was not to build a predictive model, only to test association and therefore any statistics related to model reliability were disregarded.
+We ran simple linear regressions to determine if there was an association between the prevalence of lack of insurance and the prevalence of health outcomes -- colon/cancer/cholesterol screenings, mammograms, etc. The purpose here was not to build a predictive model, only to test association and therefore any statistics related to model reliability were disregarded.
 
 ```{r, insurance_slrs, include = FALSE}
 
