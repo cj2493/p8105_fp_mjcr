@@ -244,6 +244,8 @@ Positive
 </tr>
 </tbody>
 </table>
+Next, we do the same for a high cholesterol model:
+
 ``` r
 health_practice = c("Dental Visits", "Lack of Physical Activity",
                     "Routine Checkups", "Colon Screening")
@@ -336,6 +338,8 @@ Positive
 </tr>
 </tbody>
 </table>
+Lastly, for our diabetes model:
+
 ``` r
 health_practice = c("Core Practices for Women", "Dental Visits", "Lack of Physical Activity", "Mammogram Usage", "Routine Checkups", "Cholesterol Screening")
 effect = c("Negative", "Negative", "Positive", "Positive", "Positive", "Negative")
@@ -632,6 +636,8 @@ Positive
 </tr>
 </tbody>
 </table>
+Once we have looked at the association, we plot to see if the association is indeed linear:
+
 ``` r
 dental = cdc_df %>% 
   ggplot(aes(x = ACCESS2_AdjPrev, y = DENTAL_AdjPrev)) + 

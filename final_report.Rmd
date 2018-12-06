@@ -188,6 +188,8 @@ cancer_tbl %>%
   knitr::kable() 
 ```
 
+Next, we do the same for a high cholesterol model:  
+
 ```{r, chol_model, include = FALSE}
 chol_full_mod = lm(HIGHCHOL_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
 summary(chol_full_mod)
@@ -219,6 +221,8 @@ chol_tbl = tibble(
 chol_tbl %>%
   knitr::kable() 
 ```
+
+Lastly, for our diabetes model:  
 
 ```{r, diab_model, include = FALSE}
 diab_full_mod = lm(DIABETES_AdjPrev ~ COREM_AdjPrev + COREW_AdjPrev + DENTAL_AdjPrev + LPA_AdjPrev + MAMMOUSE_AdjPrev + PAPTEST_AdjPrev + CHECKUP_AdjPrev + CHOLSCREEN_AdjPrev + COLON_SCREEN_AdjPrev, data = cdc_df)
@@ -296,6 +300,8 @@ insurance_asso = tibble(
 insurance_asso %>% 
   knitr::kable() 
 ```
+
+Once we have looked at the association, we plot to see if the association is indeed linear:  
 
 ```{r, insurance_plots}
 dental = cdc_df %>% 

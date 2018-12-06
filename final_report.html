@@ -223,6 +223,7 @@ Positive
 </tr>
 </tbody>
 </table>
+<p>Next, we do the same for a high cholesterol model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">health_practice =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Dental Visits&quot;</span>, <span class="st">&quot;Lack of Physical Activity&quot;</span>,
                     <span class="st">&quot;Routine Checkups&quot;</span>, <span class="st">&quot;Colon Screening&quot;</span>)
 effect =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Positive&quot;</span>)
@@ -312,6 +313,7 @@ Positive
 </tr>
 </tbody>
 </table>
+<p>Lastly, for our diabetes model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">health_practice =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Core Practices for Women&quot;</span>, <span class="st">&quot;Dental Visits&quot;</span>, <span class="st">&quot;Lack of Physical Activity&quot;</span>, <span class="st">&quot;Mammogram Usage&quot;</span>, <span class="st">&quot;Routine Checkups&quot;</span>, <span class="st">&quot;Cholesterol Screening&quot;</span>)
 effect =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Negative&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Positive&quot;</span>, <span class="st">&quot;Negative&quot;</span>)
 estimate =<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.063</span>, <span class="op">-</span><span class="fl">0.135</span>, <span class="fl">0.193</span>, <span class="fl">0.085</span>, <span class="fl">0.076</span>, <span class="op">-</span><span class="fl">0.074</span>)
@@ -601,6 +603,7 @@ Positive
 </tr>
 </tbody>
 </table>
+<p>Once we have looked at the association, we plot to see if the association is indeed linear:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dental =<span class="st"> </span>cdc_df <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> ACCESS2_AdjPrev, <span class="dt">y =</span> DENTAL_AdjPrev)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span>
