@@ -5,8 +5,11 @@ Team Members and UNIs:
 ----------------------
 
 Melanie Mayer; mm4963
+
 Jaisal Amin; ja3314
+
 Rebekah Yu; dry2115
+
 Courtney Johnson; cj2493
 
 Motivation, Background, and Initial Questions:
