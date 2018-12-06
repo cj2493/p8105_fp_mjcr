@@ -14,7 +14,10 @@ Motivation, Background, and Initial Questions:
 
 Motivation for this project was rooted in the group's collective interest in the impact of public health initiatives on health outcomes. Over the past few years, the changing health landscape has made the cost of many routine health procedures and practices prohibitive. Although the conversation pertaining to healthcare accessibility and affordability has become overtly political, it is important for us as public health students to be aware of the state of health and healthcare in this country, since it directly affects our field. We started by looking for data related to healthcare cost and accessibility. While exploring for related datasets, we found city-level data on health practices and health outcomes from the CDC. Project objectives and analysis plans were mainly driven by the data and the information available from the data set.
 
-The initial question we explored was what are the associations between: (1) prevalence of lack of health insurance, (2) regular health practices (i.e. pap smear, doctor visits, mammograms) (3) health outcomes (diabetes, kidney disease, smoking).
+The initial question we explored was what are the associations between:
+(1) prevalence of lack of health insurance,
+(2) regular health practices (i.e. pap smear, doctor visits, mammograms)
+(3) health outcomes (diabetes, kidney disease, smoking).
 
 To further support our analysis, we hypothesized that health expenditures and geography could be possible predictors of outcomes and practices, thus, external data sets of health expenditures per capita by state and a classification of the states into four regions were included.
 
@@ -39,7 +42,7 @@ Link to original data set:
 
 <https://www.kff.org/other/state-indicator/health-spending-per-capita/?currentTimeframe=0&sortModel=%7B%22colId%22:%22Location%22,%22sort%22:%22asc%22%7D>
 
-Once again we attempted to scrape this data from the website but due to the interactiveness of the table on the website we were not able to do so succesfully. This table provides information on the healthcare expenditure per capita by each state in 2014, and therefore will not change in the future.
+Once again we attempted to scrape this data from the website but due to the interactivity of the table on the website we were not able to do so successfully. This table provides information on the healthcare expenditure per capita by each state in 2014, and therefore will not change in the future.
 
 Link to our health care expenditure data:
 
@@ -91,7 +94,7 @@ regions_df = read_csv("https://raw.githubusercontent.com/cphalpert/census-region
 cdc_df = left_join(cdc_df, regions_df, by = "state")
 ```
 
-We found it important to have an easily accesible, clear data dictionary. Similar to downloading our initial data, variable obtaining issues progressed when attempting to scrape the data for our data dictionary. Therefore, we copied the data dictionary given on the website and pasted into an excel file. Below is the link to the excel data dictionary file:
+We found it important to have an easily accessible, clear data dictionary. Similar to downloading our initial data, variable obtaining issues progressed when attempting to scrape the data for our data dictionary. Therefore, we copied the data dictionary given on the website and pasted into an excel file. Below is the link to the excel data dictionary file:
 
 <https://drive.google.com/file/d/1Myn3kicEjmmeD2PGoOehSlA30UtFfaV9/view?usp=sharing>
 
@@ -510,7 +513,7 @@ Negative
 </tr>
 </tbody>
 </table>
-We ran simple linear regressions to determine if there was an association between the prevalence of lack of insurance and the prevalence of health outcomes -- colon/cancer/cholestrol screenings, mammograms, etc. The purpose here was not to build a predictive model, only to test association and therefore any statistics related to model reliability were disregarded.
+We ran simple linear regressions to determine if there was an association between the prevalence of lack of insurance and the prevalence of health outcomes -- colon/cancer/cholesterol screenings, mammograms, etc. The purpose here was not to build a predictive model, only to test association and therefore any statistics related to model reliability were disregarded.
 
 ``` r
 #Create table with results
@@ -921,6 +924,8 @@ ANOVA
 </tr>
 </tbody>
 </table>
+From the plot and tables above, we can see that the differences in healthcare expenditure across regions are significant.
+
 Discussion:
 -----------
 
