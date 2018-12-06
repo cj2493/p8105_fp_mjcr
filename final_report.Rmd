@@ -25,20 +25,20 @@ library(shiny)
 
 ## Team Members and UNIs:
 
-Melanie Mayer; mm4963  
-Jaisal Amin; ja3314  
-Rebekah Yu; dry2115  
-Courtney Johnson; cj2493  
+Melanie Mayer; mm4963     
+Jaisal Amin; ja3314     
+Rebekah Yu; dry2115     
+Courtney Johnson; cj2493     
   
 ## Motivation, Background, and Initial Questions:  
 
 Motivation for this project was rooted in the group's collective interest in the impact of public health initiatives on health outcomes. Over the past few years, the changing health landscape has made the cost of many routine health procedures and practices prohibitive. Although the conversation pertaining to healthcare accessibility and affordability has become overtly political, it is important for us as public health students to be aware of the state of health and healthcare in this country, since it directly affects our field. We started by looking for data related to healthcare cost and accessibility. While exploring for related datasets, we found city-level data on health practices and health outcomes from the CDC. Project objectives and analysis plans were mainly driven by the data and the information available from the data set. 
 
 
-The initial question we explored was what are the associations between:
-  (1) prevalence of lack of health insurance, 
-  (2) regular health practices (i.e. pap smear, doctor visits, mammograms) 
-  (3) health outcomes (diabetes, kidney disease, smoking). 
+The initial question we explored was what are the associations between:   
+  (1) prevalence of lack of health insurance,    
+  (2) regular health practices (i.e. pap smear, doctor visits, mammograms)    
+  (3) health outcomes (diabetes, kidney disease, smoking).    
   
 To further support our analysis, we hypothesized that health expenditures and geography could be possible predictors of outcomes and practices, thus, external data sets of health expenditures per capita by state and a classification of the states into four regions were included.
 
@@ -521,6 +521,8 @@ regional_anova = tibble(
 regional_anova %>% 
   knitr::kable() 
 ```
+
+From the plot and tables above, we can see that the differences in healthcare expenditure across regions are significant.
 
 ## Discussion:  
 
