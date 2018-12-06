@@ -1,4 +1,4 @@
-Final\_Report
+Final Report: Exploring the Relationship between Health and Healthcare in America
 ================
 
 Team Members and UNIs:
@@ -12,81 +12,122 @@ Courtney Johnson; cj2493
 Motivation, Background, and Initial Questions:
 ----------------------------------------------
 
-Motivation for this project was rooted in the group's collective interest in the impact of public health initiatives on health outcomes. While exploring for related datasets, we found city-level data on health practices and health outcomes from the CDC. Project objectives and analysis plans were mainly driven by the data and the information available from the data set.
+Motivation for this project was rooted in the group's collective interest in the impact of public health initiatives on health outcomes. Over the past few years, the changing health landscape has made the cost of many routine health procedures and practices prohibitive. Although the conversation pertaining to healthcare accessibility and affordability has become overtly political, it is important for us as public health students to be aware of the state of health and healthcare in this country, since it directly affects our field. We started by looking for data related to healthcare cost and accessibility. While exploring for related datasets, we found city-level data on health practices and health outcomes from the CDC. Project objectives and analysis plans were mainly driven by the data and the information available from the data set.
 
-The initial question we explored was what are the associations between: (1) prevalence of lack of health insurance, (2) regular health practices (i.e. pap smear, doctor visits, mammograms), and (3) health outcomes (diabetes, kidney disease, smoking).
+The initial question we explored was what are the associations between: (1) prevalence of lack of health insurance, (2) regular health practices (i.e. pap smear, doctor visits, mammograms) (3) health outcomes (diabetes, kidney disease, smoking).
 
-To further support our analysis, we hypothesized that health expenditures could be a possible predictor of outcomes and practices, thus, an external data set of health expenditures by state was included. In addition, we were interested in regional trends of health for the data. To obtain regional categories, we found an external data set including four regions and states included in each region.
+To further support our analysis, we hypothesized that health expenditures and geography could be possible predictors of outcomes and practices, thus, external data sets of health expenditures per capita by state and a classification of the states into four regions were included.
 
 Data:
 -----
 
-Our data was taken from the 500 cities project. The data used for their analysis was obtained from the Centers of Disease Control, Division of Population Health, Epidemiology, and Surveillance Branch. The dataset provides model-based estimates for the prevalence of various diseases/practices in order to help local public health officials better serve their communities. We filtered out many variables and ultimately chose to only keep diseases associated with higher rates of fatality and/or those that placed a higher burden on our healthcare system. We also kept variables that could be clearly classified as "health practices" or behaviors whose primary purpose is to maintain or improve one's health. Because we were interested in the relationship between these variables and health insurance/expenditure, we kept the variable associated with prevalence of lack of insurance and imported data on healthcare expenditure by state from the Henry J. Kaiser Family Foundation. In order to conduct regional analysis, we imported a dataset that classified states based on region.
+Our data was taken from the 500 cities project. The data used for their analysis was obtained from the Centers of Disease Control, Division of Population Health, Epidemiology, and Surveillance Branch. The dataset provides model-based estimates for the prevalence of various diseases/practices in order to help local public health officials better serve their communities. Information on the confidence interval around each estimated prevalence per variable as well as crude and adjusted prevalence were included in the original data. We filtered out the confidence intervals as well as the crude estimates, seeing how we believe the adjusted estimates would be more accurate and the confidence intervals would not be helpful for us in analysis. Ultimately we chose to only keep variables of diseases associated with higher rates of fatality and/or those that placed a higher burden on our healthcare system. We also kept variables that could be clearly classified as "health practices" or behaviors whose primary purpose is to maintain or improve one's health. Because we were interested in the relationship between these variables and health insurance/expenditure, we kept the variable associated with prevalence of lack of insurance and imported data on healthcare expenditure by state from the Henry J. Kaiser Family Foundation. In order to conduct regional analysis, we imported a dataset that classified states into four regions.
 
-Link to original data set from the CDC: <https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny/data>
+### How we imported data:
 
-When attempting to extract the data using the API, some variables (such as city name and state) were dropped in the process. Our data was obtained and completed in 2016, so we found it appropriate to simply download the CSV to use for our analysis. Below is the link to the data set that was read in for our project: <https://drive.google.com/file/d/1ltT_y_W5kveipbEq6smnpsjmVADIwnee/view?usp=sharing>
+Link to original data set from the CDC:
 
-Data for health care expenditure was downloaded from the Henry J. Kaiser Family Foundation Link to our health care expenditure data: <https://drive.google.com/file/d/1jlps3e265Q9eZoBXcgKTu5YrKwOOHTFc/view?usp=sharing>
+<https://chronicdata.cdc.gov/500-Cities/500-Cities-City-level-Data-GIS-Friendly-Format-201/k56w-7tny/data>
 
-Data for state and region categories were found on Chris Halpert's github. Link to region and state data: <https://drive.google.com/file/d/1jlps3e265Q9eZoBXcgKTu5YrKwOOHTFc/view?usp=sharing>
+When attempting to extract the data using the API, some critical variables (such as city name and state) were dropped. Our data was obtained and completed in 2016 and will therefore not change in the future, so we found it appropriate to conserve the complete dataset by downloading the CSV to use for our analysis. Below is the link to the data set that was read in for our project:
+
+<https://drive.google.com/file/d/1ltT_y_W5kveipbEq6smnpsjmVADIwnee/view?usp=sharing>
+
+Data for health care expenditure was downloaded from the Henry J. Kaiser Family Foundation.
+
+Link to original data set:
+
+<https://www.kff.org/other/state-indicator/health-spending-per-capita/?currentTimeframe=0&sortModel=%7B%22colId%22:%22Location%22,%22sort%22:%22asc%22%7D>
+
+Once again we attempted to scrape this data from the website but due to the interactiveness of the table on the website we were not able to do so succesfully. This table provides information on the healthcare expenditure per capita by each state in 2014, and therefore will not change in the future.
+
+Link to our health care expenditure data:
+
+<https://drive.google.com/file/d/1jlps3e265Q9eZoBXcgKTu5YrKwOOHTFc/view?usp=sharing>
+
+Data for state and region categories were found on Chris Halpert's github. We were able to read this data directly from his repository.
+
+Link to original data set:
+
+<https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv>
+
+Link to region and state data:
+
+<https://drive.google.com/file/d/1jlps3e265Q9eZoBXcgKTu5YrKwOOHTFc/view?usp=sharing>
 
 ### Instructions for reading in data:
 
-Download the data sets from the google drive links given above. In the code below, replace the "read\_csv" locations to the local locations where data is downloaded.
+Download the data sets from the google drive links given above. In the code below, replace the "read\_csv" locations to the local locations where your data was downloaded to.
 
 Code for reading in, merging, and cleaning data:
 
 ``` r
+#Read in dataset
 cdc_df = read_csv("./data/500_Cities__City-level_Data__GIS_Friendly_Format___2016_release.csv")
-#Select variables of interest
+
+#Select variables we are interested in, add state abbreviations
 cdc_df = cdc_df %>%
   select(c(StateAbbr, PlaceName, Population2010, ACCESS2_AdjPrev, BPHIGH_AdjPrev, BPMED_AdjPrev, CANCER_AdjPrev, CHD_AdjPrev, CHECKUP_AdjPrev, CHOLSCREEN_AdjPrev, COLON_SCREEN_AdjPrev, COPD_AdjPrev,COREM_AdjPrev, COREW_AdjPrev, DENTAL_AdjPrev, DIABETES_AdjPrev, HIGHCHOL_AdjPrev, LPA_AdjPrev, MAMMOUSE_AdjPrev, OBESITY_AdjPrev, PAPTEST_AdjPrev, PHLTH_AdjPrev, STROKE_AdjPrev, Geolocation)) %>% 
   mutate(state = abbr2state(StateAbbr)) %>%
   select(state, everything())
-#Importing the raw expenditure data set and cleaning
+
+#Importing the raw expenditure data set and clean
 healthcare_exp_df = read_csv("./data/health_care_expenditure.csv", 
                              skip = 4, n_max = 51, col_names = F) %>%
   rename(state = "X1", health_exp = "X2") %>%
   mutate(health_exp = str_replace(health_exp, "\\$", ""),
          health_exp  = as.numeric(health_exp))
+
 #Add state healthcare expenditure data to CDC data
 cdc_df = left_join(cdc_df, healthcare_exp_df, by = "state")
 cdc_df = cdc_df %>% mutate(state = abbr2state(StateAbbr))
-#Merge data regions per state
+
+#Read in data on regions per state
 regions_df = read_csv("https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv") %>%
   janitor::clean_names() %>%
   select(-state_code)
-  
+
+#Add regions data with CDC data
 cdc_df = left_join(cdc_df, regions_df, by = "state")
 ```
 
-Similar to downloading our initial data, variable obtaining issues progressed when attempting to scrape the data for our data dictionary. Therefore, we copied the data dictionary given on the website and pasted into an excel file. Below is the link to the excel data dictionary file:
+We found it important to have an easily accesible, clear data dictionary. Similar to downloading our initial data, variable obtaining issues progressed when attempting to scrape the data for our data dictionary. Therefore, we copied the data dictionary given on the website and pasted into an excel file. Below is the link to the excel data dictionary file:
 
 <https://drive.google.com/file/d/1Myn3kicEjmmeD2PGoOehSlA30UtFfaV9/view?usp=sharing>
 
 Code to create a data dictionary:
 
 ``` r
+#Read in data dictionary dataset
 data_dictionary = readxl::read_xlsx("./data/data_dictionary.xlsx") 
+
+#Select only variables we chose to analyze
 data_dictionary = data_dictionary %>%
   janitor::clean_names() %>%
   filter(column_name %in% c("StateAbbr", "PlaceName", "Population2010", "ACCESS2_AdjPrev", "BPHIGH_AdjPrev", "BPMED_AdjPrev", "CANCER_AdjPrev", "CHD_AdjPrev", "CHECKUP_AdjPrev", "CHOLSCREEN_AdjPrev", "COLON_SCREEN_AdjPrev", "COPD_AdjPrev", "COREM_AdjPrev", "COREW_AdjPrev", "DENTAL_AdjPrev", "DIABETES_AdjPrev", "HIGHCHOL_AdjPrev", "LPA_AdjPrev", "MAMMOUSE_AdjPrev", "OBESITY_AdjPrev", "PAPTEST_AdjPrev", "PHLTH_AdjPrev", "STROKE_AdjPrev", "Geolocation"))
+
+#Add expenditure variable
 health_exp_dictionary = tibble(column_name = c("state", "health_exp"),
                                description = c("full name of the state", "total healthcare expenditures per capita by state in 2014"),
                                type = c("Plain Text", "Number"))
+
+#Merge in expenditure variable
 data_dictionary = full_join(data_dictionary, health_exp_dictionary)
+
+#Add region variable
 region_dict = tibble(column_name = c("region", "division"),
                      description = c("geographical region of the state", "more specific division within the region"),
                      type = c("Plain Text", "Plain Text")
 )
+
+#Merge in region variable
 data_dictionary = full_join(data_dictionary, region_dict)
 ```
 
 Exploratory Analysis:
 ---------------------
 
-Shiny plots were created to explore the associations between health factors and health outcomes. We defined two health factors of interest: (1) prevalence of uninsured people by city and (2) health care expenditure by state. To give visualizations of the type of plots created, the code below illustrates the plots for the health outcome, cancer. However, in the Shiny document, users can toggle between 9 outcomes.
+Shiny plots were created to explore the associations between health factors and health outcomes. We defined two health factors of interest: (1) prevalence of uninsured people by city and (2) health care expenditure by state. To give visualizations of the type of plots created, the code below illustrates the plots for the one health outcome, cancer. However, in the Shiny document, users can toggle between 9 outcomes.
 
 ``` r
 # transform data to long form
@@ -104,6 +145,7 @@ outcome_transform = cdc_df %>%
                                   'PHLTH' = 'Poor Physical Health',
                                   'STROKE' = 'Stroke')) %>%
   select(city_state, ACCESS2_AdjPrev, Population2010, Geolocation, health_exp, region, division, outcome, prevalence) 
+
 # Plot of Prevalence of Cancer vs. Prevalence of Uninsured
 outcome_transform %>%
   filter(outcome == "Cancer") %>%
@@ -139,6 +181,7 @@ Additional Analysis:
 To explore the relationship between commonly used health practices and health outcomes, we tried to fit some multiple linear regression models using backwards selection. The models we created were attempting to predict the prevalence of cancer, high cholesterol and diabetes. For each model, we started with all of the health practice variables: core screenings for men, core screenings for women, dental visits, lack of physical activity, mammogram usage, routine checkups, cholesterol screenings, and colon screenings. All of these variables are also in terms of prevalence. Then, to show the results in a way that people who aren't statisticians could understand, I produced a table for each model that showed which variables were included in the final model and the direction of effect they had on the disease prevalence.
 
 ``` r
+#Create table with effects on cancer prevalence
 health_practice = c("Core Practices for Men", "Dental Visits", "Mammogram Usage",
                     "Routine Checkups", "Colon Screening")
 effect = c("Positive", "Negative", "Negative", "Negative", "Positive")
@@ -150,6 +193,8 @@ cancer_tbl = tibble(
   "Coefficient Estimate" = estimate,
   "P-Value" = p_val
 )
+
+#Output table
 cancer_tbl %>%
   knitr::kable() 
 ```
@@ -247,6 +292,7 @@ Positive
 Next, we do the same for a high cholesterol model:
 
 ``` r
+#Create table with effects on cholesterol prevalence
 health_practice = c("Dental Visits", "Lack of Physical Activity",
                     "Routine Checkups", "Colon Screening")
 effect = c("Negative", "Positive", "Positive", "Positive")
@@ -258,6 +304,8 @@ chol_tbl = tibble(
   "Coefficient Estimate" = estimate,
   "P-Value" = p_val
 )
+
+#Output table
 chol_tbl %>%
   knitr::kable() 
 ```
@@ -341,6 +389,7 @@ Positive
 Lastly, for our diabetes model:
 
 ``` r
+#Create table with effects on diabetes prevalence
 health_practice = c("Core Practices for Women", "Dental Visits", "Lack of Physical Activity", "Mammogram Usage", "Routine Checkups", "Cholesterol Screening")
 effect = c("Negative", "Negative", "Positive", "Positive", "Positive", "Negative")
 estimate = c(-0.063, -0.135, 0.193, 0.085, 0.076, -0.074)
@@ -351,6 +400,8 @@ diab_tbl = tibble(
   "Coefficient Estimate" = estimate,
   "P-Value" = p_val
 )
+
+#Output table
 diab_tbl %>%
   knitr::kable() 
 ```
@@ -462,6 +513,7 @@ Negative
 We ran simple linear regressions to determine if there was an association between the prevalence of lack of insurance and the prevalence of health outcomes -- colon/cancer/cholestrol screenings, mammograms, etc. The purpose here was not to build a predictive model, only to test association and therefore any statistics related to model reliability were disregarded.
 
 ``` r
+#Create table with results
 health_practice = c("Health Checkup", "Cholestrol Screening", "Colon Screening", "Dental", "COREM", "COREW", "LPA", "Mammogram", "Pap Test", "Poor Physical Health")
 linear = c("No", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes")
 direction = c("NA", "Negative", "Negative", "Negative", "Negative", "Negative", "Positive", "Negative", "Negative", "Positive")
@@ -472,6 +524,8 @@ insurance_asso = tibble(
   "Direction of Association" = direction,
   "p-value" = p_value
 ) 
+
+#Print table
 insurance_asso %>% 
   knitr::kable() 
 ```
@@ -639,6 +693,7 @@ Positive
 Once we have looked at the association, we plot to see if the association is indeed linear:
 
 ``` r
+#Create scatterplots to observe linear relationships
 dental = cdc_df %>% 
   ggplot(aes(x = ACCESS2_AdjPrev, y = DENTAL_AdjPrev)) + 
   geom_point(alpha = 0.5) + 
@@ -671,8 +726,11 @@ phlth = cdc_df %>%
 We also wanted to look at lack of health insurance prevalence and health expenditure by state and compare across regions. We created graphs to display differences and ran an ANOVA to test significance.
 
 ``` r
+#Extract state geolocation
 usa = map_data("state") %>%
   rename(state = "region")
+
+#Add geolocation info to CDC data frame
 cdc_df_map = read_csv("./data/cdc_df.csv") %>%
   separate(Geolocation, into = c("long", "lat"), sep = ",") %>%
   mutate(long = str_replace(long, "\\(", ""),
@@ -683,6 +741,8 @@ cdc_df_map = read_csv("./data/cdc_df.csv") %>%
          state = tolower(state)) %>%
   filter(!state %in% c("alaska", "hawaii")) %>%
   left_join(., usa, by = "state")
+
+#Plot map showing lack of healthcare accross US
 ggplot() + 
   geom_polygon(data = cdc_df_map, aes(x = long.y, y = lat.y, group = state, 
                                       fill = ACCESS2_AdjPrev), 
@@ -714,18 +774,7 @@ ggplot() +
 ![](final_report_files/figure-markdown_github/insurance_map-1.png)
 
 ``` r
-usa = map_data("state") %>%
-  rename(state = "region")
-cdc_df_map = read_csv("./data/cdc_df.csv") %>%
-  separate(Geolocation, into = c("long", "lat"), sep = ",") %>%
-  mutate(long = str_replace(long, "\\(", ""),
-         lat = str_replace(lat, "\\)", ""),
-         long = as.numeric(long),
-         lat = as.numeric(lat),
-         state = factor(state),
-         state = tolower(state)) %>%
-  filter(!state %in% c("alaska", "hawaii")) %>%
-  left_join(., usa, by = "state")
+#Plot map showing healthcare expenditure accross US
 ggplot() + 
   geom_polygon(data = cdc_df_map, aes(x = long.y, y = lat.y, 
                                       group = state, fill = health_exp), color = "white") +
@@ -756,6 +805,7 @@ ggplot() +
 ![](final_report_files/figure-markdown_github/expend_map-1.png)
 
 ``` r
+#Showing regional boxplots for healthcare expenditure 
 cdc_df %>%
   distinct(state, .keep_all = TRUE) %>%
   mutate(text_label = str_c("Health Expenditures per Capita: ", health_exp, '\nState: ', StateAbbr)) %>%

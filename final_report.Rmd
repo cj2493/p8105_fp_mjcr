@@ -32,11 +32,8 @@ Courtney Johnson; cj2493
   
 ## Motivation, Background, and Initial Questions:  
 
-<<<<<<< HEAD
-Motivation for this project was rooted in the group's collective interest in the impact of public health initiatives on health outcomes. While exploring for related datasets, we found city-level data on health practices and health outcomes from the Centers of Disease Control. Project objectives and analysis plans were mainly driven by the data and the information available from the data set. 
-=======
 Motivation for this project was rooted in the group's collective interest in the impact of public health initiatives on health outcomes. Over the past few years, the changing health landscape has made the cost of many routine health procedures and practices prohibitive. Although the conversation pertaining to healthcare accessibility and affordability has become overtly political, it is important for us as public health students to be aware of the state of health and healthcare in this country, since it directly affects our field. We started by looking for data related to healthcare cost and accessibility. While exploring for related datasets, we found city-level data on health practices and health outcomes from the CDC. Project objectives and analysis plans were mainly driven by the data and the information available from the data set. 
->>>>>>> 2559005ee57e5066bb339421737a492e973053db
+
 
 The initial question we explored was what are the associations between:
   (1) prevalence of lack of health insurance, 
